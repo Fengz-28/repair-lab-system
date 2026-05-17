@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { IntakeForm } from "@/modules/intake/components/intake-form";
 import { prisma } from "@/server/db/prisma";
 
@@ -58,7 +60,11 @@ export default async function AdminIntakePage() {
               ) : (
                 recentTickets.map((ticket) => (
                   <tr key={ticket.id} className="border-b border-zinc-100 last:border-0">
-                    <td className="px-3 py-2 font-medium">{ticket.ticketNumber}</td>
+                    <td className="px-3 py-2 font-medium">
+                      <Link className="underline" href={`/admin/tickets/${ticket.id}`}>
+                        {ticket.ticketNumber}
+                      </Link>
+                    </td>
                     <td className="px-3 py-2">
                       {ticket.customer.firstName} {ticket.customer.lastName ?? ""}
                     </td>
@@ -77,4 +83,3 @@ export default async function AdminIntakePage() {
     </main>
   );
 }
-
