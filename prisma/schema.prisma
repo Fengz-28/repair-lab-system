@@ -82,6 +82,7 @@ enum InvoiceStatus {
   SENT
   APPROVED
   REJECTED
+  EXPIRED
   CANCELLED
   PAID
   PARTIALLY_PAID
@@ -376,23 +377,27 @@ model InventoryMovement {
 }
 
 model Invoice {
-  id            String        @id @default(cuid())
-  invoiceNumber String        @unique
-  type          InvoiceType
-  status        InvoiceStatus @default(DRAFT)
-  paymentStatus PaymentStatus @default(UNPAID)
-  customerId    String
-  ticketId      String?
-  subtotal      Decimal       @default(0) @db.Decimal(12, 2)
-  taxTotal      Decimal       @default(0) @db.Decimal(12, 2)
-  total         Decimal       @default(0) @db.Decimal(12, 2)
-  currency      String        @default("CRC")
-  notes         String?
-  approvedAt    DateTime?
-  rejectedAt    DateTime?
-  sentAt        DateTime?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  id                String        @id @default(cuid())
+  invoiceNumber     String        @unique
+  type              InvoiceType
+  status            InvoiceStatus @default(DRAFT)
+  paymentStatus     PaymentStatus @default(UNPAID)
+  customerId        String
+  ticketId          String?
+  subtotal          Decimal       @default(0) @db.Decimal(12, 2)
+  taxTotal          Decimal       @default(0) @db.Decimal(12, 2)
+  total             Decimal       @default(0) @db.Decimal(12, 2)
+  currency          String        @default("CRC")
+  notes             String?
+  customerNotes     String?
+  internalNotes     String?
+  approvalToken     String?       @unique
+  approvalExpiresAt DateTime?
+  approvedAt        DateTime?
+  rejectedAt        DateTime?
+  sentAt            DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 
   customer Customer      @relation(fields: [customerId], references: [id])
   ticket   Ticket?       @relation(fields: [ticketId], references: [id])
@@ -407,6 +412,7 @@ model InvoiceItem {
   id            String   @id @default(cuid())
   invoiceId     String
   catalogItemId String?
+  itemType      ProductType
   description   String
   quantity      Int      @default(1)
   unitPrice     Decimal  @db.Decimal(12, 2)

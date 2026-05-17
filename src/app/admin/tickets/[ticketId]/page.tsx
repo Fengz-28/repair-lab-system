@@ -94,6 +94,9 @@ export default async function TicketDetailPage({
           <p className="text-sm font-medium text-zinc-500">Ticket {ticket.ticketNumber}</p>
           <h1 className="text-2xl font-semibold text-zinc-950">{ticket.title}</h1>
           <p className="text-sm text-zinc-600">Estado actual: {ticket.status}</p>
+          <Link className="text-sm text-zinc-600 underline" href={`/admin/tickets/${ticket.id}/quotes`}>
+            Ver cotizaciones
+          </Link>
         </header>
 
         <section className="grid gap-4 rounded border border-zinc-200 p-4 md:grid-cols-2">

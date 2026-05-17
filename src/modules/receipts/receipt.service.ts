@@ -35,6 +35,7 @@ export async function createReceptionReceiptPlaceholder(
       notes: preview.text,
       items: {
         create: {
+          itemType: "SERVICE",
           description: "Comprobante placeholder de recepcion de equipo",
           quantity: 1,
           unitPrice: 0,
@@ -81,4 +82,3 @@ export async function createReceptionReceiptPlaceholder(
     preview,
   };
 }
-
