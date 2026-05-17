@@ -323,19 +323,27 @@ model Appointment {
 }
 
 model CatalogItem {
-  id          String      @id @default(cuid())
-  type        ProductType
-  sku         String?     @unique
-  name        String
-  description String?
-  basePrice   Decimal?    @db.Decimal(12, 2)
-  isActive    Boolean     @default(true)
-  isPublic    Boolean     @default(false)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id                       String      @id @default(cuid())
+  type                     ProductType
+  sku                      String?     @unique
+  name                     String
+  description              String?
+  category                 String?
+  basePrice                Decimal?    @db.Decimal(12, 2)
+  costPrice                Decimal?    @db.Decimal(12, 2)
+  priceStartsAt            Boolean     @default(false)
+  estimatedDurationMinutes Int?
+  isActive                 Boolean     @default(true)
+  isPublic                 Boolean     @default(false)
+  createdAt                DateTime    @default(now())
+  updatedAt                DateTime    @updatedAt
 
   inventoryItem InventoryItem?
   invoiceItems  InvoiceItem[]
+
+  @@index([type])
+  @@index([category])
+  @@index([isActive])
 }
 
 model InventoryItem {
