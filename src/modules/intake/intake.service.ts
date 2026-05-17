@@ -3,6 +3,8 @@ import { Prisma, TicketStatus } from "@prisma/client";
 import { writeAuditLog } from "@/server/audit/audit.service";
 import { prisma } from "@/server/db/prisma";
 import { preparePrivateIntakePhoto } from "@/server/storage/private-upload-placeholder";
+import { registerEmailNotificationPlaceholder } from "@/modules/notifications/notification.service";
+import { createReceptionReceiptPlaceholder } from "@/modules/receipts/receipt.service";
 
 import type { CreateIntakeInput } from "./intake.schema";
 
@@ -123,6 +125,41 @@ export async function receiveDeviceForRepair(
       },
     });
 
+    const customerName = `${customer.firstName} ${customer.lastName ?? ""}`.trim();
+    const deviceLabel = `${device.brand}${device.model ? ` ${device.model}` : ""}`;
+
+    await createReceptionReceiptPlaceholder(tx, {
+      actorUserId: options.actorUserId ?? null,
+      customerId: customer.id,
+      ticketId: ticket.id,
+      receipt: {
+        receiptNumber: intake.receiptNumber ?? issuedNumbers.receiptNumber,
+        ticketNumber: ticket.ticketNumber,
+        customerName,
+        deviceLabel,
+        reportedIssue: intake.reportedIssue,
+        physicalCondition: intake.physicalCondition,
+        accessoriesReceived: intake.accessoriesReceived ?? undefined,
+        receivedAt: intake.createdAt,
+      },
+    });
+
+    await registerEmailNotificationPlaceholder(tx, {
+      template: "intake.received",
+      recipient: {
+        customerId: customer.id,
+        ticketId: ticket.id,
+        email: customer.email ?? undefined,
+      },
+      data: {
+        customerName,
+        ticketNumber: ticket.ticketNumber,
+        deviceLabel,
+        reportedIssue: ticket.reportedIssue,
+        receiptNumber: intake.receiptNumber ?? issuedNumbers.receiptNumber,
+      },
+    });
+
     await writeAuditLog(tx, {
       actorUserId: options.actorUserId ?? null,
       action: "intake.created",
@@ -182,4 +219,3 @@ function createReceptionNumbers() {
     ticketNumber: `T-${datePart}-${suffix}`,
   };
 }
-

@@ -3,6 +3,7 @@ import { Prisma, TicketStatus } from "@prisma/client";
 import { writeAuditLog } from "@/server/audit/audit.service";
 import { prisma } from "@/server/db/prisma";
 import { preparePrivateTicketAttachment } from "@/server/storage/private-ticket-attachment-placeholder";
+import { registerEmailNotificationPlaceholder } from "@/modules/notifications/notification.service";
 
 import type {
   AddInternalCommentInput,
@@ -48,6 +49,20 @@ export async function changeTicketStatus(
         ticketNumber: true,
         status: true,
         customerId: true,
+        reportedIssue: true,
+        customer: {
+          select: {
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+        device: {
+          select: {
+            brand: true,
+            model: true,
+          },
+        },
       },
     });
 
@@ -101,6 +116,23 @@ export async function changeTicketStatus(
           fromStatus: ticket.status,
           toStatus: input.nextStatus,
         },
+      },
+    });
+
+    await registerEmailNotificationPlaceholder(tx, {
+      template: notificationTemplateForStatus(input.nextStatus),
+      recipient: {
+        customerId: ticket.customerId,
+        ticketId: ticket.id,
+        email: ticket.customer.email ?? undefined,
+      },
+      data: {
+        customerName: `${ticket.customer.firstName} ${ticket.customer.lastName ?? ""}`.trim(),
+        ticketNumber: ticket.ticketNumber,
+        deviceLabel: `${ticket.device.brand}${ticket.device.model ? ` ${ticket.device.model}` : ""}`,
+        reportedIssue: ticket.reportedIssue,
+        fromStatus: ticket.status,
+        toStatus: input.nextStatus,
       },
     });
 
@@ -356,3 +388,14 @@ function integrationEventForStatus(status: TicketStatus) {
   return "ticket.status_changed";
 }
 
+function notificationTemplateForStatus(status: TicketStatus) {
+  if (status === TicketStatus.READY_FOR_PICKUP) {
+    return "ticket.ready_for_pickup" as const;
+  }
+
+  if (status === TicketStatus.DELIVERED) {
+    return "ticket.delivered" as const;
+  }
+
+  return "ticket.status_changed" as const;
+}
