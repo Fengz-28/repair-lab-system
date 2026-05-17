@@ -1,0 +1,558 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  admin
+  staff
+}
+
+enum PreferredContactMethod {
+  EMAIL
+  PHONE
+  WHATSAPP
+  NONE
+}
+
+enum CommunicationChannel {
+  EMAIL
+  SMS
+  WHATSAPP
+  PHONE
+  INTERNAL
+  SYSTEM
+}
+
+enum MessageDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum MessageStatus {
+  DRAFT
+  QUEUED
+  SENT
+  DELIVERED
+  FAILED
+  RECEIVED
+}
+
+enum DeviceType {
+  PHONE
+  TABLET
+  LAPTOP
+  DESKTOP
+  CONSOLE
+  ACCESSORY
+  OTHER
+}
+
+enum TicketStatus {
+  RECEIVED
+  INITIAL_REVIEW
+  DIAGNOSIS
+  WAITING_APPROVAL
+  APPROVED
+  REPAIR_IN_PROGRESS
+  READY_FOR_PICKUP
+  DELIVERED
+  CANCELLED
+}
+
+enum AppointmentStatus {
+  REQUESTED
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+}
+
+enum InvoiceType {
+  QUOTE
+  INVOICE
+  RECEIPT
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  APPROVED
+  REJECTED
+  CANCELLED
+  PAID
+  PARTIALLY_PAID
+  UNPAID
+}
+
+enum PaymentStatus {
+  UNPAID
+  PARTIALLY_PAID
+  PAID
+  REFUNDED
+  VOID
+}
+
+enum ProductType {
+  SERVICE
+  PRODUCT
+  PART
+}
+
+enum InventoryMovementType {
+  IN
+  OUT
+  ADJUSTMENT
+  RESERVED
+  RELEASED
+}
+
+enum FileVisibility {
+  PRIVATE
+  INTERNAL
+  PUBLIC
+}
+
+enum IntegrationEventStatus {
+  PENDING
+  PROCESSING
+  PROCESSED
+  FAILED
+  CANCELLED
+}
+
+enum AIInteractionType {
+  TICKET_SUMMARY
+  SUGGESTED_REPLY
+  SEMANTIC_SEARCH
+  KNOWLEDGE_INGESTION
+  CONTENT_GENERATION
+  TECHNICAL_ASSISTANCE
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  role         UserRole @default(staff)
+  passwordHash String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  assignedTickets     Ticket[]              @relation("AssignedTickets")
+  createdTickets      Ticket[]              @relation("CreatedTickets")
+  ticketComments      TicketComment[]
+  ticketStatusHistory TicketStatusHistory[]
+  auditLogs           AuditLog[]
+}
+
+model Customer {
+  id                     String                 @id @default(cuid())
+  firstName              String
+  lastName               String?
+  email                  String?
+  phone                  String?
+  whatsappPhone          String?
+  preferredContactMethod PreferredContactMethod @default(WHATSAPP)
+  notes                  String?
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime               @updatedAt
+
+  devices      Device[]
+  intakes      Intake[]
+  tickets      Ticket[]
+  appointments Appointment[]
+  invoices     Invoice[]
+  messages     MessageLog[]
+
+  @@index([email])
+  @@index([phone])
+  @@index([whatsappPhone])
+}
+
+model Device {
+  id         String     @id @default(cuid())
+  customerId String
+  type       DeviceType
+  brand      String
+  model      String?
+  serial     String?
+  color      String?
+  notes      String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  customer Customer @relation(fields: [customerId], references: [id])
+  intakes  Intake[]
+  tickets  Ticket[]
+
+  @@index([customerId])
+  @@index([serial])
+  @@index([brand, model])
+}
+
+model Intake {
+  id                  String   @id @default(cuid())
+  customerId          String
+  deviceId            String
+  receivedByUserId    String?
+  accessoriesReceived String?
+  physicalCondition   String
+  reportedIssue       String
+  internalNotes       String?
+  receiptNumber       String?  @unique
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  customer Customer    @relation(fields: [customerId], references: [id])
+  device   Device      @relation(fields: [deviceId], references: [id])
+  ticket   Ticket?
+  files    FileAsset[]
+
+  @@index([customerId])
+  @@index([deviceId])
+  @@index([createdAt])
+}
+
+model Ticket {
+  id              String       @id @default(cuid())
+  ticketNumber    String       @unique
+  customerId      String
+  deviceId        String
+  intakeId        String?      @unique
+  createdByUserId String?
+  assignedToId    String?
+  status          TicketStatus @default(RECEIVED)
+  title           String
+  reportedIssue   String
+  diagnosis       String?
+  resolution      String?
+  internalNotes   String?
+  priority        Int          @default(0)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  closedAt        DateTime?
+
+  customer       Customer              @relation(fields: [customerId], references: [id])
+  device         Device                @relation(fields: [deviceId], references: [id])
+  intake         Intake?               @relation(fields: [intakeId], references: [id])
+  createdBy      User?                 @relation("CreatedTickets", fields: [createdByUserId], references: [id])
+  assignedTo     User?                 @relation("AssignedTickets", fields: [assignedToId], references: [id])
+  appointments   Appointment[]
+  comments       TicketComment[]
+  statusHistory  TicketStatusHistory[]
+  events         TicketEvent[]
+  files          FileAsset[]
+  invoices       Invoice[]
+  messages       MessageLog[]
+  aiInteractions AIInteraction[]
+
+  @@index([customerId])
+  @@index([deviceId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model TicketStatusHistory {
+  id              String        @id @default(cuid())
+  ticketId        String
+  fromStatus      TicketStatus?
+  toStatus        TicketStatus
+  changedById     String?
+  internalComment String?
+  createdAt       DateTime      @default(now())
+
+  ticket    Ticket @relation(fields: [ticketId], references: [id])
+  changedBy User?  @relation(fields: [changedById], references: [id])
+
+  @@index([ticketId, createdAt])
+}
+
+model TicketComment {
+  id         String   @id @default(cuid())
+  ticketId   String
+  authorId   String?
+  body       String
+  isInternal Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  ticket Ticket @relation(fields: [ticketId], references: [id])
+  author User?  @relation(fields: [authorId], references: [id])
+
+  @@index([ticketId, createdAt])
+}
+
+model TicketEvent {
+  id        String   @id @default(cuid())
+  ticketId  String
+  type      String
+  payload   Json?
+  createdAt DateTime @default(now())
+
+  ticket Ticket @relation(fields: [ticketId], references: [id])
+
+  @@index([ticketId, createdAt])
+  @@index([type])
+}
+
+model Appointment {
+  id                       String            @id @default(cuid())
+  customerId               String?
+  ticketId                 String?
+  status                   AppointmentStatus @default(REQUESTED)
+  title                    String
+  description              String?
+  startsAt                 DateTime
+  endsAt                   DateTime
+  googleCalendarEventId    String?
+  externalCalendarProvider String?
+  createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
+
+  customer Customer? @relation(fields: [customerId], references: [id])
+  ticket   Ticket?   @relation(fields: [ticketId], references: [id])
+
+  @@index([customerId])
+  @@index([ticketId])
+  @@index([startsAt])
+}
+
+model CatalogItem {
+  id          String      @id @default(cuid())
+  type        ProductType
+  sku         String?     @unique
+  name        String
+  description String?
+  basePrice   Decimal?    @db.Decimal(12, 2)
+  isActive    Boolean     @default(true)
+  isPublic    Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  inventoryItem InventoryItem?
+  invoiceItems  InvoiceItem[]
+}
+
+model InventoryItem {
+  id             String   @id @default(cuid())
+  catalogItemId  String   @unique
+  quantityOnHand Int      @default(0)
+  reorderLevel   Int      @default(0)
+  location       String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  catalogItem CatalogItem         @relation(fields: [catalogItemId], references: [id])
+  movements   InventoryMovement[]
+}
+
+model InventoryMovement {
+  id              String                @id @default(cuid())
+  inventoryItemId String
+  type            InventoryMovementType
+  quantity        Int
+  reason          String?
+  referenceType   String?
+  referenceId     String?
+  createdAt       DateTime              @default(now())
+
+  inventoryItem InventoryItem @relation(fields: [inventoryItemId], references: [id])
+
+  @@index([inventoryItemId, createdAt])
+  @@index([referenceType, referenceId])
+}
+
+model Invoice {
+  id            String        @id @default(cuid())
+  invoiceNumber String        @unique
+  type          InvoiceType
+  status        InvoiceStatus @default(DRAFT)
+  paymentStatus PaymentStatus @default(UNPAID)
+  customerId    String
+  ticketId      String?
+  subtotal      Decimal       @default(0) @db.Decimal(12, 2)
+  taxTotal      Decimal       @default(0) @db.Decimal(12, 2)
+  total         Decimal       @default(0) @db.Decimal(12, 2)
+  currency      String        @default("CRC")
+  notes         String?
+  approvedAt    DateTime?
+  rejectedAt    DateTime?
+  sentAt        DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  customer Customer      @relation(fields: [customerId], references: [id])
+  ticket   Ticket?       @relation(fields: [ticketId], references: [id])
+  items    InvoiceItem[]
+
+  @@index([customerId])
+  @@index([ticketId])
+  @@index([status])
+}
+
+model InvoiceItem {
+  id            String   @id @default(cuid())
+  invoiceId     String
+  catalogItemId String?
+  description   String
+  quantity      Int      @default(1)
+  unitPrice     Decimal  @db.Decimal(12, 2)
+  lineTotal     Decimal  @db.Decimal(12, 2)
+  createdAt     DateTime @default(now())
+
+  invoice     Invoice      @relation(fields: [invoiceId], references: [id])
+  catalogItem CatalogItem? @relation(fields: [catalogItemId], references: [id])
+
+  @@index([invoiceId])
+}
+
+model MessageLog {
+  id                String               @id @default(cuid())
+  customerId        String?
+  ticketId          String?
+  channel           CommunicationChannel
+  direction         MessageDirection
+  status            MessageStatus        @default(QUEUED)
+  provider          String?
+  providerMessageId String?
+  recipient         String?
+  subject           String?
+  body              String?
+  metadata          Json?
+  sentAt            DateTime?
+  receivedAt        DateTime?
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+
+  customer Customer? @relation(fields: [customerId], references: [id])
+  ticket   Ticket?   @relation(fields: [ticketId], references: [id])
+
+  @@index([customerId])
+  @@index([ticketId])
+  @@index([channel, status])
+  @@index([providerMessageId])
+}
+
+model FileAsset {
+  id           String         @id @default(cuid())
+  ownerType    String
+  ownerId      String
+  intakeId     String?
+  ticketId     String?
+  storageKey   String
+  originalName String
+  mimeType     String
+  byteSize     Int
+  checksum     String?
+  visibility   FileVisibility @default(PRIVATE)
+  metadata     Json?
+  createdAt    DateTime       @default(now())
+  deletedAt    DateTime?
+
+  intake Intake? @relation(fields: [intakeId], references: [id])
+  ticket Ticket? @relation(fields: [ticketId], references: [id])
+
+  @@index([ownerType, ownerId])
+  @@index([intakeId])
+  @@index([ticketId])
+}
+
+model IntegrationEvent {
+  id             String                 @id @default(cuid())
+  type           String
+  status         IntegrationEventStatus @default(PENDING)
+  aggregateType  String?
+  aggregateId    String?
+  payload        Json
+  idempotencyKey String?                @unique
+  attempts       Int                    @default(0)
+  lastError      String?
+  availableAt    DateTime               @default(now())
+  processedAt    DateTime?
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+
+  @@index([type, status])
+  @@index([aggregateType, aggregateId])
+  @@index([availableAt])
+}
+
+model WebhookEndpoint {
+  id        String   @id @default(cuid())
+  name      String
+  provider  String
+  url       String?
+  secretRef String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  actorUserId String?
+  action      String
+  entityType  String
+  entityId    String?
+  before      Json?
+  after       Json?
+  metadata    Json?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  actor User? @relation(fields: [actorUserId], references: [id])
+
+  @@index([actorUserId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
+
+model KnowledgeDocument {
+  id          String   @id @default(cuid())
+  title       String
+  sourceType  String
+  sourceUri   String?
+  contentHash String?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  chunks KnowledgeChunk[]
+}
+
+model KnowledgeChunk {
+  id         String                 @id @default(cuid())
+  documentId String
+  content    String
+  embedding  Unsupported("vector")?
+  metadata   Json?
+  createdAt  DateTime               @default(now())
+
+  document KnowledgeDocument @relation(fields: [documentId], references: [id])
+
+  @@index([documentId])
+}
+
+model AIInteraction {
+  id         String            @id @default(cuid())
+  type       AIInteractionType
+  ticketId   String?
+  provider   String?
+  model      String?
+  prompt     String?
+  response   String?
+  metadata   Json?
+  reviewedBy String?
+  createdAt  DateTime          @default(now())
+
+  ticket Ticket? @relation(fields: [ticketId], references: [id])
+
+  @@index([ticketId])
+  @@index([type, createdAt])
+}

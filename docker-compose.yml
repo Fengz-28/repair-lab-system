@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    container_name: repair_lab_postgres
+
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: repairlab
+      POSTGRES_PASSWORD: repairlab_password
+      POSTGRES_DB: repairlab
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - repair_lab_pgdata:/var/lib/postgresql/data
+
+volumes:
+  repair_lab_pgdata:
