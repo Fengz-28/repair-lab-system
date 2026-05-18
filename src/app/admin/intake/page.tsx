@@ -27,9 +27,9 @@ export default async function AdminIntakePage() {
   return (
     <main className="mx-auto w-full max-w-5xl space-y-8 px-6 py-8">
       <header className="space-y-2">
-        <p className="text-sm font-medium text-zinc-500">Admin / Recepcion</p>
-        <h1 className="text-2xl font-semibold text-zinc-950">Recepcion de equipos</h1>
-        <p className="max-w-3xl text-sm text-zinc-600">
+        <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Admin / Recepcion</p>
+        <h1 className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50">Recepcion de equipos</h1>
+        <p className="max-w-3xl text-sm text-zinc-600 dark:text-zinc-300">
           Registra cliente, equipo, condicion inicial y problema reportado. El sistema crea
           automaticamente ticket, historial de estado y auditoria minima.
         </p>
@@ -38,30 +38,30 @@ export default async function AdminIntakePage() {
       <IntakeForm />
 
       <section className="space-y-3">
-        <h2 className="text-lg font-semibold text-zinc-950">Recepciones recientes</h2>
-        <div className="overflow-x-auto rounded border border-zinc-200">
+        <h2 className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">Recepciones recientes</h2>
+        <div className="overflow-x-auto rounded border border-zinc-200 dark:border-zinc-800">
           <table className="w-full border-collapse text-left text-sm">
-            <thead className="bg-zinc-50 text-zinc-600">
+            <thead className="bg-zinc-50 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">
               <tr>
-                <th className="border-b border-zinc-200 px-3 py-2">Ticket</th>
-                <th className="border-b border-zinc-200 px-3 py-2">Cliente</th>
-                <th className="border-b border-zinc-200 px-3 py-2">Equipo</th>
-                <th className="border-b border-zinc-200 px-3 py-2">Estado</th>
-                <th className="border-b border-zinc-200 px-3 py-2">Fotos</th>
+                <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Ticket</th>
+                <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Cliente</th>
+                <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Equipo</th>
+                <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Estado</th>
+                <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Fotos</th>
               </tr>
             </thead>
             <tbody>
               {recentTickets.length === 0 ? (
                 <tr>
-                  <td className="px-3 py-4 text-zinc-500" colSpan={5}>
+                  <td className="px-3 py-4 text-zinc-500 dark:text-zinc-400" colSpan={5}>
                     Aun no hay recepciones registradas.
                   </td>
                 </tr>
               ) : (
                 recentTickets.map((ticket) => (
-                  <tr key={ticket.id} className="border-b border-zinc-100 last:border-0">
+                  <tr key={ticket.id} className="border-b border-zinc-100 last:border-0 dark:border-zinc-800">
                     <td className="px-3 py-2 font-medium">
-                      <Link className="underline" href={`/admin/tickets/${ticket.id}`}>
+                      <Link className="underline dark:text-zinc-100" href={`/admin/tickets/${ticket.id}`}>
                         {ticket.ticketNumber}
                       </Link>
                     </td>

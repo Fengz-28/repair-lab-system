@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import type { InvoiceStatus } from "@prisma/client";
+import type { InvoiceStatus, TicketStatus } from "@prisma/client";
 
 import {
   addQuoteItemAction,
@@ -45,18 +45,65 @@ type Quote = {
 
 export function QuoteAdmin({
   ticketId,
+  ticketStatus,
   quotes,
   catalogItems,
 }: {
   ticketId: string;
+  ticketStatus: TicketStatus;
   quotes: Quote[];
   catalogItems: CatalogOption[];
 }) {
+  const mainQuote = quotes[0];
+
   return (
     <div className="space-y-8">
+      <GuidedQuoteFlow ticketStatus={ticketStatus} quote={mainQuote} />
       <CreateQuoteForm ticketId={ticketId} />
       <QuoteList ticketId={ticketId} quotes={quotes} catalogItems={catalogItems} />
     </div>
+  );
+}
+
+function GuidedQuoteFlow({
+  ticketStatus,
+  quote,
+}: {
+  ticketStatus: TicketStatus;
+  quote?: Quote;
+}) {
+  return (
+    <section className="space-y-4 rounded border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-950">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="space-y-2">
+          <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">
+            Flujo de cotizacion
+          </h2>
+          <ol className="list-decimal space-y-1 pl-5 text-sm text-zinc-700 dark:text-zinc-300">
+            <li>Crear cotizacion en borrador.</li>
+            <li>Agregar lineas con precios mientras este en borrador.</li>
+            <li>Revisar el total estimado.</li>
+            <li>Enviar la cotizacion al cliente.</li>
+            <li>Esperar aprobacion o rechazo.</li>
+          </ol>
+          <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+            El precio se coloca en las lineas de la cotizacion, no en el ticket.
+          </p>
+        </div>
+        <div className="grid gap-2 text-sm">
+          <StatusPill label="Ticket" value={ticketStatusLabel(ticketStatus)} tone="ticket" />
+          <StatusPill
+            label="Cotizacion"
+            value={quote ? quoteStatusLabel(quote.status) : "Sin cotizacion"}
+            tone="quote"
+          />
+        </div>
+      </div>
+      <div className="rounded border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-100">
+        <p className="font-semibold">Siguiente paso recomendado</p>
+        <p>{getRecommendedStep(quote)}</p>
+      </div>
+    </section>
   );
 }
 
@@ -64,16 +111,16 @@ function CreateQuoteForm({ ticketId }: { ticketId: string }) {
   const [state, formAction] = useActionState(createQuoteAction, initialQuoteActionState);
 
   return (
-    <form action={formAction} className="space-y-4 rounded border border-zinc-200 p-5">
+    <form action={formAction} className="space-y-4 rounded border border-zinc-200 p-5 dark:border-zinc-800">
       <input type="hidden" name="ticketId" value={ticketId} />
       <div>
-        <h2 className="text-base font-semibold text-zinc-950">Crear cotizacion</h2>
-        <p className="text-sm text-zinc-600">
-          Crea un estimate en borrador. La aprobacion de cliente queda como placeholder.
+        <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Crear cotizacion</h2>
+        <p className="text-sm text-zinc-600 dark:text-zinc-300">
+          Crea una cotizacion en borrador. Luego agrega mano de obra, repuestos o servicios con precio.
         </p>
       </div>
       <div className="grid gap-4 md:grid-cols-3">
-        <label className="grid gap-2 text-sm font-medium text-zinc-800">
+        <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
           Expira en dias
           <input
             name="expiresInDays"
@@ -81,24 +128,24 @@ function CreateQuoteForm({ ticketId }: { ticketId: string }) {
             min={1}
             max={90}
             defaultValue={15}
-            className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm"
+            className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
           />
         </label>
       </div>
-      <label className="grid gap-2 text-sm font-medium text-zinc-800">
+      <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
         Notas visibles para cliente
         <textarea
           name="customerNotes"
           rows={3}
-          className="rounded border border-zinc-300 px-3 py-2 text-sm"
+          className="rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
         />
       </label>
-      <label className="grid gap-2 text-sm font-medium text-zinc-800">
+      <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
         Notas internas
         <textarea
           name="internalNotes"
           rows={3}
-          className="rounded border border-zinc-300 px-3 py-2 text-sm"
+          className="rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
         />
       </label>
       <ActionMessage ok={state.ok} message={state.message} />
@@ -118,7 +165,7 @@ function QuoteList({
 }) {
   if (quotes.length === 0) {
     return (
-      <section className="rounded border border-zinc-200 p-5 text-sm text-zinc-500">
+      <section className="rounded border border-zinc-200 p-5 text-sm text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
         No hay cotizaciones para este ticket.
       </section>
     );
@@ -127,18 +174,18 @@ function QuoteList({
   return (
     <section className="space-y-4">
       {quotes.map((quote) => (
-        <article key={quote.id} className="space-y-4 rounded border border-zinc-200 p-5">
+        <article key={quote.id} className="space-y-4 rounded border border-zinc-200 p-5 dark:border-zinc-800">
           <div className="flex flex-wrap justify-between gap-3">
             <div>
-              <h2 className="text-base font-semibold text-zinc-950">
+              <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">
                 {quote.invoiceNumber}
               </h2>
-              <p className="text-sm text-zinc-600">Estado: {quote.status}</p>
-              <p className="text-sm text-zinc-600">
-                Total: {quote.currency} {quote.total}
+              <StatusBadge status={quote.status} />
+              <p className="mt-2 text-lg font-semibold text-zinc-950 dark:text-zinc-50">
+                Total estimado: {quote.currency} {quote.total}
               </p>
               {quote.approvalExpiresAt ? (
-                <p className="text-sm text-zinc-500">
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">
                   Expira: {quote.approvalExpiresAt}
                 </p>
               ) : null}
@@ -154,8 +201,8 @@ function QuoteList({
               catalogItems={catalogItems}
             />
           ) : (
-            <p className="rounded border border-zinc-200 bg-zinc-50 p-3 text-sm text-zinc-600">
-              Solo las cotizaciones en DRAFT pueden editar lineas.
+            <p className="rounded border border-zinc-200 bg-zinc-50 p-3 text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
+              Esta cotizacion ya no se puede editar porque fue enviada, aprobada, rechazada o expirada.
             </p>
           )}
         </article>
@@ -166,32 +213,32 @@ function QuoteList({
 
 function QuoteItemsTable({ items }: { items: QuoteItem[] }) {
   return (
-    <div className="overflow-x-auto rounded border border-zinc-200">
+    <div className="overflow-x-auto rounded border border-zinc-200 dark:border-zinc-800">
       <table className="w-full border-collapse text-left text-sm">
-        <thead className="bg-zinc-50 text-zinc-600">
+        <thead className="bg-zinc-50 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">
           <tr>
-            <th className="border-b border-zinc-200 px-3 py-2">Tipo</th>
-            <th className="border-b border-zinc-200 px-3 py-2">Descripcion</th>
-            <th className="border-b border-zinc-200 px-3 py-2">Cantidad</th>
-            <th className="border-b border-zinc-200 px-3 py-2">Unitario</th>
-            <th className="border-b border-zinc-200 px-3 py-2">Total</th>
+            <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Tipo</th>
+            <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Descripcion</th>
+            <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Cantidad</th>
+            <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Unitario</th>
+            <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Total</th>
           </tr>
         </thead>
         <tbody>
           {items.length === 0 ? (
             <tr>
-              <td className="px-3 py-4 text-zinc-500" colSpan={5}>
-                Sin lineas todavia.
+              <td className="px-3 py-4 text-zinc-500 dark:text-zinc-400" colSpan={5}>
+                Aun no hay lineas. Agrega mano de obra, repuestos, productos o servicios para formar el precio final.
               </td>
             </tr>
           ) : (
             items.map((item) => (
-              <tr key={item.id} className="border-b border-zinc-100 last:border-0">
-                <td className="px-3 py-2">{item.itemType}</td>
+              <tr key={item.id} className="border-b border-zinc-100 last:border-0 dark:border-zinc-800">
+                <td className="px-3 py-2">{quoteItemTypeLabel(item.itemType)}</td>
                 <td className="px-3 py-2">
                   <p>{item.description}</p>
                   {item.catalogItemName ? (
-                    <p className="text-zinc-500">Catalogo: {item.catalogItemName}</p>
+                    <p className="text-zinc-500 dark:text-zinc-400">Catalogo: {item.catalogItemName}</p>
                   ) : null}
                 </td>
                 <td className="px-3 py-2">{item.quantity}</td>
@@ -218,16 +265,21 @@ function AddQuoteItemForm({
   const [state, formAction] = useActionState(addQuoteItemAction, initialQuoteActionState);
 
   return (
-    <form action={formAction} className="grid gap-3 rounded border border-zinc-200 p-4">
+    <form action={formAction} className="grid gap-3 rounded border border-zinc-200 p-4 dark:border-zinc-800">
       <input type="hidden" name="ticketId" value={ticketId} />
       <input type="hidden" name="quoteId" value={quoteId} />
-      <h3 className="text-sm font-semibold text-zinc-950">Agregar linea</h3>
+      <div>
+        <h3 className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">Agregar precio</h3>
+        <p className="text-sm text-zinc-600 dark:text-zinc-300">
+          Agrega aqui mano de obra, repuestos, productos o servicios. Estos valores forman el precio final de la cotizacion.
+        </p>
+      </div>
       <div className="grid gap-3 md:grid-cols-5">
-        <label className="grid gap-2 text-sm font-medium text-zinc-800">
+        <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
           Catalogo opcional
           <select
             name="catalogItemId"
-            className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm"
+            className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
           >
             <option value="">Manual</option>
             {catalogItems.map((item) => (
@@ -237,27 +289,27 @@ function AddQuoteItemForm({
             ))}
           </select>
         </label>
-        <label className="grid gap-2 text-sm font-medium text-zinc-800">
+        <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
           Tipo
           <select
             name="itemType"
             defaultValue="SERVICE"
-            className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm"
+            className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
           >
-            <option value="SERVICE">SERVICE</option>
-            <option value="PRODUCT">PRODUCT</option>
-            <option value="PART">PART</option>
+            <option value="SERVICE">Servicio</option>
+            <option value="PRODUCT">Producto</option>
+            <option value="PART">Repuesto</option>
           </select>
         </label>
-        <label className="grid gap-2 text-sm font-medium text-zinc-800 md:col-span-2">
+        <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200 md:col-span-2">
           Descripcion
           <input
             name="description"
             required
-            className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm"
+            className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
           />
         </label>
-        <label className="grid gap-2 text-sm font-medium text-zinc-800">
+        <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
           Cantidad
           <input
             name="quantity"
@@ -265,21 +317,21 @@ function AddQuoteItemForm({
             min={1}
             defaultValue={1}
             required
-            className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm"
+            className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
           />
         </label>
-        <label className="grid gap-2 text-sm font-medium text-zinc-800">
+        <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
           Precio unitario
           <input
             name="unitPrice"
             type="number"
             step="0.01"
-            className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm"
+            className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
           />
         </label>
       </div>
-      <p className="text-xs text-zinc-500">
-        Si seleccionas catalogo y dejas precio vacio, se usa su precio base.
+      <p className="text-xs text-zinc-500 dark:text-zinc-400">
+        Si seleccionas un item del catalogo y dejas el precio vacio, se usa su precio base. Total de linea = cantidad x precio unitario.
       </p>
       <ActionMessage ok={state.ok} message={state.message} />
       <SubmitButton label="Agregar linea" pendingLabel="Agregando..." />
@@ -293,8 +345,36 @@ function QuoteStatusForm({ ticketId, quote }: { ticketId: string; quote: Quote }
     initialQuoteActionState,
   );
 
+  const availableStatuses = quote.allowedNextStatuses.filter((status) => {
+    if (status === "SENT") {
+      return quote.items.length > 0;
+    }
+
+    if (status === "APPROVED") {
+      return quote.items.length > 0 && Number(quote.total) > 0;
+    }
+
+    if (status === "EXPIRED") {
+      return quote.status === "SENT";
+    }
+
+    return true;
+  });
+
   if (quote.allowedNextStatuses.length === 0) {
-    return <p className="text-sm text-zinc-500">Estado final</p>;
+    return (
+      <p className="rounded border border-zinc-200 bg-zinc-50 p-3 text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
+        Esta cotizacion ya esta en un estado final.
+      </p>
+    );
+  }
+
+  if (availableStatuses.length === 0) {
+    return (
+      <p className="max-w-xs rounded border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100">
+        Agrega lineas con total mayor a cero antes de enviar o aprobar esta cotizacion.
+      </p>
+    );
   }
 
   return (
@@ -303,21 +383,21 @@ function QuoteStatusForm({ ticketId, quote }: { ticketId: string; quote: Quote }
       <input type="hidden" name="quoteId" value={quote.id} />
       <select
         name="nextStatus"
-        className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm"
+        className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
       >
-        {quote.allowedNextStatuses.map((status) => (
+        {availableStatuses.map((status) => (
           <option key={status} value={status}>
-            {status}
+            {quoteStatusActionLabel(status)}
           </option>
         ))}
       </select>
       <input
         name="internalComment"
         placeholder="Comentario interno opcional"
-        className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm"
+        className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm placeholder:text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
       />
       <ActionMessage ok={state.ok} message={state.message} />
-      <SubmitButton label="Cambiar estado" pendingLabel="Cambiando..." />
+      <SubmitButton label="Actualizar cotizacion" pendingLabel="Actualizando..." />
     </form>
   );
 }
@@ -335,11 +415,138 @@ function SubmitButton({
     <button
       type="submit"
       disabled={pending}
-      className="w-fit rounded bg-zinc-950 px-3 py-2 text-sm font-medium text-white disabled:bg-zinc-400"
+      className="w-fit rounded bg-zinc-950 px-3 py-2 text-sm font-medium text-white disabled:bg-zinc-400 dark:bg-zinc-100 dark:text-zinc-950 dark:disabled:bg-zinc-700 dark:disabled:text-zinc-300"
     >
       {pending ? pendingLabel : label}
     </button>
   );
+}
+
+function StatusBadge({ status }: { status: InvoiceStatus }) {
+  const classes: Record<InvoiceStatus, string> = {
+    DRAFT: "border-zinc-300 bg-zinc-50 text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200",
+    SENT: "border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-100",
+    APPROVED: "border-green-200 bg-green-50 text-green-800 dark:border-green-900 dark:bg-green-950 dark:text-green-100",
+    REJECTED: "border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-100",
+    EXPIRED: "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100",
+    CANCELLED: "border-zinc-300 bg-zinc-50 text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200",
+    PAID: "border-green-200 bg-green-50 text-green-800 dark:border-green-900 dark:bg-green-950 dark:text-green-100",
+    PARTIALLY_PAID: "border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-100",
+    UNPAID: "border-zinc-300 bg-zinc-50 text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200",
+  };
+
+  return (
+    <span className={`inline-flex rounded border px-2 py-1 text-xs font-medium ${classes[status]}`}>
+      {quoteStatusLabel(status)}
+    </span>
+  );
+}
+
+function StatusPill({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone: "ticket" | "quote";
+}) {
+  const classes =
+    tone === "ticket"
+      ? "border-violet-200 bg-violet-50 text-violet-800 dark:border-violet-900 dark:bg-violet-950 dark:text-violet-100"
+      : "border-sky-200 bg-sky-50 text-sky-800 dark:border-sky-900 dark:bg-sky-950 dark:text-sky-100";
+
+  return (
+    <div className={`rounded border px-3 py-2 ${classes}`}>
+      <p className="text-xs font-medium uppercase">{label}</p>
+      <p className="text-sm font-semibold">{value}</p>
+    </div>
+  );
+}
+
+function getRecommendedStep(quote?: Quote) {
+  if (!quote) {
+    return "Crea una cotizacion para empezar a definir precios.";
+  }
+
+  if (quote.status === "DRAFT" && quote.items.length === 0) {
+    return "Agrega servicios, repuestos o productos con precio antes de enviarla.";
+  }
+
+  if (quote.status === "DRAFT") {
+    return "Revisa el total y envia la cotizacion al cliente.";
+  }
+
+  if (quote.status === "SENT") {
+    return "La cotizacion fue enviada. Ahora espera aprobacion o rechazo del cliente.";
+  }
+
+  if (quote.status === "APPROVED") {
+    return "La cotizacion fue aprobada. El siguiente paso futuro sera convertirla en factura o continuar reparacion.";
+  }
+
+  if (quote.status === "REJECTED") {
+    return "La cotizacion fue rechazada. Puedes crear una nueva cotizacion o volver a diagnostico.";
+  }
+
+  if (quote.status === "EXPIRED") {
+    return "La cotizacion expiro. Puedes crear una nueva cotizacion.";
+  }
+
+  return "Revisa el estado actual antes de continuar.";
+}
+
+function quoteStatusLabel(status: InvoiceStatus) {
+  const labels: Record<InvoiceStatus, string> = {
+    DRAFT: "Borrador",
+    SENT: "Enviada",
+    APPROVED: "Aprobada",
+    REJECTED: "Rechazada",
+    EXPIRED: "Expirada",
+    CANCELLED: "Cancelada",
+    PAID: "Pagada",
+    PARTIALLY_PAID: "Pago parcial",
+    UNPAID: "Sin pago",
+  };
+
+  return labels[status] ?? status;
+}
+
+function quoteStatusActionLabel(status: InvoiceStatus) {
+  const labels: Partial<Record<InvoiceStatus, string>> = {
+    SENT: "Enviar al cliente",
+    APPROVED: "Marcar como aprobada",
+    REJECTED: "Marcar como rechazada",
+    EXPIRED: "Marcar como expirada",
+  };
+
+  return labels[status] ?? quoteStatusLabel(status);
+}
+
+function ticketStatusLabel(status: TicketStatus) {
+  const labels: Record<TicketStatus, string> = {
+    RECEIVED: "Recibido",
+    INITIAL_REVIEW: "Revision inicial",
+    DIAGNOSIS: "Diagnostico",
+    WAITING_APPROVAL: "Esperando aprobacion",
+    APPROVED: "Aprobado",
+    REPAIR_IN_PROGRESS: "Reparacion en proceso",
+    READY_FOR_PICKUP: "Listo para retirar",
+    DELIVERED: "Entregado",
+    CANCELLED: "Cancelado",
+  };
+
+  return labels[status] ?? status;
+}
+
+function quoteItemTypeLabel(type: string) {
+  const labels: Record<string, string> = {
+    SERVICE: "Servicio",
+    PRODUCT: "Producto",
+    PART: "Repuesto",
+  };
+
+  return labels[type] ?? type;
 }
 
 function ActionMessage({ ok, message }: { ok: boolean; message: string }) {
@@ -358,4 +565,3 @@ function ActionMessage({ ok, message }: { ok: boolean; message: string }) {
     </p>
   );
 }
-

@@ -153,13 +153,12 @@ export async function addTicketAttachmentPlaceholderAction(
 
     return {
       ok: true,
-      message: "Attachment placeholder agregado.",
+      message: "Archivo privado agregado.",
     };
   } catch (error) {
     return {
       ok: false,
-      message: error instanceof Error ? error.message : "No se pudo agregar el attachment.",
+      message: error instanceof Error ? error.message : "No se pudo agregar el archivo.",
     };
   }
 }
-

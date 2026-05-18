@@ -65,6 +65,7 @@ export async function createIntakeAction(
     return {
       ok: true,
       message: "Recepcion registrada y ticket creado.",
+      ticketId: result.ticketId,
       ticketNumber: result.ticketNumber,
       receiptNumber: result.receiptNumber,
     };

@@ -1,4 +1,4 @@
-import { Prisma, TicketStatus } from "@prisma/client";
+import { InvoiceStatus, InvoiceType, Prisma, TicketStatus } from "@prisma/client";
 
 import { writeAuditLog } from "@/server/audit/audit.service";
 import { prisma } from "@/server/db/prisma";
@@ -50,6 +50,9 @@ export async function changeTicketStatus(
         status: true,
         customerId: true,
         reportedIssue: true,
+        diagnosis: true,
+        resolution: true,
+        internalNotes: true,
         customer: {
           select: {
             firstName: true,
@@ -63,6 +66,14 @@ export async function changeTicketStatus(
             model: true,
           },
         },
+        invoices: {
+          where: {
+            type: InvoiceType.QUOTE,
+          },
+          select: {
+            status: true,
+          },
+        },
       },
     });
 
@@ -73,6 +84,8 @@ export async function changeTicketStatus(
     if (!canTransitionTicketStatus(ticket.status, input.nextStatus)) {
       throw new Error(`Invalid ticket transition: ${ticket.status} -> ${input.nextStatus}.`);
     }
+
+    assertTicketOperationalRequirements(ticket, input.nextStatus);
 
     const updatedTicket = await tx.ticket.update({
       where: { id: ticket.id },
@@ -156,6 +169,29 @@ export async function changeTicketStatus(
 
     return updatedTicket;
   });
+}
+
+function assertTicketOperationalRequirements(
+  ticket: {
+    status: TicketStatus;
+    resolution: string | null;
+    invoices: { status: InvoiceStatus }[];
+  },
+  nextStatus: TicketStatus,
+) {
+  if (nextStatus === TicketStatus.REPAIR_IN_PROGRESS) {
+    const hasApprovedQuote = ticket.invoices.some(
+      (invoice) => invoice.status === InvoiceStatus.APPROVED,
+    );
+
+    if (!hasApprovedQuote) {
+      throw new Error("No se puede iniciar reparacion sin una cotizacion aprobada.");
+    }
+  }
+
+  if (nextStatus === TicketStatus.DELIVERED && !ticket.resolution?.trim()) {
+    throw new Error("Registra el trabajo realizado antes de cerrar el ticket.");
+  }
 }
 
 export async function addInternalComment(

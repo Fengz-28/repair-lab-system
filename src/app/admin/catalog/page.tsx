@@ -17,11 +17,11 @@ export default async function AdminCatalogPage() {
   return (
     <main className="mx-auto w-full max-w-6xl space-y-8 px-6 py-8">
       <header className="space-y-2">
-        <p className="text-sm font-medium text-zinc-500">Admin / Catalogo</p>
-        <h1 className="text-2xl font-semibold text-zinc-950">
+        <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Admin / Catalogo</p>
+        <h1 className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50">
           Servicios, productos e inventario basico
         </h1>
-        <p className="max-w-3xl text-sm text-zinc-600">
+        <p className="max-w-3xl text-sm text-zinc-600 dark:text-zinc-300">
           Base comercial para cotizaciones, invoices, web publica futura e inventario. Sin
           ecommerce, pagos ni integraciones externas.
         </p>
@@ -54,4 +54,3 @@ export default async function AdminCatalogPage() {
     </main>
   );
 }
-

@@ -56,25 +56,26 @@ export default async function TicketQuotesPage({
   return (
     <main className="mx-auto w-full max-w-6xl space-y-8 px-6 py-8">
       <header className="space-y-2">
-        <Link className="text-sm text-zinc-600 underline" href={`/admin/tickets/${ticket.id}`}>
+        <Link className="text-sm text-zinc-600 underline dark:text-zinc-300" href={`/admin/tickets/${ticket.id}`}>
           Volver al ticket
         </Link>
-        <p className="text-sm font-medium text-zinc-500">
+        <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
           Ticket {ticket.ticketNumber} / Cotizaciones
         </p>
-        <h1 className="text-2xl font-semibold text-zinc-950">
+        <h1 className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50">
           Cotizaciones para {ticket.device.brand} {ticket.device.model ?? ""}
         </h1>
-        <p className="max-w-3xl text-sm text-zinc-600">
-          Flujo comercial placeholder para aprobacion futura. Sin pagos, PDF ni envio real.
+        <p className="max-w-3xl text-sm text-zinc-600 dark:text-zinc-300">
+          Aqui se definen los precios de reparacion. La cotizacion puede enviarse para aprobacion sin activar pagos, PDF ni envio real.
         </p>
       </header>
 
       <QuoteAdmin
         ticketId={ticket.id}
+        ticketStatus={ticket.status}
         catalogItems={catalogItems.map((item) => ({
           id: item.id,
-          label: `${item.type} - ${item.name}${item.basePrice ? ` (CRC ${item.basePrice.toString()})` : ""}`,
+          label: `${catalogTypeLabel(item.type)} - ${item.name}${item.basePrice ? ` (CRC ${item.basePrice.toString()})` : ""}`,
           type: item.type,
           basePrice: item.basePrice?.toString() ?? null,
         }))}
@@ -105,3 +106,12 @@ export default async function TicketQuotesPage({
   );
 }
 
+function catalogTypeLabel(type: string) {
+  const labels: Record<string, string> = {
+    SERVICE: "Servicio",
+    PRODUCT: "Producto",
+    PART: "Repuesto",
+  };
+
+  return labels[type] ?? type;
+}

@@ -4,6 +4,7 @@ import {
   InvoiceType,
   PaymentStatus,
   Prisma,
+  TicketStatus,
 } from "@prisma/client";
 
 import { registerEmailNotificationPlaceholder } from "@/modules/notifications/notification.service";
@@ -234,6 +235,8 @@ export async function changeQuoteStatus(input: ChangeQuoteStatusInput, options: 
       throw new Error("Quote not found.");
     }
 
+    await assertQuoteCanMoveToStatus(tx, quote.id, input.nextStatus);
+
     if (!canTransitionQuoteStatus(quote.status, input.nextStatus)) {
       throw new Error(`Invalid quote transition: ${quote.status} -> ${input.nextStatus}.`);
     }
@@ -251,6 +254,15 @@ export async function changeQuoteStatus(input: ChangeQuoteStatusInput, options: 
     });
 
     const eventType = quoteEventForStatus(input.nextStatus);
+    const ticketStatusChange = quote.ticketId
+      ? await syncTicketStatusFromQuoteApproval(tx, {
+          ticketId: quote.ticketId,
+          quoteNumber: quote.invoiceNumber,
+          quoteStatus: input.nextStatus,
+          actorUserId: options.actorUserId ?? null,
+          internalComment: input.internalComment,
+        })
+      : null;
 
     if (quote.ticketId) {
       await tx.ticketEvent.create({
@@ -262,6 +274,11 @@ export async function changeQuoteStatus(input: ChangeQuoteStatusInput, options: 
             quoteNumber: quote.invoiceNumber,
             fromStatus: quote.status,
             toStatus: input.nextStatus,
+            total: quote.total.toString(),
+            currency: quote.currency,
+            timelineLabel: quoteTimelineLabel(input.nextStatus),
+            ticketStatusChangedTo: ticketStatusChange?.toStatus ?? null,
+            ticketStatusReason: ticketStatusChange?.reason ?? null,
             internalComment: input.internalComment ?? null,
           },
         },
@@ -389,4 +406,207 @@ function quoteEventForStatus(status: InvoiceStatus) {
   }
 
   return "quote.updated";
+}
+
+async function assertQuoteCanMoveToStatus(
+  tx: Prisma.TransactionClient,
+  quoteId: string,
+  nextStatus: InvoiceStatus,
+) {
+  if (nextStatus !== InvoiceStatus.SENT && nextStatus !== InvoiceStatus.APPROVED) {
+    return;
+  }
+
+  const quote = await tx.invoice.findUnique({
+    where: { id: quoteId },
+    include: {
+      items: true,
+    },
+  });
+
+  if (!quote) {
+    throw new Error("Quote not found.");
+  }
+
+  if (quote.items.length === 0) {
+    if (nextStatus === InvoiceStatus.SENT) {
+      throw new Error("No se puede enviar una cotizacion sin lineas.");
+    }
+
+    throw new Error("No se puede aprobar una cotizacion sin lineas.");
+  }
+
+  if (nextStatus === InvoiceStatus.APPROVED && Number(quote.total) <= 0) {
+    throw new Error("No se puede aprobar una cotizacion con total cero.");
+  }
+}
+
+function quoteTimelineLabel(status: InvoiceStatus) {
+  if (status === InvoiceStatus.SENT) {
+    return "Cotizacion enviada al cliente";
+  }
+
+  if (status === InvoiceStatus.APPROVED) {
+    return "Cotizacion aprobada. El ticket quedo listo para reparacion.";
+  }
+
+  if (status === InvoiceStatus.REJECTED) {
+    return "Cotizacion rechazada. El ticket volvio a diagnostico.";
+  }
+
+  if (status === InvoiceStatus.EXPIRED) {
+    return "Cotizacion expirada. El ticket volvio a diagnostico.";
+  }
+
+  return "Cotizacion actualizada";
+}
+
+async function syncTicketStatusFromQuoteApproval(
+  tx: Prisma.TransactionClient,
+  input: {
+    ticketId: string;
+    quoteNumber: string;
+    quoteStatus: InvoiceStatus;
+    actorUserId: string | null;
+    internalComment?: string;
+  },
+) {
+  const ticket = await tx.ticket.findUnique({
+    where: { id: input.ticketId },
+    select: {
+      id: true,
+      ticketNumber: true,
+      status: true,
+      customerId: true,
+    },
+  });
+
+  if (!ticket) {
+    return null;
+  }
+
+  const targetStatus = ticketStatusForQuoteStatus(input.quoteStatus, ticket.status);
+
+  if (!targetStatus || targetStatus === ticket.status) {
+    return null;
+  }
+
+  const updatedTicket = await tx.ticket.update({
+    where: { id: ticket.id },
+    data: {
+      status: targetStatus,
+    },
+  });
+
+  const reason = ticketQuoteSyncReason(input.quoteStatus);
+
+  await tx.ticketStatusHistory.create({
+    data: {
+      ticketId: ticket.id,
+      fromStatus: ticket.status,
+      toStatus: targetStatus,
+      changedById: input.actorUserId,
+      internalComment: reason,
+    },
+  });
+
+  await tx.ticketEvent.create({
+    data: {
+      ticketId: ticket.id,
+      type: "ticket.status_changed",
+      payload: {
+        fromStatus: ticket.status,
+        toStatus: targetStatus,
+        quoteNumber: input.quoteNumber,
+        timelineLabel: reason,
+        internalComment: input.internalComment ?? null,
+      },
+    },
+  });
+
+  await tx.integrationEvent.create({
+    data: {
+      type: "ticket.status_changed",
+      aggregateType: "Ticket",
+      aggregateId: ticket.id,
+      payload: {
+        ticketId: ticket.id,
+        ticketNumber: ticket.ticketNumber,
+        customerId: ticket.customerId,
+        fromStatus: ticket.status,
+        toStatus: targetStatus,
+        quoteNumber: input.quoteNumber,
+        source: "quote.approval_flow",
+      },
+    },
+  });
+
+  await writeAuditLog(tx, {
+    actorUserId: input.actorUserId,
+    action: "ticket.status_changed",
+    entityType: "Ticket",
+    entityId: ticket.id,
+    before: {
+      status: ticket.status,
+    },
+    after: {
+      status: updatedTicket.status,
+    },
+    metadata: {
+      module: "quotes",
+      quoteNumber: input.quoteNumber,
+      reason,
+    },
+  });
+
+  return {
+    fromStatus: ticket.status,
+    toStatus: targetStatus,
+    reason,
+  };
+}
+
+function ticketStatusForQuoteStatus(
+  quoteStatus: InvoiceStatus,
+  currentTicketStatus: TicketStatus,
+) {
+  if (quoteStatus === InvoiceStatus.SENT && currentTicketStatus === TicketStatus.DIAGNOSIS) {
+    return TicketStatus.WAITING_APPROVAL;
+  }
+
+  if (
+    quoteStatus === InvoiceStatus.APPROVED &&
+    currentTicketStatus === TicketStatus.WAITING_APPROVAL
+  ) {
+    return TicketStatus.APPROVED;
+  }
+
+  if (
+    (quoteStatus === InvoiceStatus.REJECTED || quoteStatus === InvoiceStatus.EXPIRED) &&
+    currentTicketStatus === TicketStatus.WAITING_APPROVAL
+  ) {
+    return TicketStatus.DIAGNOSIS;
+  }
+
+  return null;
+}
+
+function ticketQuoteSyncReason(status: InvoiceStatus) {
+  if (status === InvoiceStatus.SENT) {
+    return "Cotizacion enviada. El ticket quedo esperando aprobacion.";
+  }
+
+  if (status === InvoiceStatus.APPROVED) {
+    return "Cotizacion aprobada. El ticket quedo listo para reparacion.";
+  }
+
+  if (status === InvoiceStatus.REJECTED) {
+    return "Cotizacion rechazada. El ticket volvio a diagnostico.";
+  }
+
+  if (status === InvoiceStatus.EXPIRED) {
+    return "Cotizacion expirada. El ticket volvio a diagnostico.";
+  }
+
+  return "Cotizacion actualizada.";
 }

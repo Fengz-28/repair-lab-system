@@ -25,7 +25,7 @@ export function IntakeForm() {
   );
 
   return (
-    <form action={formAction} className="space-y-8 rounded border border-zinc-200 p-6">
+    <form action={formAction} className="space-y-8 rounded border border-zinc-200 p-6 dark:border-zinc-800">
       <FormSection title="Cliente">
         <TextInput label="Nombre" name="customer.firstName" required />
         <TextInput label="Apellido" name="customer.lastName" />
@@ -56,7 +56,7 @@ export function IntakeForm() {
         <TextareaInput label="Problema reportado" name="intake.reportedIssue" required />
         <TextareaInput label="Observaciones internas" name="intake.internalNotes" />
         <div className="grid gap-2">
-          <label className="text-sm font-medium text-zinc-800" htmlFor="photos">
+          <label className="text-sm font-medium text-zinc-800 dark:text-zinc-200" htmlFor="photos">
             Fotos privadas del estado inicial
           </label>
           <input
@@ -65,9 +65,9 @@ export function IntakeForm() {
             type="file"
             accept="image/*"
             multiple
-            className="block w-full text-sm"
+            className="block w-full text-sm dark:text-zinc-100"
           />
-          <p className="text-xs text-zinc-500">
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">
             Placeholder privado: se registra metadata y storageKey; no se publica en /public.
           </p>
         </div>
@@ -85,6 +85,14 @@ export function IntakeForm() {
           <p>{state.message}</p>
           {state.ticketNumber ? <p>Ticket: {state.ticketNumber}</p> : null}
           {state.receiptNumber ? <p>Comprobante: {state.receiptNumber}</p> : null}
+          {state.ticketId ? (
+            <a
+              className="mt-2 inline-block font-medium underline"
+              href={`/admin/tickets/${state.ticketId}`}
+            >
+              Ver ticket creado
+            </a>
+          ) : null}
         </div>
       ) : null}
 
@@ -116,7 +124,7 @@ function FormSection({
 }) {
   return (
     <fieldset className="grid gap-4">
-      <legend className="mb-2 text-base font-semibold text-zinc-950">{title}</legend>
+      <legend className="mb-2 text-base font-semibold text-zinc-950 dark:text-zinc-50">{title}</legend>
       <div className="grid gap-4 md:grid-cols-2">{children}</div>
     </fieldset>
   );
@@ -135,7 +143,7 @@ function TextInput({
 }) {
   return (
     <div className="grid gap-2">
-      <label className="text-sm font-medium text-zinc-800" htmlFor={name}>
+      <label className="text-sm font-medium text-zinc-800 dark:text-zinc-200" htmlFor={name}>
         {label}
       </label>
       <input
@@ -143,7 +151,7 @@ function TextInput({
         name={name}
         type={type}
         required={required}
-        className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-700"
+        className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
       />
     </div>
   );
@@ -160,7 +168,7 @@ function TextareaInput({
 }) {
   return (
     <div className="grid gap-2 md:col-span-2">
-      <label className="text-sm font-medium text-zinc-800" htmlFor={name}>
+      <label className="text-sm font-medium text-zinc-800 dark:text-zinc-200" htmlFor={name}>
         {label}
       </label>
       <textarea
@@ -168,7 +176,7 @@ function TextareaInput({
         name={name}
         required={required}
         rows={3}
-        className="rounded border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-700"
+        className="rounded border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
       />
     </div>
   );
@@ -187,14 +195,14 @@ function SelectInput<T extends string>({
 }) {
   return (
     <div className="grid gap-2">
-      <label className="text-sm font-medium text-zinc-800" htmlFor={name}>
+      <label className="text-sm font-medium text-zinc-800 dark:text-zinc-200" htmlFor={name}>
         {label}
       </label>
       <select
         id={name}
         name={name}
         defaultValue={defaultValue}
-        className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-700"
+        className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
       >
         {options.map((option) => (
           <option key={option} value={option}>

@@ -47,10 +47,10 @@ function CreateCatalogItemForm() {
   );
 
   return (
-    <form action={formAction} className="space-y-5 rounded border border-zinc-200 p-5">
+    <form action={formAction} className="space-y-5 rounded border border-zinc-200 p-5 dark:border-zinc-800">
       <div>
-        <h2 className="text-base font-semibold text-zinc-950">Crear item comercial</h2>
-        <p className="text-sm text-zinc-600">
+        <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Crear item comercial</h2>
+        <p className="text-sm text-zinc-600 dark:text-zinc-300">
           Servicios, productos y repuestos para quotes, invoices y web publica futura.
         </p>
       </div>
@@ -77,12 +77,12 @@ function CreateCatalogItemForm() {
         <TextField label="Ubicacion" name="location" />
       </div>
 
-      <label className="grid gap-2 text-sm font-medium text-zinc-800">
+      <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
         Descripcion
         <textarea
           name="description"
           rows={3}
-          className="rounded border border-zinc-300 px-3 py-2 text-sm"
+          className="rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
         />
       </label>
 
@@ -110,34 +110,34 @@ function CreateCatalogItemForm() {
 function CatalogList({ items }: { items: CatalogAdminItem[] }) {
   return (
     <section className="space-y-3">
-      <h2 className="text-base font-semibold text-zinc-950">Catalogo interno</h2>
-      <div className="overflow-x-auto rounded border border-zinc-200">
+      <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Catalogo interno</h2>
+      <div className="overflow-x-auto rounded border border-zinc-200 dark:border-zinc-800">
         <table className="w-full border-collapse text-left text-sm">
-          <thead className="bg-zinc-50 text-zinc-600">
+          <thead className="bg-zinc-50 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">
             <tr>
-              <th className="border-b border-zinc-200 px-3 py-2">Tipo</th>
-              <th className="border-b border-zinc-200 px-3 py-2">Nombre</th>
-              <th className="border-b border-zinc-200 px-3 py-2">Precio</th>
-              <th className="border-b border-zinc-200 px-3 py-2">Stock</th>
-              <th className="border-b border-zinc-200 px-3 py-2">Estado</th>
-              <th className="border-b border-zinc-200 px-3 py-2">Acciones</th>
+              <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Tipo</th>
+              <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Nombre</th>
+              <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Precio</th>
+              <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Stock</th>
+              <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Estado</th>
+              <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {items.length === 0 ? (
               <tr>
-                <td className="px-3 py-4 text-zinc-500" colSpan={6}>
+                <td className="px-3 py-4 text-zinc-500 dark:text-zinc-400" colSpan={6}>
                   No hay items de catalogo.
                 </td>
               </tr>
             ) : (
               items.map((item) => (
-                <tr key={item.id} className="border-b border-zinc-100 align-top last:border-0">
+                <tr key={item.id} className="border-b border-zinc-100 align-top last:border-0 dark:border-zinc-800">
                   <td className="px-3 py-3">{item.type}</td>
                   <td className="px-3 py-3">
                     <p className="font-medium">{item.name}</p>
-                    <p className="text-zinc-500">{item.category ?? "Sin categoria"}</p>
-                    {item.sku ? <p className="text-zinc-500">SKU: {item.sku}</p> : null}
+                    <p className="text-zinc-500 dark:text-zinc-400">{item.category ?? "Sin categoria"}</p>
+                    {item.sku ? <p className="text-zinc-500 dark:text-zinc-400">SKU: {item.sku}</p> : null}
                   </td>
                   <td className="px-3 py-3">
                     {item.basePrice ? (
@@ -148,16 +148,16 @@ function CatalogList({ items }: { items: CatalogAdminItem[] }) {
                     ) : (
                       <p>Manual</p>
                     )}
-                    {item.costPrice ? <p className="text-zinc-500">Costo: {item.costPrice}</p> : null}
+                    {item.costPrice ? <p className="text-zinc-500 dark:text-zinc-400">Costo: {item.costPrice}</p> : null}
                     {item.estimatedDurationMinutes ? (
-                      <p className="text-zinc-500">{item.estimatedDurationMinutes} min</p>
+                      <p className="text-zinc-500 dark:text-zinc-400">{item.estimatedDurationMinutes} min</p>
                     ) : null}
                   </td>
                   <td className="px-3 py-3">
                     {item.inventoryItem ? (
                       <InventoryAdjustForm item={item} />
                     ) : (
-                      <span className="text-zinc-500">No aplica</span>
+                      <span className="text-zinc-500 dark:text-zinc-400">No aplica</span>
                     )}
                   </td>
                   <td className="px-3 py-3">{item.isActive ? "Activo" : "Inactivo"}</td>
@@ -210,20 +210,20 @@ function InventoryAdjustForm({ item }: { item: CatalogAdminItem }) {
         Actual: {item.inventoryItem.quantityOnHand} / min {item.inventoryItem.reorderLevel}
       </p>
       {item.inventoryItem.location ? (
-        <p className="text-zinc-500">{item.inventoryItem.location}</p>
+        <p className="text-zinc-500 dark:text-zinc-400">{item.inventoryItem.location}</p>
       ) : null}
       <input
         name="quantityDelta"
         type="number"
         placeholder="+/- cantidad"
-        className="min-h-9 rounded border border-zinc-300 px-2 text-sm"
+        className="min-h-9 rounded border border-zinc-300 px-2 text-sm placeholder:text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
         required
       />
       <input
         name="reason"
         type="text"
         placeholder="Motivo"
-        className="min-h-9 rounded border border-zinc-300 px-2 text-sm"
+        className="min-h-9 rounded border border-zinc-300 px-2 text-sm placeholder:text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
         required
       />
       <SubmitButton label="Ajustar" pendingLabel="Ajustando..." />
@@ -246,14 +246,14 @@ function TextField({
   required?: boolean;
 }) {
   return (
-    <label className="grid gap-2 text-sm font-medium text-zinc-800">
+    <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
       {label}
       <input
         name={name}
         type={type}
         step={step}
         required={required}
-        className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm"
+        className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
       />
     </label>
   );
@@ -271,12 +271,12 @@ function SelectField({
   defaultValue: string;
 }) {
   return (
-    <label className="grid gap-2 text-sm font-medium text-zinc-800">
+    <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
       {label}
       <select
         name={name}
         defaultValue={defaultValue}
-        className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm"
+        className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
       >
         {options.map((option) => (
           <option key={option} value={option}>
@@ -301,7 +301,7 @@ function SubmitButton({
     <button
       type="submit"
       disabled={pending}
-      className="rounded bg-zinc-950 px-3 py-2 text-sm font-medium text-white disabled:bg-zinc-400"
+      className="rounded bg-zinc-950 px-3 py-2 text-sm font-medium text-white disabled:bg-zinc-400 dark:bg-zinc-100 dark:text-zinc-950 dark:disabled:bg-zinc-700 dark:disabled:text-zinc-300"
     >
       {pending ? pendingLabel : label}
     </button>
@@ -324,4 +324,3 @@ function ActionMessage({ ok, message }: { ok: boolean; message: string }) {
     </p>
   );
 }
-
