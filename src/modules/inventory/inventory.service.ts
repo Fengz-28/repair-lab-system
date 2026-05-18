@@ -25,10 +25,13 @@ export async function adjustInventory(
       throw new Error("Inventory item not found.");
     }
 
-    const nextQuantity = inventoryItem.quantityOnHand + input.quantityDelta;
+    const nextQuantity =
+      input.type === InventoryMovementType.OUT
+        ? inventoryItem.quantityOnHand - input.quantity
+        : inventoryItem.quantityOnHand + input.quantity;
 
     if (nextQuantity < 0) {
-      throw new Error("Inventory adjustment would make stock negative.");
+      throw new Error("No hay stock suficiente para registrar esta salida.");
     }
 
     const updatedInventoryItem = await tx.inventoryItem.update({
@@ -41,14 +44,12 @@ export async function adjustInventory(
     const movement = await tx.inventoryMovement.create({
       data: {
         inventoryItemId: inventoryItem.id,
-        type:
-          input.quantityDelta >= 0
-            ? InventoryMovementType.ADJUSTMENT
-            : InventoryMovementType.OUT,
-        quantity: Math.abs(input.quantityDelta),
+        type: input.type,
+        quantity: input.quantity,
         reason: input.reason,
         referenceType: "ManualAdjustment",
         referenceId: inventoryItem.catalogItemId,
+        notes: input.notes,
       },
     });
 
@@ -62,7 +63,8 @@ export async function adjustInventory(
           catalogItemId: inventoryItem.catalogItemId,
           quantityBefore: inventoryItem.quantityOnHand,
           quantityAfter: updatedInventoryItem.quantityOnHand,
-          quantityDelta: input.quantityDelta,
+          movementType: input.type,
+          quantity: input.quantity,
           movementId: movement.id,
         },
       },
@@ -85,10 +87,11 @@ export async function adjustInventory(
         catalogItemName: inventoryItem.catalogItem.name,
         movementId: movement.id,
         reason: input.reason,
+        movementType: input.type,
+        quantity: input.quantity,
       },
     });
 
     return updatedInventoryItem;
   });
 }
-

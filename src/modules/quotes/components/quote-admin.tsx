@@ -190,7 +190,15 @@ function QuoteList({
                 </p>
               ) : null}
             </div>
-            <QuoteStatusForm ticketId={ticketId} quote={quote} />
+            <div className="grid gap-3">
+              <a
+                className="rounded border border-zinc-300 px-3 py-2 text-sm font-medium text-zinc-800 dark:border-zinc-700 dark:text-zinc-100"
+                href={`/admin/tickets/${ticketId}/quotes/${quote.id}/pdf`}
+              >
+                Descargar cotizacion PDF
+              </a>
+              <QuoteStatusForm ticketId={ticketId} quote={quote} />
+            </div>
           </div>
 
           <QuoteItemsTable items={quote.items} />

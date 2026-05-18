@@ -3,6 +3,8 @@
 import { revalidatePath } from "next/cache";
 
 import { requireLocalStaff } from "@/server/auth/local-admin";
+import { convertQuoteToInvoiceSchema } from "@/modules/invoices/invoice.schema";
+import { convertQuoteToInvoice } from "@/modules/invoices/invoice.service";
 import type { TicketActionState } from "@/modules/tickets/ticket.action-state";
 import {
   addInternalCommentSchema,
@@ -159,6 +161,43 @@ export async function addTicketAttachmentPlaceholderAction(
     return {
       ok: false,
       message: error instanceof Error ? error.message : "No se pudo agregar el archivo.",
+    };
+  }
+}
+
+export async function convertQuoteToInvoiceAction(
+  _previousState: TicketActionState,
+  formData: FormData,
+): Promise<TicketActionState> {
+  const session = await requireLocalStaff();
+  const ticketId = String(formData.get("ticketId") ?? "");
+
+  const parsed = convertQuoteToInvoiceSchema.safeParse({
+    quoteId: formData.get("quoteId"),
+  });
+
+  if (!parsed.success) {
+    return {
+      ok: false,
+      message: "No se pudo generar la factura. Revisa la cotizacion.",
+      errors: parsed.error.flatten().fieldErrors,
+    };
+  }
+
+  try {
+    await convertQuoteToInvoice(parsed.data, {
+      actorUserId: session.userId,
+    });
+    revalidatePath(`/admin/tickets/${ticketId}`);
+
+    return {
+      ok: true,
+      message: "Factura generada.",
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      message: error instanceof Error ? error.message : "No se pudo generar la factura.",
     };
   }
 }

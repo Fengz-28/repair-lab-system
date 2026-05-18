@@ -28,6 +28,9 @@ export default async function AdminTicketsPage() {
   return (
     <main className="mx-auto w-full max-w-7xl space-y-8 px-6 py-8">
       <header className="space-y-2">
+        <Link className="text-sm text-zinc-600 underline dark:text-zinc-300" href="/admin/dashboard">
+          Volver al dashboard
+        </Link>
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
           Admin / Tickets
         </p>
@@ -135,4 +138,3 @@ export default async function AdminTicketsPage() {
     </main>
   );
 }
-

@@ -8,6 +8,7 @@ import {
   addInternalCommentAction,
   addTicketAttachmentPlaceholderAction,
   changeTicketStatusAction,
+  convertQuoteToInvoiceAction,
   updateTechnicalNotesAction,
 } from "@/app/admin/tickets/[ticketId]/actions";
 import { initialTicketActionState } from "@/modules/tickets/ticket.action-state";
@@ -215,6 +216,33 @@ export function AttachmentPlaceholderForm({ ticketId }: { ticketId: string }) {
       <input name="attachment" type="file" className="block w-full text-sm dark:text-zinc-100" />
       <ActionMessage ok={state.ok} message={state.message} />
       <SubmitButton label="Agregar archivo" pendingLabel="Agregando..." />
+    </form>
+  );
+}
+
+export function GenerateInvoiceForm({
+  ticketId,
+  quoteId,
+}: {
+  ticketId: string;
+  quoteId: string;
+}) {
+  const [state, formAction] = useActionState(
+    convertQuoteToInvoiceAction,
+    initialTicketActionState,
+  );
+
+  return (
+    <form action={formAction} className="space-y-2">
+      <input type="hidden" name="ticketId" value={ticketId} />
+      <input type="hidden" name="quoteId" value={quoteId} />
+      <button
+        type="submit"
+        className="rounded bg-zinc-950 px-4 py-2 text-sm font-medium text-white dark:bg-zinc-100 dark:text-zinc-950"
+      >
+        Generar factura
+      </button>
+      <ActionMessage ok={state.ok} message={state.message} />
     </form>
   );
 }

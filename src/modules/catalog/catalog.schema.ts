@@ -30,6 +30,7 @@ export const createCatalogItemSchema = z.object({
   costPrice: optionalMoney,
   priceStartsAt: z.coerce.boolean().default(false),
   estimatedDurationMinutes: optionalInt,
+  trackInventory: z.coerce.boolean().default(false),
   initialStock: optionalInt,
   reorderLevel: optionalInt,
   location: z.preprocess(emptyToUndefined, z.string().max(120).optional()),
@@ -42,6 +43,14 @@ export const updateCatalogItemStatusSchema = z.object({
   isActive: z.coerce.boolean(),
 });
 
+export const updateCatalogInventoryTrackingSchema = z.object({
+  catalogItemId: z.string().min(1),
+  trackInventory: z.coerce.boolean(),
+  initialStock: optionalInt,
+  reorderLevel: optionalInt,
+  location: z.preprocess(emptyToUndefined, z.string().max(120).optional()),
+});
+
 export type CreateCatalogItemInput = z.infer<typeof createCatalogItemSchema>;
 export type UpdateCatalogItemStatusInput = z.infer<typeof updateCatalogItemStatusSchema>;
-
+export type UpdateCatalogInventoryTrackingInput = z.infer<typeof updateCatalogInventoryTrackingSchema>;

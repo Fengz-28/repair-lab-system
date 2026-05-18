@@ -97,6 +97,14 @@ enum PaymentStatus {
   VOID
 }
 
+enum PaymentMethod {
+  CASH
+  CARD
+  TRANSFER
+  SINPE
+  OTHER
+}
+
 enum ProductType {
   SERVICE
   PRODUCT
@@ -334,6 +342,7 @@ model CatalogItem {
   costPrice                Decimal?    @db.Decimal(12, 2)
   priceStartsAt            Boolean     @default(false)
   estimatedDurationMinutes Int?
+  trackInventory           Boolean     @default(false)
   isActive                 Boolean     @default(true)
   isPublic                 Boolean     @default(false)
   createdAt                DateTime    @default(now())
@@ -368,6 +377,7 @@ model InventoryMovement {
   reason          String?
   referenceType   String?
   referenceId     String?
+  notes           String?
   createdAt       DateTime              @default(now())
 
   inventoryItem InventoryItem @relation(fields: [inventoryItemId], references: [id])
@@ -402,6 +412,7 @@ model Invoice {
   customer Customer      @relation(fields: [customerId], references: [id])
   ticket   Ticket?       @relation(fields: [ticketId], references: [id])
   items    InvoiceItem[]
+  payments Payment[]
 
   @@index([customerId])
   @@index([ticketId])
@@ -423,6 +434,22 @@ model InvoiceItem {
   catalogItem CatalogItem? @relation(fields: [catalogItemId], references: [id])
 
   @@index([invoiceId])
+}
+
+model Payment {
+  id        String        @id @default(cuid())
+  invoiceId String
+  amount    Decimal       @db.Decimal(12, 2)
+  method    PaymentMethod
+  reference String?
+  notes     String?
+  createdAt DateTime      @default(now())
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id])
+
+  @@index([invoiceId])
+  @@index([method])
+  @@index([createdAt])
 }
 
 model MessageLog {

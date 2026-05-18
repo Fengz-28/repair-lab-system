@@ -27,6 +27,9 @@ export default async function AdminIntakePage() {
   return (
     <main className="mx-auto w-full max-w-5xl space-y-8 px-6 py-8">
       <header className="space-y-2">
+        <Link className="text-sm text-zinc-600 underline dark:text-zinc-300" href="/admin/dashboard">
+          Volver al dashboard
+        </Link>
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Admin / Recepcion</p>
         <h1 className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50">Recepcion de equipos</h1>
         <p className="max-w-3xl text-sm text-zinc-600 dark:text-zinc-300">

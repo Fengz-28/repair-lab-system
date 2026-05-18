@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { InvoiceType } from "@prisma/client";
-import type { InvoiceStatus, TicketStatus } from "@prisma/client";
+import type { InvoiceStatus, PaymentStatus, TicketStatus } from "@prisma/client";
 
 import {
   AttachmentPlaceholderForm,
+  GenerateInvoiceForm,
   InternalCommentForm,
   TechnicalNotesForm,
   TicketGuidedActions,
@@ -45,16 +46,26 @@ export default async function TicketDetailPage({
       },
       invoices: {
         where: {
-          type: InvoiceType.QUOTE,
+          type: {
+            in: [InvoiceType.QUOTE, InvoiceType.INVOICE],
+          },
         },
         orderBy: { createdAt: "desc" },
         select: {
           id: true,
           invoiceNumber: true,
+          type: true,
           status: true,
+          paymentStatus: true,
           total: true,
           currency: true,
           createdAt: true,
+          internalNotes: true,
+          _count: {
+            select: {
+              items: true,
+            },
+          },
         },
       },
     },
@@ -68,7 +79,15 @@ export default async function TicketDetailPage({
     value: status,
     label: ticketStatusLabel(status),
   }));
-  const approvedQuote = ticket.invoices.find((quote) => quote.status === "APPROVED");
+  const quotes = ticket.invoices.filter((invoice) => invoice.type === InvoiceType.QUOTE);
+  const invoices = ticket.invoices.filter((invoice) => invoice.type === InvoiceType.INVOICE);
+  const approvedQuote = quotes.find((quote) => quote.status === "APPROVED");
+  const generatedInvoice = approvedQuote
+    ? invoices.find((invoice) => invoice.internalNotes?.includes(`sourceQuoteId:${approvedQuote.id}`))
+    : null;
+  const canGenerateInvoice = Boolean(
+    approvedQuote && approvedQuote._count.items > 0 && Number(approvedQuote.total) > 0 && !generatedInvoice,
+  );
   const hasResolution = Boolean(ticket.resolution?.trim());
 
   const timelineItems = [
@@ -116,10 +135,10 @@ export default async function TicketDetailPage({
           <h1 className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50">{ticket.title}</h1>
           <div className="flex flex-wrap gap-2">
             <StatusBadge label="Ticket" value={ticketStatusLabel(ticket.status)} tone="ticket" />
-            {ticket.invoices[0] ? (
+            {quotes[0] ? (
               <StatusBadge
                 label="Cotizacion"
-                value={quoteStatusLabel(ticket.invoices[0].status)}
+                value={quoteStatusLabel(quotes[0].status)}
                 tone="quote"
               />
             ) : null}
@@ -163,13 +182,13 @@ export default async function TicketDetailPage({
               Abrir cotizaciones
             </Link>
           </div>
-          {ticket.invoices.length === 0 ? (
+          {quotes.length === 0 ? (
             <p className="text-sm text-zinc-500 dark:text-zinc-400">
               No hay cotizaciones. Cuando el diagnostico tenga precio, crea una cotizacion y agrega sus lineas.
             </p>
           ) : (
             <ul className="space-y-2">
-              {ticket.invoices.map((quote) => (
+              {quotes.map((quote) => (
                 <li
                   key={quote.id}
                   className="flex flex-wrap items-center justify-between gap-3 rounded border border-zinc-100 p-3 text-sm dark:border-zinc-800"
@@ -191,10 +210,75 @@ export default async function TicketDetailPage({
                     >
                       Abrir
                     </Link>
+                    <a
+                      className="text-zinc-600 underline dark:text-zinc-300"
+                      href={`/admin/tickets/${ticket.id}/quotes/${quote.id}/pdf`}
+                    >
+                      PDF
+                    </a>
                   </div>
                 </li>
               ))}
             </ul>
+          )}
+        </section>
+
+        <section className="space-y-3 rounded border border-zinc-200 p-4 dark:border-zinc-800">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Factura interna</h2>
+            {generatedInvoice ? (
+              <Link
+                className="text-sm text-zinc-600 underline dark:text-zinc-300"
+                href={`/admin/tickets/${ticket.id}/invoices/${generatedInvoice.id}`}
+              >
+                Ver factura
+              </Link>
+            ) : null}
+          </div>
+          {generatedInvoice ? (
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded border border-zinc-100 p-3 text-sm dark:border-zinc-800">
+              <div>
+                <p className="font-medium text-zinc-950 dark:text-zinc-50">{generatedInvoice.invoiceNumber}</p>
+                <p className="text-zinc-500 dark:text-zinc-400">
+                  Total facturado: {generatedInvoice.currency} {generatedInvoice.total.toString()}
+                </p>
+                <p className="text-zinc-500 dark:text-zinc-400">
+                  Creada: {generatedInvoice.createdAt.toLocaleString("es-CR")}
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <StatusBadge label="Factura" value={quoteStatusLabel(generatedInvoice.status)} tone="invoice" />
+                <StatusBadge label="Pago" value={paymentStatusLabel(generatedInvoice.paymentStatus)} tone="invoice" />
+                <a
+                  className="text-zinc-600 underline dark:text-zinc-300"
+                  href={`/admin/tickets/${ticket.id}/invoices/${generatedInvoice.id}/pdf`}
+                >
+                  Descargar factura PDF
+                </a>
+              </div>
+            </div>
+          ) : approvedQuote ? (
+            <div className="space-y-3 rounded border border-zinc-100 p-3 text-sm dark:border-zinc-800">
+              <div>
+                <p className="font-medium text-zinc-950 dark:text-zinc-50">
+                  Cotizacion aprobada: {approvedQuote.invoiceNumber}
+                </p>
+                <p className="text-zinc-500 dark:text-zinc-400">
+                  Total aprobado: {approvedQuote.currency} {approvedQuote.total.toString()}
+                </p>
+              </div>
+              {canGenerateInvoice ? (
+                <GenerateInvoiceForm ticketId={ticket.id} quoteId={approvedQuote.id} />
+              ) : (
+                <p className="text-sm text-amber-700 dark:text-amber-200">
+                  La factura no puede generarse hasta que la cotizacion tenga lineas y total mayor a cero.
+                </p>
+              )}
+            </div>
+          ) : (
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+              La factura se podra generar cuando exista una cotizacion aprobada.
+            </p>
           )}
         </section>
 
@@ -284,12 +368,16 @@ function StatusBadge({
 }: {
   label: string;
   value: string;
-  tone: "ticket" | "quote";
+  tone: "ticket" | "quote" | "invoice";
 }) {
-  const classes =
-    tone === "ticket"
-      ? "border-violet-200 bg-violet-50 text-violet-800 dark:border-violet-900 dark:bg-violet-950 dark:text-violet-100"
-      : "border-sky-200 bg-sky-50 text-sky-800 dark:border-sky-900 dark:bg-sky-950 dark:text-sky-100";
+  const classes = {
+    ticket:
+      "border-violet-200 bg-violet-50 text-violet-800 dark:border-violet-900 dark:bg-violet-950 dark:text-violet-100",
+    quote:
+      "border-sky-200 bg-sky-50 text-sky-800 dark:border-sky-900 dark:bg-sky-950 dark:text-sky-100",
+    invoice:
+      "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100",
+  }[tone];
 
   return (
     <span className={`inline-flex items-center gap-2 rounded border px-3 py-1 text-xs font-medium ${classes}`}>
@@ -313,6 +401,7 @@ function getTicketEventTitle(type: string, payload: unknown) {
     "quote.rejected": "Cotizacion rechazada",
     "quote.expired": "Cotizacion expirada",
     "quote.item_added": "Linea agregada a cotizacion",
+    "invoice.created": "Factura generada desde cotizacion aprobada",
     "ticket.created": "Ticket creado",
     "ticket.status_changed": "Estado de ticket actualizado",
   };
@@ -459,6 +548,18 @@ function quoteStatusLabel(status: InvoiceStatus) {
     PAID: "Pagada",
     PARTIALLY_PAID: "Pago parcial",
     UNPAID: "Sin pago",
+  };
+
+  return labels[status] ?? status;
+}
+
+function paymentStatusLabel(status: PaymentStatus) {
+  const labels: Record<PaymentStatus, string> = {
+    UNPAID: "Pendiente",
+    PARTIALLY_PAID: "Parcial",
+    PAID: "Pagada",
+    REFUNDED: "Reembolsada",
+    VOID: "Anulada",
   };
 
   return labels[status] ?? status;
