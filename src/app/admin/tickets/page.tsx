@@ -1,5 +1,7 @@
 import Link from "next/link";
+import type { TicketStatus } from "@prisma/client";
 
+import { AdminNav } from "@/components/admin-nav";
 import { requireLocalStaff } from "@/server/auth/local-admin";
 import { prisma } from "@/server/db/prisma";
 
@@ -27,10 +29,8 @@ export default async function AdminTicketsPage() {
 
   return (
     <main className="mx-auto w-full max-w-7xl space-y-8 px-6 py-8">
+      <AdminNav />
       <header className="space-y-2">
-        <Link className="text-sm text-zinc-600 underline dark:text-zinc-300" href="/admin/dashboard">
-          Volver al dashboard
-        </Link>
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
           Admin / Tickets
         </p>
@@ -38,7 +38,7 @@ export default async function AdminTicketsPage() {
           Tickets de reparacion
         </h1>
         <p className="max-w-3xl text-sm text-zinc-600 dark:text-zinc-300">
-          Vista operativa para abrir tickets y cotizaciones sin buscar IDs internos.
+          Consulta y da seguimiento a los tickets de reparacion, cotizaciones y facturas.
         </p>
       </header>
 
@@ -106,7 +106,7 @@ export default async function AdminTicketsPage() {
                     </td>
                     <td className="px-3 py-3">
                       <span className="rounded border border-zinc-200 px-2 py-1 text-xs font-medium text-zinc-700 dark:border-zinc-700 dark:text-zinc-200">
-                        {ticket.status}
+                        {ticketStatusLabel(ticket.status)}
                       </span>
                     </td>
                     <td className="px-3 py-3 text-zinc-600 dark:text-zinc-300">
@@ -137,4 +137,20 @@ export default async function AdminTicketsPage() {
       </section>
     </main>
   );
+}
+
+function ticketStatusLabel(status: TicketStatus) {
+  const labels: Record<TicketStatus, string> = {
+    RECEIVED: "Recibido",
+    INITIAL_REVIEW: "Revision inicial",
+    DIAGNOSIS: "En diagnostico",
+    WAITING_APPROVAL: "Esperando aprobacion",
+    APPROVED: "Listo para reparacion",
+    REPAIR_IN_PROGRESS: "En reparacion",
+    READY_FOR_PICKUP: "Listo para entrega",
+    DELIVERED: "Entregado",
+    CANCELLED: "Cancelado",
+  };
+
+  return labels[status] ?? status;
 }

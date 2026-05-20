@@ -1,5 +1,4 @@
-import Link from "next/link";
-
+import { AdminNav } from "@/components/admin-nav";
 import { CatalogAdmin } from "@/modules/catalog/components/catalog-admin";
 import { requireLocalStaff } from "@/server/auth/local-admin";
 import { prisma } from "@/server/db/prisma";
@@ -25,17 +24,14 @@ export default async function AdminCatalogPage() {
 
   return (
     <main className="mx-auto w-full max-w-6xl space-y-8 px-6 py-8">
+      <AdminNav />
       <header className="space-y-2">
-        <Link className="text-sm text-zinc-600 underline dark:text-zinc-300" href="/admin/dashboard">
-          Volver al dashboard
-        </Link>
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Admin / Catalogo</p>
         <h1 className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50">
           Servicios, productos e inventario basico
         </h1>
         <p className="max-w-3xl text-sm text-zinc-600 dark:text-zinc-300">
-          Base comercial para cotizaciones, invoices, web publica futura e inventario. Sin
-          ecommerce, pagos ni integraciones externas.
+          Administra servicios, repuestos, productos e inventario del taller.
         </p>
       </header>
 

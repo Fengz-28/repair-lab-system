@@ -1,5 +1,7 @@
 import Link from "next/link";
+import type { TicketStatus } from "@prisma/client";
 
+import { AdminNav } from "@/components/admin-nav";
 import { IntakeForm } from "@/modules/intake/components/intake-form";
 import { prisma } from "@/server/db/prisma";
 
@@ -26,15 +28,12 @@ export default async function AdminIntakePage() {
 
   return (
     <main className="mx-auto w-full max-w-5xl space-y-8 px-6 py-8">
+      <AdminNav />
       <header className="space-y-2">
-        <Link className="text-sm text-zinc-600 underline dark:text-zinc-300" href="/admin/dashboard">
-          Volver al dashboard
-        </Link>
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Admin / Recepcion</p>
         <h1 className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50">Recepcion de equipos</h1>
         <p className="max-w-3xl text-sm text-zinc-600 dark:text-zinc-300">
-          Registra cliente, equipo, condicion inicial y problema reportado. El sistema crea
-          automaticamente ticket, historial de estado y auditoria minima.
+          Registra aqui un equipo que ingresa al taller. El sistema crea automaticamente el ticket y su historial.
         </p>
       </header>
 
@@ -74,7 +73,7 @@ export default async function AdminIntakePage() {
                     <td className="px-3 py-2">
                       {ticket.device.brand} {ticket.device.model ?? ""}
                     </td>
-                    <td className="px-3 py-2">{ticket.status}</td>
+                    <td className="px-3 py-2">{ticketStatusLabel(ticket.status)}</td>
                     <td className="px-3 py-2">{ticket.intake?.files.length ?? 0}</td>
                   </tr>
                 ))
@@ -85,4 +84,20 @@ export default async function AdminIntakePage() {
       </section>
     </main>
   );
+}
+
+function ticketStatusLabel(status: TicketStatus) {
+  const labels: Record<TicketStatus, string> = {
+    RECEIVED: "Recibido",
+    INITIAL_REVIEW: "Revision inicial",
+    DIAGNOSIS: "En diagnostico",
+    WAITING_APPROVAL: "Esperando aprobacion",
+    APPROVED: "Listo para reparacion",
+    REPAIR_IN_PROGRESS: "En reparacion",
+    READY_FOR_PICKUP: "Listo para entrega",
+    DELIVERED: "Entregado",
+    CANCELLED: "Cancelado",
+  };
+
+  return labels[status] ?? status;
 }

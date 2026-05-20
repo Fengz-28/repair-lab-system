@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type React from "react";
 
+import { AdminNav, DemoChecklist } from "@/components/admin-nav";
 import {
   getDashboardData,
   inventoryMovementLabel,
@@ -19,6 +20,7 @@ export default async function AdminDashboardPage() {
 
   return (
     <main className="mx-auto w-full max-w-7xl space-y-8 px-6 py-8">
+      <AdminNav />
       <header className="space-y-4">
         <div className="space-y-2">
           <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Admin / Dashboard</p>
@@ -42,6 +44,8 @@ export default async function AdminDashboardPage() {
         <KpiCard label="Ingresos registrados" value={formatMoney(dashboard.payments.receivedTotal)} />
         <KpiCard label="Saldo pendiente" value={formatMoney(dashboard.invoices.balanceDue)} tone="warning" />
       </section>
+
+      <DemoChecklist />
 
       <section className="grid gap-6 xl:grid-cols-2">
         <MetricPanel
