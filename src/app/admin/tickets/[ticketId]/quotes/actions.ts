@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { requireLocalStaff } from "@/server/auth/local-admin";
+import { requireLocalStaff, UserRole } from "@/server/auth/local-admin";
 import type { QuoteActionState } from "@/modules/quotes/quote.action-state";
 import {
   addQuoteItemSchema,
@@ -15,7 +15,9 @@ export async function createQuoteAction(
   _previousState: QuoteActionState,
   formData: FormData,
 ): Promise<QuoteActionState> {
-  const session = await requireLocalStaff();
+  const session = await requireLocalStaff({
+    roles: [UserRole.ADMIN, UserRole.TECHNICIAN],
+  });
 
   const parsed = createQuoteSchema.safeParse({
     ticketId: formData.get("ticketId"),
@@ -54,7 +56,9 @@ export async function addQuoteItemAction(
   _previousState: QuoteActionState,
   formData: FormData,
 ): Promise<QuoteActionState> {
-  const session = await requireLocalStaff();
+  const session = await requireLocalStaff({
+    roles: [UserRole.ADMIN, UserRole.TECHNICIAN],
+  });
   const ticketId = String(formData.get("ticketId") ?? "");
 
   const parsed = addQuoteItemSchema.safeParse({
@@ -96,7 +100,9 @@ export async function changeQuoteStatusAction(
   _previousState: QuoteActionState,
   formData: FormData,
 ): Promise<QuoteActionState> {
-  const session = await requireLocalStaff();
+  const session = await requireLocalStaff({
+    roles: [UserRole.ADMIN, UserRole.TECHNICIAN],
+  });
   const ticketId = String(formData.get("ticketId") ?? "");
 
   const parsed = changeQuoteStatusSchema.safeParse({
@@ -131,4 +137,3 @@ export async function changeQuoteStatusAction(
     };
   }
 }
-

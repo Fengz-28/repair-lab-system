@@ -7,8 +7,9 @@ datasource db {
 }
 
 enum UserRole {
-  admin
-  staff
+  ADMIN
+  TECHNICIAN
+  RECEPTIONIST
 }
 
 enum PreferredContactMethod {
@@ -146,7 +147,7 @@ model User {
   id           String   @id @default(cuid())
   email        String   @unique
   name         String?
-  role         UserRole @default(staff)
+  role         UserRole @default(TECHNICIAN)
   passwordHash String?
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
@@ -230,6 +231,7 @@ model Intake {
 model Ticket {
   id              String       @id @default(cuid())
   ticketNumber    String       @unique
+  publicAccessToken String     @unique
   customerId      String
   deviceId        String
   intakeId        String?      @unique

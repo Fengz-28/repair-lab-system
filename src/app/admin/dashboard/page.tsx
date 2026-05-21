@@ -3,6 +3,13 @@ import type React from "react";
 
 import { AdminNav, DemoChecklist } from "@/components/admin-nav";
 import {
+  RepairButton,
+  RepairContainer,
+  RepairPageHero,
+  RepairPanel,
+  RepairStatCard,
+} from "@/components/repairlab";
+import {
   getDashboardData,
   inventoryMovementLabel,
   paymentMethodLabel,
@@ -19,141 +26,93 @@ export default async function AdminDashboardPage() {
   const dashboard = await getDashboardData();
 
   return (
-    <main className="mx-auto w-full max-w-7xl space-y-8 px-6 py-8">
+    <main className="min-h-screen bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50">
       <AdminNav />
-      <header className="space-y-4">
-        <div className="space-y-2">
-          <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Admin / Dashboard</p>
-          <h1 className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50">
-            Panel operativo del taller
-          </h1>
-          <p className="max-w-3xl text-sm text-zinc-600 dark:text-zinc-300">
-            Resumen de tickets, cotizaciones, facturas, pagos e inventario para entender que requiere atencion.
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <QuickLink href="/admin/intake" label="Nueva recepcion" primary />
-          <QuickLink href="/admin/tickets" label="Ver tickets" />
-          <QuickLink href="/admin/catalog" label="Ver catalogo" />
-        </div>
-      </header>
+      <RepairPageHero
+        eyebrow="Admin / Dashboard"
+        title="Panel operativo del taller"
+        description="Vista ejecutiva para entender tickets activos, flujo comercial, pagos, saldos e inventario con lectura rapida."
+        actions={
+          <>
+            <RepairButton href="/admin/intake">Nueva recepcion</RepairButton>
+            <RepairButton href="/admin/tickets" tone="secondary">Ver tickets</RepairButton>
+          </>
+        }
+      />
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Tickets abiertos" value={dashboard.tickets.open} />
-        <KpiCard label="Esperando aprobacion" value={dashboard.tickets.waitingApproval} />
-        <KpiCard label="Ingresos registrados" value={formatMoney(dashboard.payments.receivedTotal)} />
-        <KpiCard label="Saldo pendiente" value={formatMoney(dashboard.invoices.balanceDue)} tone="warning" />
-      </section>
+      <RepairContainer className="space-y-8 py-8 sm:py-10">
+        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <RepairStatCard label="Tickets abiertos" value={dashboard.tickets.open} />
+          <RepairStatCard label="Esperando aprobacion" value={dashboard.tickets.waitingApproval} tone="cyan" />
+          <RepairStatCard label="Ingresos registrados" value={formatMoney(dashboard.payments.receivedTotal)} tone="emerald" />
+          <RepairStatCard label="Saldo pendiente" value={formatMoney(dashboard.invoices.balanceDue)} tone="warning" />
+        </section>
 
-      <DemoChecklist />
+        <DemoChecklist />
 
-      <section className="grid gap-6 xl:grid-cols-2">
-        <MetricPanel
-          title="Tickets"
-          items={[
-            ["Total de tickets", dashboard.tickets.total],
-            ["Tickets abiertos", dashboard.tickets.open],
-            ["Tickets entregados", dashboard.tickets.delivered],
-            ["En diagnostico", dashboard.tickets.diagnosis],
-            ["Esperando aprobacion", dashboard.tickets.waitingApproval],
-            ["Listos para reparacion", dashboard.tickets.approved],
-            ["En reparacion", dashboard.tickets.inRepair],
-            ["Listos para entrega", dashboard.tickets.readyForPickup],
-          ]}
-        />
-        <MetricPanel
-          title="Cotizaciones"
-          items={[
-            ["Total de cotizaciones", dashboard.quotes.total],
-            ["Borrador", dashboard.quotes.draft],
-            ["Enviadas", dashboard.quotes.sent],
-            ["Aprobadas", dashboard.quotes.approved],
-            ["Rechazadas", dashboard.quotes.rejected],
-            ["Expiradas", dashboard.quotes.expired],
-            ["Monto total cotizado", formatMoney(dashboard.quotes.quotedTotal)],
-            ["Monto total aprobado", formatMoney(dashboard.quotes.approvedTotal)],
-          ]}
-        />
-        <MetricPanel
-          title="Facturas"
-          items={[
-            ["Total de facturas", dashboard.invoices.total],
-            ["Pagadas", dashboard.invoices.paid],
-            ["Pendientes", dashboard.invoices.unpaid],
-            ["Parcialmente pagadas", dashboard.invoices.partiallyPaid],
-            ["Total facturado", formatMoney(dashboard.invoices.invoicedTotal)],
-            ["Total pagado", formatMoney(dashboard.invoices.paidTotal)],
-            ["Saldo pendiente", formatMoney(dashboard.invoices.balanceDue)],
-          ]}
-        />
-        <MetricPanel
-          title="Inventario"
-          items={[
-            ["Items de catalogo", dashboard.inventory.catalogItems],
-            ["Controlan stock", dashboard.inventory.trackedItems],
-            ["Stock bajo", dashboard.inventory.lowStock],
-            ["Sin stock", dashboard.inventory.outOfStock],
-            ["Valor estimado", formatMoney(dashboard.inventory.estimatedValue)],
-          ]}
-        />
-      </section>
+        <section className="grid gap-6 xl:grid-cols-2">
+          <MetricPanel
+            title="Tickets"
+            items={[
+              ["Total de tickets", dashboard.tickets.total],
+              ["Tickets abiertos", dashboard.tickets.open],
+              ["Tickets entregados", dashboard.tickets.delivered],
+              ["En diagnostico", dashboard.tickets.diagnosis],
+              ["Esperando aprobacion", dashboard.tickets.waitingApproval],
+              ["Listos para reparacion", dashboard.tickets.approved],
+              ["En reparacion", dashboard.tickets.inRepair],
+              ["Listos para entrega", dashboard.tickets.readyForPickup],
+            ]}
+          />
+          <MetricPanel
+            title="Cotizaciones"
+            items={[
+              ["Total de cotizaciones", dashboard.quotes.total],
+              ["Borrador", dashboard.quotes.draft],
+              ["Enviadas", dashboard.quotes.sent],
+              ["Aprobadas", dashboard.quotes.approved],
+              ["Rechazadas", dashboard.quotes.rejected],
+              ["Expiradas", dashboard.quotes.expired],
+              ["Monto total cotizado", formatMoney(dashboard.quotes.quotedTotal)],
+              ["Monto total aprobado", formatMoney(dashboard.quotes.approvedTotal)],
+            ]}
+          />
+          <MetricPanel
+            title="Facturas"
+            items={[
+              ["Total de facturas", dashboard.invoices.total],
+              ["Pagadas", dashboard.invoices.paid],
+              ["Pendientes", dashboard.invoices.unpaid],
+              ["Parcialmente pagadas", dashboard.invoices.partiallyPaid],
+              ["Total facturado", formatMoney(dashboard.invoices.invoicedTotal)],
+              ["Total pagado", formatMoney(dashboard.invoices.paidTotal)],
+              ["Saldo pendiente", formatMoney(dashboard.invoices.balanceDue)],
+            ]}
+          />
+          <MetricPanel
+            title="Inventario"
+            items={[
+              ["Items de catalogo", dashboard.inventory.catalogItems],
+              ["Controlan stock", dashboard.inventory.trackedItems],
+              ["Stock bajo", dashboard.inventory.lowStock],
+              ["Sin stock", dashboard.inventory.outOfStock],
+              ["Valor estimado", formatMoney(dashboard.inventory.estimatedValue)],
+            ]}
+          />
+        </section>
 
-      <section className="grid gap-6 xl:grid-cols-2">
-        <PaymentsPanel dashboard={dashboard} />
-        <TicketsAttentionPanel tickets={dashboard.lists.ticketsNeedingAttention} />
-        <PendingQuotesPanel quotes={dashboard.lists.pendingQuotes} />
-        <PendingInvoicesPanel invoices={dashboard.lists.pendingInvoices} />
-        <InventoryAlertsPanel items={dashboard.lists.inventoryAlerts} />
-        <RecentMovementsPanel movements={dashboard.lists.recentMovements} />
-      </section>
+        <section className="grid gap-6 xl:grid-cols-2">
+          <PaymentsPanel dashboard={dashboard} />
+          <TicketsAttentionPanel tickets={dashboard.lists.ticketsNeedingAttention} />
+          <PendingQuotesPanel quotes={dashboard.lists.pendingQuotes} />
+          <PendingInvoicesPanel invoices={dashboard.lists.pendingInvoices} />
+          <InventoryAlertsPanel items={dashboard.lists.inventoryAlerts} />
+          <RecentMovementsPanel movements={dashboard.lists.recentMovements} />
+        </section>
 
-      <RecentEventsPanel events={dashboard.lists.recentEvents} />
+        <RecentEventsPanel events={dashboard.lists.recentEvents} />
+      </RepairContainer>
     </main>
-  );
-}
-
-function QuickLink({
-  href,
-  label,
-  primary = false,
-}: {
-  href: string;
-  label: string;
-  primary?: boolean;
-}) {
-  return (
-    <Link
-      className={
-        primary
-          ? "rounded bg-zinc-950 px-3 py-2 text-sm font-medium text-white dark:bg-zinc-100 dark:text-zinc-950"
-          : "rounded border border-zinc-300 px-3 py-2 text-sm font-medium text-zinc-800 dark:border-zinc-700 dark:text-zinc-100"
-      }
-      href={href}
-    >
-      {label}
-    </Link>
-  );
-}
-
-function KpiCard({
-  label,
-  value,
-  tone = "default",
-}: {
-  label: string;
-  value: string | number;
-  tone?: "default" | "warning";
-}) {
-  const classes =
-    tone === "warning"
-      ? "border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950"
-      : "border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950";
-
-  return (
-    <article className={`rounded border p-4 ${classes}`}>
-      <p className="text-sm text-zinc-500 dark:text-zinc-400">{label}</p>
-      <p className="mt-2 text-2xl font-semibold text-zinc-950 dark:text-zinc-50">{value}</p>
-    </article>
   );
 }
 
@@ -165,17 +124,17 @@ function MetricPanel({
   items: [string, string | number][];
 }) {
   return (
-    <section className="rounded border border-zinc-200 p-4 dark:border-zinc-800">
-      <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">{title}</h2>
+    <RepairPanel>
+      <h2 className="text-base font-black text-zinc-950 dark:text-zinc-50">{title}</h2>
       <dl className="mt-3 grid gap-2 text-sm">
         {items.map(([label, value]) => (
-          <div key={label} className="flex justify-between gap-4 border-b border-zinc-100 pb-2 last:border-0 dark:border-zinc-800">
-            <dt className="text-zinc-500 dark:text-zinc-400">{label}</dt>
-            <dd className="font-medium text-zinc-950 dark:text-zinc-50">{value}</dd>
+          <div key={label} className="flex flex-wrap justify-between gap-2 border-b border-zinc-100 pb-2 last:border-0 dark:border-zinc-800">
+            <dt className="min-w-0 text-zinc-500 dark:text-zinc-400">{label}</dt>
+            <dd className="break-words font-medium text-zinc-950 dark:text-zinc-50">{value}</dd>
           </div>
         ))}
       </dl>
-    </section>
+    </RepairPanel>
   );
 }
 
@@ -183,8 +142,8 @@ type DashboardData = Awaited<ReturnType<typeof getDashboardData>>;
 
 function PaymentsPanel({ dashboard }: { dashboard: DashboardData }) {
   return (
-    <section className="rounded border border-zinc-200 p-4 dark:border-zinc-800">
-      <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Pagos</h2>
+    <RepairPanel>
+      <h2 className="text-base font-black text-zinc-950 dark:text-zinc-50">Pagos</h2>
       <dl className="mt-3 grid gap-2 text-sm">
         <MetricRow label="Pagos registrados" value={dashboard.payments.count} />
         <MetricRow label="Total recibido" value={formatMoney(dashboard.payments.receivedTotal)} />
@@ -197,14 +156,14 @@ function PaymentsPanel({ dashboard }: { dashboard: DashboardData }) {
           <EmptyText>No hay pagos registrados.</EmptyText>
         ) : (
           dashboard.payments.byMethod.map((method) => (
-            <div key={method.method} className="flex justify-between gap-3 rounded border border-zinc-100 p-2 text-sm dark:border-zinc-800">
+            <div key={method.method} className="flex flex-wrap justify-between gap-2 rounded border border-zinc-100 p-2 text-sm dark:border-zinc-800">
               <span>{paymentMethodLabel(method.method)}</span>
-              <span className="font-medium">{formatMoney(method.total)} ({method.count})</span>
+              <span className="break-words font-medium">{formatMoney(method.total)} ({method.count})</span>
             </div>
           ))
         )}
       </div>
-    </section>
+    </RepairPanel>
   );
 }
 
@@ -217,11 +176,11 @@ function TicketsAttentionPanel({
     <ListPanel title="Tickets que necesitan atencion" empty="No hay tickets pendientes de atencion.">
       {tickets.map((ticket) => (
         <ListItem key={ticket.id}>
-          <div>
+          <div className="min-w-0">
             <Link className="font-medium underline" href={`/admin/tickets/${ticket.id}`}>
               {ticket.ticketNumber}
             </Link>
-            <p className="text-zinc-500 dark:text-zinc-400">{ticket.customerName} / {ticket.deviceLabel}</p>
+            <p className="break-words text-zinc-500 dark:text-zinc-400">{ticket.customerName} / {ticket.deviceLabel}</p>
           </div>
           <Badge>{ticketStatusLabel(ticket.status)}</Badge>
         </ListItem>
@@ -239,11 +198,11 @@ function PendingQuotesPanel({
     <ListPanel title="Cotizaciones pendientes" empty="No hay cotizaciones pendientes.">
       {quotes.map((quote) => (
         <ListItem key={quote.id}>
-          <div>
+          <div className="min-w-0">
             <Link className="font-medium underline" href={quote.ticketId ? `/admin/tickets/${quote.ticketId}/quotes` : "/admin/tickets"}>
               {quote.invoiceNumber}
             </Link>
-            <p className="text-zinc-500 dark:text-zinc-400">
+            <p className="break-words text-zinc-500 dark:text-zinc-400">
               {quote.customerName} / {quote.ticketNumber} / {formatMoney(quote.total)}
             </p>
           </div>
@@ -263,7 +222,7 @@ function PendingInvoicesPanel({
     <ListPanel title="Facturas por cobrar" empty="No hay facturas pendientes.">
       {invoices.map((invoice) => (
         <ListItem key={invoice.id}>
-          <div>
+          <div className="min-w-0">
             <Link
               className="font-medium underline"
               href={
@@ -274,7 +233,7 @@ function PendingInvoicesPanel({
             >
               {invoice.invoiceNumber}
             </Link>
-            <p className="text-zinc-500 dark:text-zinc-400">
+            <p className="break-words text-zinc-500 dark:text-zinc-400">
               {invoice.customerName} / saldo {formatMoney(invoice.balanceDue)}
             </p>
           </div>
@@ -294,11 +253,11 @@ function InventoryAlertsPanel({
     <ListPanel title="Inventario en alerta" empty="No hay items con stock bajo.">
       {items.map((item) => (
         <ListItem key={item.id}>
-          <div>
+          <div className="min-w-0">
             <Link className="font-medium underline" href="/admin/catalog">
               {item.name}
             </Link>
-            <p className="text-zinc-500 dark:text-zinc-400">
+            <p className="break-words text-zinc-500 dark:text-zinc-400">
               Stock {item.quantityOnHand} / minimo {item.reorderLevel}
             </p>
           </div>
@@ -318,9 +277,9 @@ function RecentMovementsPanel({
     <ListPanel title="Ultimos movimientos de inventario" empty="No hay movimientos de inventario.">
       {movements.map((movement) => (
         <ListItem key={movement.id}>
-          <div>
-            <p className="font-medium text-zinc-950 dark:text-zinc-50">{movement.itemName}</p>
-            <p className="text-zinc-500 dark:text-zinc-400">
+          <div className="min-w-0">
+            <p className="break-words font-medium text-zinc-950 dark:text-zinc-50">{movement.itemName}</p>
+            <p className="break-words text-zinc-500 dark:text-zinc-400">
               {movement.createdAt.toLocaleString("es-CR")} / {movement.reason ?? "Sin motivo"}
             </p>
           </div>
@@ -340,11 +299,11 @@ function RecentEventsPanel({
     <ListPanel title="Ultimos eventos" empty="No hay eventos recientes.">
       {events.map((event) => (
         <ListItem key={event.id}>
-          <div>
+          <div className="min-w-0">
             <Link className="font-medium underline" href={`/admin/tickets/${event.ticketId}`}>
               {event.ticketNumber}
             </Link>
-            <p className="text-zinc-500 dark:text-zinc-400">{event.title}</p>
+            <p className="break-words text-zinc-500 dark:text-zinc-400">{event.title}</p>
           </div>
           <span className="text-xs text-zinc-500 dark:text-zinc-400">
             {event.createdAt.toLocaleString("es-CR")}
@@ -367,18 +326,18 @@ function ListPanel({
   const isEmpty = Array.isArray(children) && children.length === 0;
 
   return (
-    <section className="rounded border border-zinc-200 p-4 dark:border-zinc-800">
-      <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">{title}</h2>
+    <RepairPanel>
+      <h2 className="text-base font-black text-zinc-950 dark:text-zinc-50">{title}</h2>
       <div className="mt-3 space-y-2">
         {isEmpty ? <EmptyText>{empty}</EmptyText> : children}
       </div>
-    </section>
+    </RepairPanel>
   );
 }
 
 function ListItem({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 rounded border border-zinc-100 p-3 text-sm dark:border-zinc-800">
+    <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-zinc-100 bg-zinc-50 p-3 text-sm dark:border-zinc-800 dark:bg-zinc-900/70">
       {children}
     </div>
   );
@@ -386,9 +345,9 @@ function ListItem({ children }: { children: React.ReactNode }) {
 
 function MetricRow({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="flex justify-between gap-4 border-b border-zinc-100 pb-2 last:border-0 dark:border-zinc-800">
+    <div className="flex flex-wrap justify-between gap-2 border-b border-zinc-100 pb-2 last:border-0 dark:border-zinc-800">
       <dt className="text-zinc-500 dark:text-zinc-400">{label}</dt>
-      <dd className="font-medium text-zinc-950 dark:text-zinc-50">{value}</dd>
+      <dd className="break-words font-medium text-zinc-950 dark:text-zinc-50">{value}</dd>
     </div>
   );
 }

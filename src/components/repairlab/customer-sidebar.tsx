@@ -1,0 +1,102 @@
+import { formatMoney } from "@/modules/customers/customer-labels";
+
+import { RepairBadge, RepairButton, RepairPanel } from "./index";
+
+export function CustomerSidebar({
+  contact,
+  phone,
+  whatsappPhone,
+  email,
+  firstTicketAt,
+  ticketCount,
+  invoiceCount,
+  totalInvoiced,
+  totalPaid,
+  balanceDue,
+}: {
+  contact: string;
+  phone: string | null;
+  whatsappPhone: string | null;
+  email: string | null;
+  firstTicketAt: Date | null;
+  ticketCount: number;
+  invoiceCount: number;
+  totalInvoiced: number;
+  totalPaid: number;
+  balanceDue: number;
+}) {
+  return (
+    <aside className="space-y-5 lg:sticky lg:top-28">
+      <RepairPanel>
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
+          Contacto rapido
+        </p>
+        <div className="mt-4 space-y-3 text-sm">
+          <Info label="Principal" value={contact} />
+          <Info label="Telefono" value={phone ?? "No registrado"} />
+          <Info label="WhatsApp" value={whatsappPhone ?? "No registrado"} />
+          <Info label="Email" value={email ?? "No registrado"} />
+        </div>
+      </RepairPanel>
+
+      <RepairPanel>
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
+              Inteligencia CRM
+            </p>
+            <h2 className="mt-2 text-xl font-black text-zinc-950 dark:text-zinc-50">Resumen</h2>
+          </div>
+          <RepairBadge tone={balanceDue > 0 ? "warning" : "emerald"}>
+            {balanceDue > 0 ? "Por cobrar" : "Al dia"}
+          </RepairBadge>
+        </div>
+        <div className="mt-5 grid gap-3">
+          <MiniMetric label="Primer ticket" value={firstTicketAt?.toLocaleDateString("es-CR") ?? "Sin tickets"} />
+          <MiniMetric label="Tickets" value={String(ticketCount)} />
+          <MiniMetric label="Facturas" value={String(invoiceCount)} />
+          <MiniMetric label="Facturado" value={formatMoney(totalInvoiced)} />
+          <MiniMetric label="Pagado" value={formatMoney(totalPaid)} />
+          <MiniMetric label="Saldo pendiente" value={formatMoney(balanceDue)} highlight={balanceDue > 0} />
+        </div>
+      </RepairPanel>
+
+      <RepairPanel>
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
+          Acciones
+        </p>
+        <div className="mt-4 grid gap-2">
+          <RepairButton href="/admin/intake" size="sm">
+            Nueva recepcion
+          </RepairButton>
+          <RepairButton href="/admin/tickets" tone="secondary" size="sm">
+            Ver tickets
+          </RepairButton>
+          <RepairButton href="/admin/customers" tone="ghost" size="sm">
+            Volver al CRM
+          </RepairButton>
+        </div>
+      </RepairPanel>
+    </aside>
+  );
+}
+
+function Info({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="min-w-0 rounded-2xl border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-900/70">
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">{label}</p>
+      <p className="mt-1 break-words font-semibold text-zinc-950 dark:text-zinc-50">{value}</p>
+    </div>
+  );
+}
+
+function MiniMetric({ label, value, highlight = false }: { label: string; value: string; highlight?: boolean }) {
+  return (
+    <div className="flex flex-wrap justify-between gap-3 border-b border-zinc-200 pb-2 last:border-0 last:pb-0 dark:border-zinc-800">
+      <span className="text-sm text-zinc-500 dark:text-zinc-400">{label}</span>
+      <span className={highlight ? "break-words text-right text-sm font-black text-amber-700 dark:text-amber-200" : "break-words text-right text-sm font-black text-zinc-950 dark:text-zinc-50"}>
+        {value}
+      </span>
+    </div>
+  );
+}

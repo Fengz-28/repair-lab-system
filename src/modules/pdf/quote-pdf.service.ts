@@ -14,7 +14,14 @@ import {
   savePdf,
 } from "./pdf-renderer";
 
-export async function generateQuotePdf(quoteId: string) {
+type GenerateQuotePdfOptions = {
+  includeInternalReference?: boolean;
+};
+
+export async function generateQuotePdf(
+  quoteId: string,
+  options: GenerateQuotePdfOptions = {},
+) {
   const quote = await prisma.invoice.findUnique({
     where: { id: quoteId },
     include: {
@@ -41,7 +48,7 @@ export async function generateQuotePdf(quoteId: string) {
     ["Fecha", quote.createdAt.toLocaleDateString("es-CR")],
     ["Estado", invoiceStatusLabel(quote.status)],
     ["Ticket", quote.ticket.ticketNumber],
-    ["Referencia interna", quote.id],
+    ...(options.includeInternalReference === false ? [] : [["Referencia interna", quote.id] as [string, string]]),
   ]);
 
   drawSectionTitle(ctx, "Cliente");

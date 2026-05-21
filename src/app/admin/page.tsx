@@ -1,6 +1,15 @@
 import Link from "next/link";
 
 import { AdminNav, DemoChecklist } from "@/components/admin-nav";
+import {
+  RepairButton,
+  RepairCard,
+  RepairContainer,
+  RepairPageHero,
+  RepairPanel,
+  RepairSection,
+  RepairStatCard,
+} from "@/components/repairlab";
 import { requireLocalStaff } from "@/server/auth/local-admin";
 import { prisma } from "@/server/db/prisma";
 
@@ -29,62 +38,67 @@ export default async function AdminHomePage() {
   ]);
 
   return (
-    <main className="mx-auto w-full max-w-6xl space-y-8 px-6 py-8">
+    <main className="min-h-screen bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50">
       <AdminNav />
 
-      <header className="space-y-3">
-        <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Admin / Inicio</p>
-        <h1 className="text-3xl font-semibold text-zinc-950 dark:text-zinc-50">
-          Repair Lab System
-        </h1>
-        <p className="max-w-3xl text-sm text-zinc-600 dark:text-zinc-300">
-          Sistema interno para gestion de reparaciones, cotizaciones, facturas, pagos e inventario.
-        </p>
-      </header>
+      <RepairPageHero
+        eyebrow="Admin / Inicio"
+        title="Repair Lab System"
+        description="Sistema operativo para gestionar reparaciones, clientes, cotizaciones, facturas, pagos e inventario con una experiencia moderna de taller tecnico."
+        actions={
+          <>
+            <RepairButton href="/admin/intake">Nueva recepcion</RepairButton>
+            <RepairButton href="/admin/dashboard" tone="secondary">Ver dashboard</RepairButton>
+          </>
+        }
+      />
 
-      <section className="grid gap-4 md:grid-cols-4">
-        <HomeCard href="/admin/dashboard" title="Dashboard" description="Resumen operativo del taller." />
-        <HomeCard href="/admin/intake" title="Nueva recepcion" description="Registra un equipo que ingresa al taller." />
-        <HomeCard href="/admin/tickets" title="Tickets" description="Consulta y da seguimiento a reparaciones." />
-        <HomeCard href="/admin/catalog" title="Catalogo" description="Administra servicios, repuestos e inventario." />
-      </section>
+      <RepairContainer className="space-y-8 py-8 sm:py-10">
+        <RepairSection>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+            <HomeCard href="/admin/dashboard" title="Dashboard" description="Resumen operativo del taller." />
+            <HomeCard href="/admin/intake" title="Nueva recepcion" description="Registra un equipo que ingresa al taller." />
+            <HomeCard href="/admin/tickets" title="Tickets" description="Seguimiento de reparaciones." />
+            <HomeCard href="/admin/customers" title="Clientes" description="Historial, equipos y saldos." />
+            <HomeCard href="/admin/messages" title="Mensajes" description="Audita emails y notificaciones." />
+            <HomeCard href="/admin/catalog" title="Catalogo" description="Servicios, repuestos e inventario." />
+          </div>
+        </RepairSection>
 
-      <section className="grid gap-4 md:grid-cols-2">
-        <div className="rounded border border-zinc-200 p-4 dark:border-zinc-800">
-          <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Resumen rapido</h2>
-          <dl className="mt-3 grid gap-2 text-sm">
-            <SummaryRow label="Tickets totales" value={ticketCount} />
-            <SummaryRow label="Tickets abiertos" value={openTicketCount} />
-          </dl>
-        </div>
+        <section className="grid gap-4 lg:grid-cols-[0.8fr_1.2fr]">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+            <RepairStatCard label="Tickets totales" value={ticketCount} tone="emerald" />
+            <RepairStatCard label="Tickets abiertos" value={openTicketCount} tone="cyan" />
+          </div>
 
-        <div className="rounded border border-zinc-200 p-4 dark:border-zinc-800">
-          <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Ultimos tickets</h2>
-          {recentTickets.length === 0 ? (
-            <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">No hay tickets todavia.</p>
-          ) : (
-            <ul className="mt-3 space-y-2 text-sm">
-              {recentTickets.map((ticket) => (
-                <li key={ticket.id} className="flex flex-wrap justify-between gap-3 rounded border border-zinc-100 p-3 dark:border-zinc-800">
-                  <div>
-                    <Link className="font-medium underline" href={`/admin/tickets/${ticket.id}`}>
-                      {ticket.ticketNumber}
-                    </Link>
-                    <p className="text-zinc-500 dark:text-zinc-400">
-                      {ticket.customer.firstName} {ticket.customer.lastName ?? ""} / {ticket.device.brand} {ticket.device.model ?? ""}
-                    </p>
-                  </div>
-                  <span className="text-zinc-500 dark:text-zinc-400">
-                    {ticket.createdAt.toLocaleDateString("es-CR")}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </section>
+          <RepairPanel>
+            <h2 className="text-base font-black text-zinc-950 dark:text-zinc-50">Ultimos tickets</h2>
+            {recentTickets.length === 0 ? (
+              <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">No hay tickets todavia.</p>
+            ) : (
+              <ul className="mt-4 space-y-3 text-sm">
+                {recentTickets.map((ticket) => (
+                  <li key={ticket.id} className="flex flex-wrap justify-between gap-3 rounded-2xl border border-zinc-100 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/70">
+                    <div className="min-w-0">
+                      <Link className="font-bold text-zinc-950 underline decoration-emerald-400 underline-offset-4 dark:text-zinc-50" href={`/admin/tickets/${ticket.id}`}>
+                        {ticket.ticketNumber}
+                      </Link>
+                      <p className="break-words text-zinc-500 dark:text-zinc-400">
+                        {ticket.customer.firstName} {ticket.customer.lastName ?? ""} / {ticket.device.brand} {ticket.device.model ?? ""}
+                      </p>
+                    </div>
+                    <span className="text-zinc-500 dark:text-zinc-400">
+                      {ticket.createdAt.toLocaleDateString("es-CR")}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </RepairPanel>
+        </section>
 
-      <DemoChecklist />
+        <DemoChecklist />
+      </RepairContainer>
     </main>
   );
 }
@@ -99,21 +113,14 @@ function HomeCard({
   description: string;
 }) {
   return (
-    <Link
-      className="rounded border border-zinc-200 p-4 transition hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900"
-      href={href}
-    >
-      <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">{title}</h2>
-      <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">{description}</p>
+    <Link href={href}>
+      <RepairCard className="min-h-36">
+        <div className="grid size-12 place-items-center rounded-2xl bg-emerald-50 text-sm font-black text-emerald-600 dark:bg-emerald-950 dark:text-emerald-200">
+          RL
+        </div>
+        <h2 className="mt-4 text-base font-black text-zinc-950 dark:text-zinc-50">{title}</h2>
+        <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-300">{description}</p>
+      </RepairCard>
     </Link>
-  );
-}
-
-function SummaryRow({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="flex justify-between gap-3 border-b border-zinc-100 pb-2 last:border-0 dark:border-zinc-800">
-      <dt className="text-zinc-500 dark:text-zinc-400">{label}</dt>
-      <dd className="font-medium text-zinc-950 dark:text-zinc-50">{value}</dd>
-    </div>
   );
 }

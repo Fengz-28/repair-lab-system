@@ -9,6 +9,10 @@ import {
   updateCatalogInventoryTrackingAction,
   updateCatalogItemStatusAction,
 } from "@/app/admin/catalog/actions";
+import { InventoryEmptyState } from "@/components/repairlab/inventory-empty-state";
+import { InventoryItemCard } from "@/components/repairlab/inventory-item-card";
+import { RepairInventoryTable } from "@/components/repairlab/inventory-table";
+import { RepairBadge, RepairPanel } from "@/components/repairlab";
 import { initialCatalogActionState } from "@/modules/catalog/catalog.action-state";
 
 type CatalogAdminItem = {
@@ -59,15 +63,25 @@ function CreateCatalogItemForm() {
   );
 
   return (
-    <form action={formAction} className="space-y-5 rounded border border-zinc-200 p-5 dark:border-zinc-800">
-      <div>
-        <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Crear item comercial</h2>
-        <p className="text-sm text-zinc-600 dark:text-zinc-300">
-          Servicios, productos y repuestos para quotes, invoices y web publica futura.
-        </p>
+    <form
+      id="crear-item"
+      action={formAction}
+      className="space-y-6 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm shadow-zinc-950/5 dark:border-zinc-800 dark:bg-zinc-950 sm:p-6"
+    >
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
+            Nuevo item
+          </p>
+          <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Crear item comercial</h2>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-600 dark:text-zinc-300">
+            Servicios, productos y repuestos para cotizaciones, facturas, web publica futura e inventario real cuando aplique.
+          </p>
+        </div>
+        <RepairBadge tone="cyan">Catalogo flexible</RepairBadge>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <SelectField
           label="Tipo"
           name="type"
@@ -89,32 +103,20 @@ function CreateCatalogItemForm() {
         <TextField label="Ubicacion" name="location" />
       </div>
 
-      <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
+      <label className="grid gap-2 text-sm font-bold text-zinc-800 dark:text-zinc-200">
         Descripcion
         <textarea
           name="description"
           rows={3}
-          className="rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+          className={fieldClassName}
         />
       </label>
 
-      <div className="flex flex-wrap gap-4 text-sm">
-        <label className="inline-flex items-center gap-2">
-          <input name="priceStartsAt" type="checkbox" />
-          Precio desde
-        </label>
-        <label className="inline-flex items-center gap-2">
-          <input name="isActive" type="checkbox" defaultChecked />
-          Activo
-        </label>
-        <label className="inline-flex items-center gap-2">
-          <input name="isPublic" type="checkbox" />
-          Preparado para web publica
-        </label>
-        <label className="inline-flex items-center gap-2">
-          <input name="trackInventory" type="checkbox" />
-          Controla stock
-        </label>
+      <div className="grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+        <CheckField name="priceStartsAt" label="Precio desde" />
+        <CheckField name="isActive" label="Activo" defaultChecked />
+        <CheckField name="isPublic" label="Preparado para web publica" />
+        <CheckField name="trackInventory" label="Controla stock" />
       </div>
 
       <ActionMessage ok={state.ok} message={state.message} />
@@ -125,63 +127,88 @@ function CreateCatalogItemForm() {
 
 function CatalogList({ items }: { items: CatalogAdminItem[] }) {
   return (
-    <section className="space-y-3">
-      <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Catalogo interno</h2>
-      <div className="overflow-x-auto rounded border border-zinc-200 dark:border-zinc-800">
-        <table className="w-full border-collapse text-left text-sm">
-          <thead className="bg-zinc-50 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">
-            <tr>
-              <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Tipo</th>
-              <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Nombre</th>
-              <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Precio</th>
-              <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Stock</th>
-              <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Estado</th>
-              <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.length === 0 ? (
-              <tr>
-                <td className="px-3 py-4 text-zinc-500 dark:text-zinc-400" colSpan={6}>
-                  No hay items de catalogo.
-                </td>
-              </tr>
-            ) : (
-              items.map((item) => (
-                <tr key={item.id} className="border-b border-zinc-100 align-top last:border-0 dark:border-zinc-800">
-                  <td className="px-3 py-3">{itemTypeLabel(item.type)}</td>
-                  <td className="px-3 py-3">
-                    <p className="font-medium">{item.name}</p>
-                    <p className="text-zinc-500 dark:text-zinc-400">{item.category ?? "Sin categoria"}</p>
-                    {item.sku ? <p className="text-zinc-500 dark:text-zinc-400">SKU: {item.sku}</p> : null}
-                  </td>
-                  <td className="px-3 py-3">
-                    {item.basePrice ? (
-                      <p>
-                        {item.priceStartsAt ? "Desde " : ""}
-                        CRC {item.basePrice}
-                      </p>
-                    ) : (
-                      <p>Manual</p>
-                    )}
-                    {item.costPrice ? <p className="text-zinc-500 dark:text-zinc-400">Costo: {item.costPrice}</p> : null}
-                    {item.estimatedDurationMinutes ? (
-                      <p className="text-zinc-500 dark:text-zinc-400">{item.estimatedDurationMinutes} min</p>
-                    ) : null}
-                  </td>
-                  <td className="px-3 py-3">
-                    <InventoryPanel item={item} />
-                  </td>
-                  <td className="px-3 py-3">{item.isActive ? "Activo" : "Inactivo"}</td>
-                  <td className="px-3 py-3">
-                    <CatalogStatusForm item={item} />
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+    <section id="catalogo" className="space-y-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
+            Stock management
+          </p>
+          <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Catalogo interno</h2>
+          <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+            Cards operativas para administrar stock y tabla compacta para escaneo rapido.
+          </p>
+        </div>
+        <RepairBadge tone="emerald">{items.length} items</RepairBadge>
       </div>
+
+      {items.length === 0 ? (
+        <InventoryEmptyState hasItems={false} />
+      ) : (
+        <>
+          <div className="grid gap-5 xl:grid-cols-2">
+            {items.map((item) => (
+              <InventoryItemCard
+                key={item.id}
+                title={item.name}
+                subtitle={item.category ?? "Sin categoria"}
+                sku={item.sku}
+                typeLabel={itemTypeLabel(item.type)}
+                price={priceLabel(item)}
+                cost={item.costPrice ? `CRC ${item.costPrice}` : null}
+                duration={item.estimatedDurationMinutes ? `${item.estimatedDurationMinutes} min` : null}
+                active={item.isActive}
+                publicReady={item.isPublic}
+                stockLabel={stockLabel(item)}
+                stockTone={stockTone(item)}
+              >
+                <div className="grid gap-4">
+                  <InventoryPanel item={item} />
+                  <CatalogStatusForm item={item} />
+                </div>
+              </InventoryItemCard>
+            ))}
+          </div>
+
+          <RepairInventoryTable>
+            <table className="w-full min-w-[980px] border-collapse text-left text-sm">
+              <thead className="bg-zinc-50 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">
+                <tr>
+                  <TableHeader>Tipo</TableHeader>
+                  <TableHeader>Nombre</TableHeader>
+                  <TableHeader>Precio</TableHeader>
+                  <TableHeader>Stock</TableHeader>
+                  <TableHeader>Estado</TableHeader>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+                {items.map((item) => (
+                  <tr key={item.id} className="align-top transition hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20">
+                    <td className="px-4 py-4">{itemTypeLabel(item.type)}</td>
+                    <td className="px-4 py-4">
+                      <p className="break-words font-black text-zinc-950 dark:text-zinc-50">{item.name}</p>
+                      <p className="break-words text-zinc-500 dark:text-zinc-400">{item.category ?? "Sin categoria"}</p>
+                      {item.sku ? <p className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-400">SKU {item.sku}</p> : null}
+                    </td>
+                    <td className="px-4 py-4">
+                      <p className="font-semibold">{priceLabel(item)}</p>
+                      {item.costPrice ? <p className="text-zinc-500 dark:text-zinc-400">Costo: CRC {item.costPrice}</p> : null}
+                    </td>
+                    <td className="px-4 py-4">
+                      <RepairBadge tone={stockTone(item)}>{stockLabel(item)}</RepairBadge>
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="flex flex-wrap gap-2">
+                        <RepairBadge tone={item.isActive ? "emerald" : "neutral"}>{item.isActive ? "Activo" : "Inactivo"}</RepairBadge>
+                        {item.isPublic ? <RepairBadge tone="cyan">Web publica</RepairBadge> : null}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </RepairInventoryTable>
+        </>
+      )}
     </section>
   );
 }
@@ -193,12 +220,13 @@ function CatalogStatusForm({ item }: { item: CatalogAdminItem }) {
   );
 
   return (
-    <form action={formAction} className="space-y-2">
+    <form action={formAction} className="grid gap-2 sm:max-w-xs">
       <input name="catalogItemId" type="hidden" value={item.id} />
       <input name="isActive" type="hidden" value={item.isActive ? "false" : "true"} />
       <SubmitButton
-        label={item.isActive ? "Desactivar" : "Activar"}
+        label={item.isActive ? "Desactivar item" : "Activar item"}
         pendingLabel="Actualizando..."
+        tone="secondary"
       />
       <ActionMessage ok={state.ok} message={state.message} />
     </form>
@@ -207,18 +235,21 @@ function CatalogStatusForm({ item }: { item: CatalogAdminItem }) {
 
 function InventoryPanel({ item }: { item: CatalogAdminItem }) {
   if (item.type === "SERVICE") {
-    return <span className="text-zinc-500 dark:text-zinc-400">Servicio sin stock</span>;
+    return (
+      <RepairPanel className="bg-white dark:bg-zinc-950">
+        <p className="text-sm font-semibold text-zinc-600 dark:text-zinc-300">Servicio sin control de stock.</p>
+        <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+          Los servicios alimentan precios y cotizaciones, pero no descuentan inventario.
+        </p>
+      </RepairPanel>
+    );
   }
 
   return (
-    <div className="grid min-w-72 gap-3">
+    <div className="grid gap-4">
       <div className="flex flex-wrap gap-2">
         <InventoryBadge item={item} />
-        {item.trackInventory && item.inventoryItem && item.inventoryItem.quantityOnHand <= item.inventoryItem.reorderLevel ? (
-          <span className="rounded border border-amber-200 bg-amber-50 px-2 py-1 text-xs font-medium text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100">
-            Stock bajo
-          </span>
-        ) : null}
+        {isLowStock(item) ? <RepairBadge tone="warning">Stock bajo</RepairBadge> : null}
       </div>
       {item.trackInventory && item.inventoryItem ? (
         <>
@@ -239,33 +270,18 @@ function InventoryTrackingForm({ item }: { item: CatalogAdminItem }) {
   );
 
   return (
-    <form action={formAction} className="grid gap-2">
+    <form action={formAction} className="grid gap-3">
       <input name="catalogItemId" type="hidden" value={item.id} />
       <input name="trackInventory" type="hidden" value="true" />
-      <p className="text-xs text-zinc-500 dark:text-zinc-400">
-        Este item puede usarse en lineas manuales o catalogo sin descontar stock. Activa control solo si quieres manejar inventario real.
+      <p className="text-sm leading-6 text-zinc-500 dark:text-zinc-400">
+        Este item puede usarse sin descontar stock. Activa control solo si quieres manejar inventario real.
       </p>
-      <input
-        name="initialStock"
-        type="number"
-        min={0}
-        placeholder="Stock inicial"
-        className="min-h-9 rounded border border-zinc-300 px-2 text-sm placeholder:text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
-      />
-      <input
-        name="reorderLevel"
-        type="number"
-        min={0}
-        placeholder="Stock minimo"
-        className="min-h-9 rounded border border-zinc-300 px-2 text-sm placeholder:text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
-      />
-      <input
-        name="location"
-        type="text"
-        placeholder="Ubicacion"
-        className="min-h-9 rounded border border-zinc-300 px-2 text-sm placeholder:text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
-      />
-      <SubmitButton label="Activar stock" pendingLabel="Activando..." />
+      <div className="grid gap-3 sm:grid-cols-3">
+        <input name="initialStock" type="number" min={0} placeholder="Stock inicial" className={smallFieldClassName} />
+        <input name="reorderLevel" type="number" min={0} placeholder="Stock minimo" className={smallFieldClassName} />
+        <input name="location" type="text" placeholder="Ubicacion" className={smallFieldClassName} />
+      </div>
+      <SubmitButton label="Activar control de stock" pendingLabel="Activando..." />
       <ActionMessage ok={state.ok} message={state.message} />
     </form>
   );
@@ -282,45 +298,24 @@ function InventoryAdjustForm({ item }: { item: CatalogAdminItem }) {
   }
 
   return (
-    <form action={formAction} className="grid min-w-56 gap-2">
+    <form action={formAction} className="grid gap-3">
       <input name="inventoryItemId" type="hidden" value={item.inventoryItem.id} />
-      <p>
-        Actual: {item.inventoryItem.quantityOnHand} / min {item.inventoryItem.reorderLevel}
-      </p>
-      {item.inventoryItem.location ? (
-        <p className="text-zinc-500 dark:text-zinc-400">{item.inventoryItem.location}</p>
-      ) : null}
-      <select
-        name="type"
-        className="min-h-9 rounded border border-zinc-300 px-2 text-sm placeholder:text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
-        defaultValue="IN"
-      >
-        <option value="IN">Entrada</option>
-        <option value="OUT">Salida</option>
-        <option value="ADJUSTMENT">Ajuste</option>
-      </select>
-      <input
-        name="quantity"
-        type="number"
-        min={1}
-        placeholder="Cantidad"
-        className="min-h-9 rounded border border-zinc-300 px-2 text-sm placeholder:text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
-        required
-      />
-      <input
-        name="reason"
-        type="text"
-        placeholder="Motivo"
-        className="min-h-9 rounded border border-zinc-300 px-2 text-sm placeholder:text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
-        required
-      />
-      <input
-        name="notes"
-        type="text"
-        placeholder="Notas opcionales"
-        className="min-h-9 rounded border border-zinc-300 px-2 text-sm placeholder:text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
-      />
-      <SubmitButton label="Ajustar" pendingLabel="Ajustando..." />
+      <div className="grid gap-3 sm:grid-cols-3">
+        <StockMetric label="Actual" value={String(item.inventoryItem.quantityOnHand)} />
+        <StockMetric label="Minimo" value={String(item.inventoryItem.reorderLevel)} />
+        <StockMetric label="Ubicacion" value={item.inventoryItem.location ?? "No definida"} />
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <select name="type" className={smallFieldClassName} defaultValue="IN">
+          <option value="IN">Entrada</option>
+          <option value="OUT">Salida</option>
+          <option value="ADJUSTMENT">Ajuste</option>
+        </select>
+        <input name="quantity" type="number" min={1} placeholder="Cantidad" className={smallFieldClassName} required />
+        <input name="reason" type="text" placeholder="Motivo" className={smallFieldClassName} required />
+        <input name="notes" type="text" placeholder="Notas opcionales" className={smallFieldClassName} />
+      </div>
+      <SubmitButton label="Ajustar inventario" pendingLabel="Ajustando..." />
       <ActionMessage ok={state.ok} message={state.message} />
     </form>
   );
@@ -332,44 +327,39 @@ function InventoryMovements({
   movements: NonNullable<CatalogAdminItem["inventoryItem"]>["movements"];
 }) {
   if (movements.length === 0) {
-    return <p className="text-xs text-zinc-500 dark:text-zinc-400">Sin movimientos recientes.</p>;
+    return <p className="text-sm text-zinc-500 dark:text-zinc-400">Sin movimientos recientes.</p>;
   }
 
   return (
-    <div className="space-y-1 text-xs">
-      <p className="font-medium text-zinc-700 dark:text-zinc-300">Movimientos recientes</p>
-      {movements.map((movement) => (
-        <div key={movement.id} className="rounded border border-zinc-100 p-2 dark:border-zinc-800">
-          <p>
-            {movement.createdAt}: {inventoryMovementLabel(movement.type)} {movement.quantity}
-          </p>
-          <p className="text-zinc-500 dark:text-zinc-400">{movement.reason ?? "Sin motivo"}</p>
-          {movement.referenceType ? (
-            <p className="text-zinc-500 dark:text-zinc-400">
-              Ref: {movement.referenceType} {movement.referenceId ?? ""}
-            </p>
-          ) : null}
-          {movement.notes ? <p className="text-zinc-500 dark:text-zinc-400">{movement.notes}</p> : null}
-        </div>
-      ))}
+    <div className="space-y-2">
+      <p className="text-xs font-black uppercase tracking-[0.16em] text-zinc-500 dark:text-zinc-400">
+        Movimientos recientes
+      </p>
+      <div className="grid gap-2">
+        {movements.map((movement) => (
+          <div key={movement.id} className="rounded-2xl border border-zinc-200 bg-white p-3 text-sm dark:border-zinc-800 dark:bg-zinc-950">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="font-black text-zinc-950 dark:text-zinc-50">
+                {inventoryMovementLabel(movement.type)} {movement.quantity}
+              </p>
+              <span className="text-xs text-zinc-500 dark:text-zinc-400">{movement.createdAt}</span>
+            </div>
+            <p className="mt-1 break-words text-zinc-500 dark:text-zinc-400">{movement.reason ?? "Sin motivo"}</p>
+            {movement.referenceType ? (
+              <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                Ref: {movement.referenceType} {movement.referenceId ?? ""}
+              </p>
+            ) : null}
+            {movement.notes ? <p className="mt-1 break-words text-xs text-zinc-500 dark:text-zinc-400">{movement.notes}</p> : null}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
 function InventoryBadge({ item }: { item: CatalogAdminItem }) {
-  if (!item.trackInventory) {
-    return (
-      <span className="rounded border border-zinc-200 bg-zinc-50 px-2 py-1 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200">
-        Sin control de stock
-      </span>
-    );
-  }
-
-  return (
-    <span className="rounded border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">
-      Controla stock
-    </span>
-  );
+  return <RepairBadge tone={item.trackInventory ? "emerald" : "neutral"}>{item.trackInventory ? "Controla stock" : "Sin control de stock"}</RepairBadge>;
 }
 
 function TextField({
@@ -386,14 +376,14 @@ function TextField({
   required?: boolean;
 }) {
   return (
-    <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
+    <label className="grid gap-2 text-sm font-bold text-zinc-800 dark:text-zinc-200">
       {label}
       <input
         name={name}
         type={type}
         step={step}
         required={required}
-        className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+        className={fieldClassName}
       />
     </label>
   );
@@ -411,21 +401,47 @@ function SelectField({
   defaultValue: string;
 }) {
   return (
-    <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
+    <label className="grid gap-2 text-sm font-bold text-zinc-800 dark:text-zinc-200">
       {label}
-      <select
-        name={name}
-        defaultValue={defaultValue}
-        className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
-      >
+      <select name={name} defaultValue={defaultValue} className={fieldClassName}>
         {options.map((option) => (
           <option key={option} value={option}>
-            {option}
+            {itemTypeLabel(option)}
           </option>
         ))}
       </select>
     </label>
   );
+}
+
+function CheckField({
+  name,
+  label,
+  defaultChecked = false,
+}: {
+  name: string;
+  label: string;
+  defaultChecked?: boolean;
+}) {
+  return (
+    <label className="flex min-h-12 items-center gap-3 rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm font-bold text-zinc-800 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-200">
+      <input name={name} type="checkbox" defaultChecked={defaultChecked} className="size-4 accent-emerald-500" />
+      {label}
+    </label>
+  );
+}
+
+function StockMetric({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-950">
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">{label}</p>
+      <p className="mt-1 break-words text-sm font-black text-zinc-950 dark:text-zinc-50">{value}</p>
+    </div>
+  );
+}
+
+function TableHeader({ children }: { children: React.ReactNode }) {
+  return <th className="border-b border-zinc-200 px-4 py-3 text-xs font-black uppercase tracking-[0.14em] dark:border-zinc-800">{children}</th>;
 }
 
 function itemTypeLabel(type: string) {
@@ -450,20 +466,78 @@ function inventoryMovementLabel(type: string) {
   return labels[type] ?? type;
 }
 
+function priceLabel(item: CatalogAdminItem) {
+  if (!item.basePrice) {
+    return "Manual";
+  }
+
+  return `${item.priceStartsAt ? "Desde " : ""}CRC ${item.basePrice}`;
+}
+
+function isLowStock(item: CatalogAdminItem) {
+  return Boolean(
+    item.trackInventory &&
+      item.inventoryItem &&
+      item.inventoryItem.quantityOnHand <= item.inventoryItem.reorderLevel,
+  );
+}
+
+function stockLabel(item: CatalogAdminItem) {
+  if (item.type === "SERVICE") {
+    return "Sin stock";
+  }
+
+  if (!item.trackInventory || !item.inventoryItem) {
+    return "Sin control";
+  }
+
+  if (item.inventoryItem.quantityOnHand <= 0) {
+    return "Agotado";
+  }
+
+  if (item.inventoryItem.quantityOnHand <= item.inventoryItem.reorderLevel) {
+    return `Bajo: ${item.inventoryItem.quantityOnHand}`;
+  }
+
+  return `Stock: ${item.inventoryItem.quantityOnHand}`;
+}
+
+function stockTone(item: CatalogAdminItem): "neutral" | "emerald" | "warning" | "danger" {
+  if (item.type === "SERVICE" || !item.trackInventory || !item.inventoryItem) {
+    return "neutral";
+  }
+
+  if (item.inventoryItem.quantityOnHand <= 0) {
+    return "danger";
+  }
+
+  if (item.inventoryItem.quantityOnHand <= item.inventoryItem.reorderLevel) {
+    return "warning";
+  }
+
+  return "emerald";
+}
+
 function SubmitButton({
   label,
   pendingLabel,
+  tone = "primary",
 }: {
   label: string;
   pendingLabel: string;
+  tone?: "primary" | "secondary";
 }) {
   const { pending } = useFormStatus();
+  const toneClass =
+    tone === "secondary"
+      ? "border border-zinc-200 bg-white text-zinc-900 hover:border-emerald-300 hover:text-emerald-700 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
+      : "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 hover:bg-emerald-600";
 
   return (
     <button
       type="submit"
       disabled={pending}
-      className="rounded bg-zinc-950 px-3 py-2 text-sm font-medium text-white disabled:bg-zinc-400 dark:bg-zinc-100 dark:text-zinc-950 dark:disabled:bg-zinc-700 dark:disabled:text-zinc-300"
+      className={`min-h-11 rounded-full px-5 py-2.5 text-sm font-black transition disabled:cursor-not-allowed disabled:bg-zinc-400 disabled:text-zinc-100 ${toneClass}`}
     >
       {pending ? pendingLabel : label}
     </button>
@@ -477,8 +551,10 @@ function ActionMessage({ ok, message }: { ok: boolean; message: string }) {
 
   return (
     <p
-      className={`rounded border p-2 text-xs ${
-        ok ? "border-green-200 bg-green-50 text-green-800" : "border-red-200 bg-red-50 text-red-800"
+      className={`rounded-2xl border p-3 text-sm font-semibold ${
+        ok
+          ? "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100"
+          : "border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-100"
       }`}
       role="status"
     >
@@ -486,3 +562,9 @@ function ActionMessage({ ok, message }: { ok: boolean; message: string }) {
     </p>
   );
 }
+
+const fieldClassName =
+  "min-h-12 rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-950 placeholder:text-zinc-500 shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:ring-emerald-900";
+
+const smallFieldClassName =
+  "min-h-11 rounded-2xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-950 placeholder:text-zinc-500 shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:ring-emerald-900";

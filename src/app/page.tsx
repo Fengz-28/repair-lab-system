@@ -1,65 +1,116 @@
-import Image from "next/image";
+import {
+  PublicHero,
+  PublicSectionHeader,
+  PublicServiceCard,
+  PublicShell,
+} from "@/components/repairlab/public-site";
+import { RepairButton, RepairContainer, RepairPanel } from "@/components/repairlab";
 
-export default function Home() {
+const featuredServices = [
+  {
+    title: "Reparacion de consolas",
+    badge: "Gaming",
+    description: "Diagnostico y reparacion para consolas con fallas de video, energia, puertos, temperatura o controles.",
+  },
+  {
+    title: "Microsoldadura",
+    badge: "Board level",
+    description: "Trabajo tecnico en conectores, pistas, componentes pequenos y reparaciones electronicas de precision.",
+  },
+  {
+    title: "Diagnostico electronico",
+    badge: "Revision",
+    description: "Evaluacion inicial para identificar causa probable, alcance de reparacion y ruta de cotizacion.",
+  },
+  {
+    title: "Mantenimiento",
+    badge: "Preventivo",
+    description: "Limpieza profunda, cambio de pasta termica y revision para mejorar estabilidad y temperatura.",
+  },
+  {
+    title: "Reparacion de controles",
+    badge: "Accesorios",
+    description: "Atencion a drift, botones, conectores, carga, flex y fallas comunes de mandos.",
+  },
+  {
+    title: "Equipos reacondicionados",
+    badge: "Catalogo",
+    description: "Preparacion y revision de equipos para venta futura con historial y control interno.",
+  },
+];
+
+const processSteps = ["Recibimos equipo", "Diagnostico", "Cotizacion", "Reparacion", "Entrega"];
+
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <PublicShell>
+      <PublicHero
+        eyebrow="RepairLab / Electronic repair"
+        title="Reparacion electronica con seguimiento claro y documentado."
+        description="Un taller moderno para recibir equipos, diagnosticar fallas, cotizar reparaciones y mantener al cliente informado con transparencia."
+        primaryHref="/contact"
+        primaryLabel="Solicitar reparacion"
+        secondaryHref="/services"
+        secondaryLabel="Ver servicios"
+        badge="Portal de seguimiento preparado para clientes"
+      />
+
+      <RepairContainer className="space-y-16 py-16">
+        <section className="space-y-8">
+          <PublicSectionHeader
+            eyebrow="Servicios destacados"
+            title="Soporte tecnico para electronica real"
+            description="Servicios pensados para consolas, controles, placas, repuestos y equipos que necesitan diagnostico profesional."
+          />
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {featuredServices.map((service) => (
+              <PublicServiceCard key={service.title} {...service} />
+            ))}
+          </div>
+        </section>
+
+        <section className="space-y-8">
+          <PublicSectionHeader
+            eyebrow="Proceso"
+            title="Un flujo simple, trazable y profesional"
+            description="Desde la recepcion hasta la entrega, cada etapa queda preparada para seguimiento interno y comunicacion clara."
+          />
+          <div className="grid gap-4 md:grid-cols-5">
+            {processSteps.map((step, index) => (
+              <RepairPanel key={step} className="text-center">
+                <div className="mx-auto grid size-12 place-items-center rounded-2xl bg-emerald-50 text-sm font-black text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200">
+                  {index + 1}
+                </div>
+                <h3 className="mt-4 text-base font-black text-zinc-950 dark:text-zinc-50">{step}</h3>
+              </RepairPanel>
+            ))}
+          </div>
+        </section>
+
+        <section className="grid gap-5 lg:grid-cols-4">
+          {[
+            ["Seguimiento por portal", "El cliente puede revisar el estado de su reparacion con un enlace seguro."],
+            ["PDFs profesionales", "Cotizaciones y facturas internas listas para descargar e imprimir."],
+            ["Historial tecnico", "Cada ticket conserva eventos, estados y actividad relevante."],
+            ["Transparencia", "Cotizaciones, pagos y saldos se mantienen claros durante el proceso."],
+          ].map(([title, description]) => (
+            <RepairPanel key={title}>
+              <h3 className="text-lg font-black text-zinc-950 dark:text-zinc-50">{title}</h3>
+              <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">{description}</p>
+            </RepairPanel>
+          ))}
+        </section>
+
+        <section className="rounded-[2rem] border border-emerald-200 bg-emerald-50 p-8 text-center dark:border-emerald-900 dark:bg-emerald-950/35">
+          <h2 className="text-3xl font-black text-zinc-950 dark:text-zinc-50">¿Tienes un equipo para revisar?</h2>
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-300">
+            Agenda una recepcion o consulta el proceso para que podamos evaluar tu equipo con orden y trazabilidad.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+          <div className="mt-6">
+            <RepairButton href="/contact">Solicitar reparacion</RepairButton>
+          </div>
+        </section>
+      </RepairContainer>
+    </PublicShell>
   );
 }

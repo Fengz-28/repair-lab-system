@@ -7,6 +7,10 @@ import {
   TicketStatus,
 } from "@prisma/client";
 
+import {
+  buildPublicPortalUrl,
+  buildPublicQuotePdfUrl,
+} from "@/modules/email/email.service";
 import { registerEmailNotificationPlaceholder } from "@/modules/notifications/notification.service";
 import { writeAuditLog } from "@/server/audit/audit.service";
 import { prisma } from "@/server/db/prisma";
@@ -302,9 +306,14 @@ export async function changeQuoteStatus(input: ChangeQuoteStatusInput, options: 
       },
     });
 
-    if (input.nextStatus === InvoiceStatus.SENT) {
+    if (
+      (input.nextStatus === InvoiceStatus.SENT || input.nextStatus === InvoiceStatus.APPROVED) &&
+      quote.ticket
+    ) {
+      const portalUrl = buildPublicPortalUrl(quote.ticket.publicAccessToken);
+
       await registerEmailNotificationPlaceholder(tx, {
-        template: "quote.sent",
+        template: input.nextStatus === InvoiceStatus.SENT ? "quote.sent" : "quote.approved",
         recipient: {
           customerId: quote.customerId,
           ticketId: quote.ticketId ?? undefined,
@@ -316,6 +325,8 @@ export async function changeQuoteStatus(input: ChangeQuoteStatusInput, options: 
           quoteNumber: quote.invoiceNumber,
           total: quote.total.toString(),
           currency: quote.currency,
+          portalUrl,
+          quotePdfUrl: buildPublicQuotePdfUrl(quote.ticket.publicAccessToken),
         },
       });
     }

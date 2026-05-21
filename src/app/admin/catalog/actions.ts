@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { requireLocalStaff } from "@/server/auth/local-admin";
+import { requireLocalStaff, UserRole } from "@/server/auth/local-admin";
 import type { CatalogActionState } from "@/modules/catalog/catalog.action-state";
 import {
   createCatalogItemSchema,
@@ -21,7 +21,7 @@ export async function createCatalogItemAction(
   _previousState: CatalogActionState,
   formData: FormData,
 ): Promise<CatalogActionState> {
-  const session = await requireLocalStaff();
+  const session = await requireLocalStaff({ roles: [UserRole.ADMIN] });
 
   const parsed = createCatalogItemSchema.safeParse({
     type: formData.get("type") || "SERVICE",
@@ -71,7 +71,7 @@ export async function updateCatalogInventoryTrackingAction(
   _previousState: CatalogActionState,
   formData: FormData,
 ): Promise<CatalogActionState> {
-  const session = await requireLocalStaff();
+  const session = await requireLocalStaff({ roles: [UserRole.ADMIN] });
 
   const parsed = updateCatalogInventoryTrackingSchema.safeParse({
     catalogItemId: formData.get("catalogItemId"),
@@ -111,7 +111,7 @@ export async function updateCatalogItemStatusAction(
   _previousState: CatalogActionState,
   formData: FormData,
 ): Promise<CatalogActionState> {
-  const session = await requireLocalStaff();
+  const session = await requireLocalStaff({ roles: [UserRole.ADMIN] });
 
   const parsed = updateCatalogItemStatusSchema.safeParse({
     catalogItemId: formData.get("catalogItemId"),
@@ -148,7 +148,7 @@ export async function adjustInventoryAction(
   _previousState: CatalogActionState,
   formData: FormData,
 ): Promise<CatalogActionState> {
-  const session = await requireLocalStaff();
+  const session = await requireLocalStaff({ roles: [UserRole.ADMIN] });
 
   const parsed = adjustInventorySchema.safeParse({
     inventoryItemId: formData.get("inventoryItemId"),

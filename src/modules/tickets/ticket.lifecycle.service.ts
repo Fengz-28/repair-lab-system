@@ -3,6 +3,10 @@ import { InvoiceStatus, InvoiceType, Prisma, TicketStatus } from "@prisma/client
 import { writeAuditLog } from "@/server/audit/audit.service";
 import { prisma } from "@/server/db/prisma";
 import { preparePrivateTicketAttachment } from "@/server/storage/private-ticket-attachment-placeholder";
+import {
+  buildPublicInvoicePdfUrl,
+  buildPublicPortalUrl,
+} from "@/modules/email/email.service";
 import { registerEmailNotificationPlaceholder } from "@/modules/notifications/notification.service";
 
 import type {
@@ -47,6 +51,7 @@ export async function changeTicketStatus(
       select: {
         id: true,
         ticketNumber: true,
+        publicAccessToken: true,
         status: true,
         customerId: true,
         reportedIssue: true,
@@ -68,10 +73,20 @@ export async function changeTicketStatus(
         },
         invoices: {
           where: {
-            type: InvoiceType.QUOTE,
+            type: {
+              in: [InvoiceType.QUOTE, InvoiceType.INVOICE],
+            },
           },
           select: {
+            type: true,
             status: true,
+            total: true,
+            currency: true,
+            payments: {
+              select: {
+                amount: true,
+              },
+            },
           },
         },
       },
@@ -146,6 +161,9 @@ export async function changeTicketStatus(
         reportedIssue: ticket.reportedIssue,
         fromStatus: ticket.status,
         toStatus: input.nextStatus,
+        toStatusLabel: ticketStatusLabel(input.nextStatus),
+        portalUrl: buildPublicPortalUrl(ticket.publicAccessToken),
+        ...invoiceEmailData(ticket),
       },
     });
 
@@ -434,4 +452,45 @@ function notificationTemplateForStatus(status: TicketStatus) {
   }
 
   return "ticket.status_changed" as const;
+}
+
+function invoiceEmailData(ticket: {
+  publicAccessToken: string;
+  invoices: {
+    type: InvoiceType;
+    total: Prisma.Decimal;
+    currency: string;
+    payments: { amount: Prisma.Decimal }[];
+  }[];
+}) {
+  const invoice = ticket.invoices.find((item) => item.type === InvoiceType.INVOICE);
+
+  if (!invoice) {
+    return {};
+  }
+
+  const paidTotal = invoice.payments.reduce((sum, payment) => sum + Number(payment.amount), 0);
+  const balanceDue = Math.max(Number(invoice.total) - paidTotal, 0);
+
+  return {
+    currency: invoice.currency,
+    balanceDue: balanceDue.toFixed(2),
+    invoicePdfUrl: buildPublicInvoicePdfUrl(ticket.publicAccessToken),
+  };
+}
+
+function ticketStatusLabel(status: TicketStatus) {
+  const labels: Record<TicketStatus, string> = {
+    RECEIVED: "Recibido",
+    INITIAL_REVIEW: "Revision inicial",
+    DIAGNOSIS: "En diagnostico",
+    WAITING_APPROVAL: "Esperando aprobacion",
+    APPROVED: "Aprobado",
+    REPAIR_IN_PROGRESS: "En reparacion",
+    READY_FOR_PICKUP: "Listo para entrega",
+    DELIVERED: "Entregado",
+    CANCELLED: "Cancelado",
+  };
+
+  return labels[status] ?? status;
 }

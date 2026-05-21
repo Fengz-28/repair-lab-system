@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { requireLocalStaff } from "@/server/auth/local-admin";
+import { requireLocalStaff, UserRole } from "@/server/auth/local-admin";
 import type { IntakeActionState } from "@/modules/intake/intake.action-state";
 import { createIntakeSchema } from "@/modules/intake/intake.schema";
 import { receiveDeviceForRepair } from "@/modules/intake/intake.service";
@@ -11,7 +11,9 @@ export async function createIntakeAction(
   _previousState: IntakeActionState,
   formData: FormData,
 ): Promise<IntakeActionState> {
-  const session = await requireLocalStaff();
+  const session = await requireLocalStaff({
+    roles: [UserRole.ADMIN, UserRole.RECEPTIONIST],
+  });
 
   const parsed = createIntakeSchema.safeParse({
     customer: {

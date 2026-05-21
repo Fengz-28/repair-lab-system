@@ -35,10 +35,14 @@ export function renderEmailTemplate(
       return renderTicketStatusChanged(data as TicketTemplateData);
     case "quote.sent":
       return renderQuoteSent(data as QuoteTemplateData);
+    case "quote.approved":
+      return renderQuoteSent(data as QuoteTemplateData);
     case "ticket.ready_for_pickup":
       return renderReadyForPickup(data as TicketTemplateData);
     case "ticket.delivered":
       return renderTicketDelivered(data as TicketTemplateData);
+    default:
+      return renderTicketStatusChanged(data as TicketTemplateData);
   }
 }
 
@@ -146,4 +150,3 @@ function escapeHtml(value: string) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 }
-

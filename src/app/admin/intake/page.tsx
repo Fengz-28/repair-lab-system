@@ -27,11 +27,11 @@ export default async function AdminIntakePage() {
   });
 
   return (
-    <main className="mx-auto w-full max-w-5xl space-y-8 px-6 py-8">
+    <main className="mx-auto w-full max-w-5xl space-y-6 px-4 py-6 sm:space-y-8 sm:px-6 sm:py-8">
       <AdminNav />
       <header className="space-y-2">
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Admin / Recepcion</p>
-        <h1 className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50">Recepcion de equipos</h1>
+        <h1 className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50 sm:text-3xl">Recepcion de equipos</h1>
         <p className="max-w-3xl text-sm text-zinc-600 dark:text-zinc-300">
           Registra aqui un equipo que ingresa al taller. El sistema crea automaticamente el ticket y su historial.
         </p>
@@ -42,7 +42,7 @@ export default async function AdminIntakePage() {
       <section className="space-y-3">
         <h2 className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">Recepciones recientes</h2>
         <div className="overflow-x-auto rounded border border-zinc-200 dark:border-zinc-800">
-          <table className="w-full border-collapse text-left text-sm">
+          <table className="w-full min-w-[760px] border-collapse text-left text-sm">
             <thead className="bg-zinc-50 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">
               <tr>
                 <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Ticket</th>
@@ -67,10 +67,10 @@ export default async function AdminIntakePage() {
                         {ticket.ticketNumber}
                       </Link>
                     </td>
-                    <td className="px-3 py-2">
+                    <td className="px-3 py-2 break-words">
                       {ticket.customer.firstName} {ticket.customer.lastName ?? ""}
                     </td>
-                    <td className="px-3 py-2">
+                    <td className="px-3 py-2 break-words">
                       {ticket.device.brand} {ticket.device.model ?? ""}
                     </td>
                     <td className="px-3 py-2">{ticketStatusLabel(ticket.status)}</td>

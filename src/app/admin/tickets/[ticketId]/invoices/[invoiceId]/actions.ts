@@ -5,13 +5,13 @@ import { revalidatePath } from "next/cache";
 import { registerManualPaymentSchema } from "@/modules/payments/payment.schema";
 import { registerManualPayment } from "@/modules/payments/payment.service";
 import type { TicketActionState } from "@/modules/tickets/ticket.action-state";
-import { requireLocalStaff } from "@/server/auth/local-admin";
+import { requireLocalStaff, UserRole } from "@/server/auth/local-admin";
 
 export async function registerManualPaymentAction(
   _previousState: TicketActionState,
   formData: FormData,
 ): Promise<TicketActionState> {
-  const session = await requireLocalStaff();
+  const session = await requireLocalStaff({ roles: [UserRole.ADMIN] });
   const ticketId = String(formData.get("ticketId") ?? "");
   const invoiceId = String(formData.get("invoiceId") ?? "");
 

@@ -9,6 +9,8 @@ import {
   changeQuoteStatusAction,
   createQuoteAction,
 } from "@/app/admin/tickets/[ticketId]/quotes/actions";
+import { RepairButton, RepairEmptyState } from "@/components/repairlab";
+import { RepairInventoryTable } from "@/components/repairlab/inventory-table";
 import { initialQuoteActionState } from "@/modules/quotes/quote.action-state";
 
 type CatalogOption = {
@@ -73,10 +75,13 @@ function GuidedQuoteFlow({
   quote?: Quote;
 }) {
   return (
-    <section className="space-y-4 rounded border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-950">
+    <section className="space-y-5 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm shadow-zinc-950/5 dark:border-zinc-800 dark:bg-zinc-950 sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="space-y-2">
-          <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">
+        <div className="min-w-0 space-y-2">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
+            Flujo comercial
+          </p>
+          <h2 className="text-2xl font-black text-zinc-950 dark:text-zinc-50">
             Flujo de cotizacion
           </h2>
           <ol className="list-decimal space-y-1 pl-5 text-sm text-zinc-700 dark:text-zinc-300">
@@ -90,7 +95,7 @@ function GuidedQuoteFlow({
             El precio se coloca en las lineas de la cotizacion, no en el ticket.
           </p>
         </div>
-        <div className="grid gap-2 text-sm">
+        <div className="grid w-full gap-2 text-sm sm:w-auto">
           <StatusPill label="Ticket" value={ticketStatusLabel(ticketStatus)} tone="ticket" />
           <StatusPill
             label="Cotizacion"
@@ -99,8 +104,8 @@ function GuidedQuoteFlow({
           />
         </div>
       </div>
-      <div className="rounded border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-100">
-        <p className="font-semibold">Siguiente paso recomendado</p>
+      <div className="rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm text-cyan-900 dark:border-cyan-900 dark:bg-cyan-950/60 dark:text-cyan-100">
+        <p className="font-black">Siguiente paso recomendado</p>
         <p>{getRecommendedStep(quote)}</p>
       </div>
     </section>
@@ -111,15 +116,18 @@ function CreateQuoteForm({ ticketId }: { ticketId: string }) {
   const [state, formAction] = useActionState(createQuoteAction, initialQuoteActionState);
 
   return (
-    <form action={formAction} className="space-y-4 rounded border border-zinc-200 p-5 dark:border-zinc-800">
+    <form id="crear-cotizacion" action={formAction} className="space-y-5 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm shadow-zinc-950/5 dark:border-zinc-800 dark:bg-zinc-950 sm:p-6">
       <input type="hidden" name="ticketId" value={ticketId} />
       <div>
-        <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Crear cotizacion</h2>
-        <p className="text-sm text-zinc-600 dark:text-zinc-300">
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
+          Nueva propuesta
+        </p>
+        <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Crear cotizacion</h2>
+        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
           Crea una cotizacion en borrador. Luego agrega mano de obra, repuestos o servicios con precio.
         </p>
       </div>
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-3">
         <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
           Expira en dias
           <input
@@ -128,7 +136,7 @@ function CreateQuoteForm({ ticketId }: { ticketId: string }) {
             min={1}
             max={90}
             defaultValue={15}
-            className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+            className={fieldClassName}
           />
         </label>
       </div>
@@ -137,7 +145,7 @@ function CreateQuoteForm({ ticketId }: { ticketId: string }) {
         <textarea
           name="customerNotes"
           rows={3}
-          className="rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+          className={fieldClassName}
         />
       </label>
       <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
@@ -145,7 +153,7 @@ function CreateQuoteForm({ ticketId }: { ticketId: string }) {
         <textarea
           name="internalNotes"
           rows={3}
-          className="rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+          className={fieldClassName}
         />
       </label>
       <ActionMessage ok={state.ok} message={state.message} />
@@ -165,23 +173,25 @@ function QuoteList({
 }) {
   if (quotes.length === 0) {
     return (
-      <section className="rounded border border-zinc-200 p-5 text-sm text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
-        No hay cotizaciones para este ticket.
-      </section>
+      <RepairEmptyState
+        title="No hay cotizaciones para este ticket."
+        description="Crea una cotizacion en borrador para empezar a definir precios."
+      />
     );
   }
 
   return (
     <section className="space-y-4">
       {quotes.map((quote) => (
-        <article key={quote.id} className="space-y-4 rounded border border-zinc-200 p-5 dark:border-zinc-800">
+        <article key={quote.id} className="space-y-5 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm shadow-zinc-950/5 transition hover:border-emerald-300 hover:shadow-2xl hover:shadow-emerald-950/10 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-emerald-800 sm:p-6">
           <div className="flex flex-wrap justify-between gap-3">
-            <div>
-              <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">
+            <div className="min-w-0">
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">Cotizacion</p>
+              <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">
                 {quote.invoiceNumber}
               </h2>
               <StatusBadge status={quote.status} />
-              <p className="mt-2 text-lg font-semibold text-zinc-950 dark:text-zinc-50">
+              <p className="mt-3 text-3xl font-black text-zinc-950 dark:text-zinc-50">
                 Total estimado: {quote.currency} {quote.total}
               </p>
               {quote.approvalExpiresAt ? (
@@ -190,13 +200,10 @@ function QuoteList({
                 </p>
               ) : null}
             </div>
-            <div className="grid gap-3">
-              <a
-                className="rounded border border-zinc-300 px-3 py-2 text-sm font-medium text-zinc-800 dark:border-zinc-700 dark:text-zinc-100"
-                href={`/admin/tickets/${ticketId}/quotes/${quote.id}/pdf`}
-              >
+            <div className="grid w-full gap-3 sm:w-auto">
+              <RepairButton href={`/admin/tickets/${ticketId}/quotes/${quote.id}/pdf`} tone="secondary" size="sm">
                 Descargar cotizacion PDF
-              </a>
+              </RepairButton>
               <QuoteStatusForm ticketId={ticketId} quote={quote} />
             </div>
           </div>
@@ -209,7 +216,7 @@ function QuoteList({
               catalogItems={catalogItems}
             />
           ) : (
-            <p className="rounded border border-zinc-200 bg-zinc-50 p-3 text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
+            <p className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 text-sm font-semibold text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
               Esta cotizacion ya no se puede editar porque fue enviada, aprobada, rechazada o expirada.
             </p>
           )}
@@ -221,8 +228,8 @@ function QuoteList({
 
 function QuoteItemsTable({ items }: { items: QuoteItem[] }) {
   return (
-    <div className="overflow-x-auto rounded border border-zinc-200 dark:border-zinc-800">
-      <table className="w-full border-collapse text-left text-sm">
+    <RepairInventoryTable>
+      <table className="w-full min-w-[720px] border-collapse text-left text-sm">
         <thead className="bg-zinc-50 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">
           <tr>
             <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Tipo</th>
@@ -241,10 +248,10 @@ function QuoteItemsTable({ items }: { items: QuoteItem[] }) {
             </tr>
           ) : (
             items.map((item) => (
-              <tr key={item.id} className="border-b border-zinc-100 last:border-0 dark:border-zinc-800">
+              <tr key={item.id} className="border-b border-zinc-100 last:border-0 transition hover:bg-emerald-50/50 dark:border-zinc-800 dark:hover:bg-emerald-950/20">
                 <td className="px-3 py-2">{quoteItemTypeLabel(item.itemType)}</td>
                 <td className="px-3 py-2">
-                  <p>{item.description}</p>
+                  <p className="break-words">{item.description}</p>
                   {item.catalogItemName ? (
                     <p className="text-zinc-500 dark:text-zinc-400">Catalogo: {item.catalogItemName}</p>
                   ) : null}
@@ -257,7 +264,7 @@ function QuoteItemsTable({ items }: { items: QuoteItem[] }) {
           )}
         </tbody>
       </table>
-    </div>
+    </RepairInventoryTable>
   );
 }
 
@@ -273,21 +280,21 @@ function AddQuoteItemForm({
   const [state, formAction] = useActionState(addQuoteItemAction, initialQuoteActionState);
 
   return (
-    <form action={formAction} className="grid gap-3 rounded border border-zinc-200 p-4 dark:border-zinc-800">
+    <form action={formAction} className="grid gap-4 rounded-2xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/70">
       <input type="hidden" name="ticketId" value={ticketId} />
       <input type="hidden" name="quoteId" value={quoteId} />
       <div>
-        <h3 className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">Agregar precio</h3>
+        <h3 className="text-lg font-black text-zinc-950 dark:text-zinc-50">Agregar precio</h3>
         <p className="text-sm text-zinc-600 dark:text-zinc-300">
           Agrega aqui mano de obra, repuestos, productos o servicios. Estos valores forman el precio final de la cotizacion.
         </p>
       </div>
-      <div className="grid gap-3 md:grid-cols-5">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
           Catalogo opcional
           <select
             name="catalogItemId"
-            className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+            className={fieldClassName}
           >
             <option value="">Manual</option>
             {catalogItems.map((item) => (
@@ -302,19 +309,19 @@ function AddQuoteItemForm({
           <select
             name="itemType"
             defaultValue="SERVICE"
-            className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+            className={fieldClassName}
           >
             <option value="SERVICE">Servicio</option>
             <option value="PRODUCT">Producto</option>
             <option value="PART">Repuesto</option>
           </select>
         </label>
-        <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200 md:col-span-2">
+        <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200 lg:col-span-2">
           Descripcion
           <input
             name="description"
             required
-            className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+            className={fieldClassName}
           />
         </label>
         <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
@@ -325,7 +332,7 @@ function AddQuoteItemForm({
             min={1}
             defaultValue={1}
             required
-            className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+            className={fieldClassName}
           />
         </label>
         <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
@@ -334,7 +341,7 @@ function AddQuoteItemForm({
             name="unitPrice"
             type="number"
             step="0.01"
-            className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+            className={fieldClassName}
           />
         </label>
       </div>
@@ -391,7 +398,7 @@ function QuoteStatusForm({ ticketId, quote }: { ticketId: string; quote: Quote }
       <input type="hidden" name="quoteId" value={quote.id} />
       <select
         name="nextStatus"
-        className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+        className={fieldClassName}
       >
         {availableStatuses.map((status) => (
           <option key={status} value={status}>
@@ -402,7 +409,7 @@ function QuoteStatusForm({ ticketId, quote }: { ticketId: string; quote: Quote }
       <input
         name="internalComment"
         placeholder="Comentario interno opcional"
-        className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm placeholder:text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+        className={fieldClassName}
       />
       <ActionMessage ok={state.ok} message={state.message} />
       <SubmitButton label="Actualizar cotizacion" pendingLabel="Actualizando..." />
@@ -423,7 +430,7 @@ function SubmitButton({
     <button
       type="submit"
       disabled={pending}
-      className="w-fit rounded bg-zinc-950 px-3 py-2 text-sm font-medium text-white disabled:bg-zinc-400 dark:bg-zinc-100 dark:text-zinc-950 dark:disabled:bg-zinc-700 dark:disabled:text-zinc-300"
+      className="min-h-11 w-full rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-black text-white shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-600 disabled:bg-zinc-400 sm:w-fit"
     >
       {pending ? pendingLabel : label}
     </button>
@@ -444,7 +451,7 @@ function StatusBadge({ status }: { status: InvoiceStatus }) {
   };
 
   return (
-    <span className={`inline-flex rounded border px-2 py-1 text-xs font-medium ${classes[status]}`}>
+    <span className={`mt-2 inline-flex rounded-full border px-3 py-1 text-xs font-bold ${classes[status]}`}>
       {quoteStatusLabel(status)}
     </span>
   );
@@ -465,7 +472,7 @@ function StatusPill({
       : "border-sky-200 bg-sky-50 text-sky-800 dark:border-sky-900 dark:bg-sky-950 dark:text-sky-100";
 
   return (
-    <div className={`rounded border px-3 py-2 ${classes}`}>
+    <div className={`rounded-2xl border px-4 py-3 ${classes}`}>
       <p className="text-xs font-medium uppercase">{label}</p>
       <p className="text-sm font-semibold">{value}</p>
     </div>
@@ -565,7 +572,7 @@ function ActionMessage({ ok, message }: { ok: boolean; message: string }) {
   return (
     <p
       className={`rounded border p-2 text-xs ${
-        ok ? "border-green-200 bg-green-50 text-green-800" : "border-red-200 bg-red-50 text-red-800"
+        ok ? "border-emerald-200 bg-emerald-50 text-emerald-800" : "border-red-200 bg-red-50 text-red-800"
       }`}
       role="status"
     >
@@ -573,3 +580,6 @@ function ActionMessage({ ok, message }: { ok: boolean; message: string }) {
     </p>
   );
 }
+
+const fieldClassName =
+  "min-h-11 rounded-2xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-950 placeholder:text-zinc-500 shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:ring-emerald-900";

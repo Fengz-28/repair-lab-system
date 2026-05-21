@@ -1,0 +1,346 @@
+import Link from "next/link";
+import type React from "react";
+
+type NavLink = {
+  href: string;
+  label: string;
+};
+
+export function RepairTopbar() {
+  return (
+    <div className="border-b border-emerald-400/30 bg-emerald-500 text-white">
+      <RepairContainer className="flex min-h-10 flex-wrap items-center justify-between gap-x-6 gap-y-2 py-2 text-xs font-medium sm:text-sm">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+          <span className="inline-flex items-center gap-2">
+            <span className="grid size-6 place-items-center rounded-full border border-white/30">T</span>
+            +506 0000-0000
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <span className="grid size-6 place-items-center rounded-full border border-white/30">E</span>
+            soporte@repairlab.local
+          </span>
+          <span className="hidden items-center gap-2 md:inline-flex">
+            <span className="grid size-6 place-items-center rounded-full border border-white/30">L</span>
+            Taller local / demo controlada
+          </span>
+        </div>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <span className="hidden sm:inline">Sistema interno RepairLab</span>
+          <span className="inline-flex items-center gap-2">
+            <span className="grid size-6 place-items-center rounded-full border border-white/30">H</span>
+            Lun - Vie: 09:00 - 17:00
+          </span>
+        </div>
+      </RepairContainer>
+    </div>
+  );
+}
+
+export function RepairNavbar({
+  links,
+  user,
+}: {
+  links: NavLink[];
+  user?: {
+    name: string;
+    role: string;
+  } | null;
+}) {
+  return (
+    <div className="sticky top-0 z-30 border-b border-zinc-200/80 bg-white/95 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/95">
+      <RepairContainer className="flex flex-col gap-4 py-4 lg:flex-row lg:items-center lg:justify-between">
+        <Link className="group flex items-center gap-3" href="/admin">
+          <span className="grid size-12 place-items-center rounded-2xl bg-emerald-500 text-lg font-black text-white shadow-lg shadow-emerald-500/20 transition group-hover:scale-105">
+            R
+          </span>
+          <span>
+            <span className="block text-xl font-black tracking-tight text-zinc-950 dark:text-zinc-50">
+              Repair<span className="text-emerald-500">Lab</span>
+            </span>
+            <span className="block text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">
+              Service OS
+            </span>
+          </span>
+        </Link>
+
+        <div className="flex min-w-0 flex-1 gap-2 overflow-x-auto pb-1 lg:justify-center lg:overflow-visible lg:pb-0">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              className="min-h-11 shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold text-zinc-700 transition hover:bg-emerald-50 hover:text-emerald-700 dark:text-zinc-200 dark:hover:bg-emerald-950 dark:hover:text-emerald-200"
+              href={link.href}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+
+        {user ? (
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-2 dark:border-zinc-800 dark:bg-zinc-900">
+              <p className="max-w-48 truncate text-sm font-semibold text-zinc-950 dark:text-zinc-50">
+                {user.name}
+              </p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">{user.role}</p>
+            </div>
+            <form action="/logout" method="post">
+              <RepairButton as="button" tone="ghost" size="sm">
+                Salir
+              </RepairButton>
+            </form>
+          </div>
+        ) : null}
+      </RepairContainer>
+    </div>
+  );
+}
+
+export function RepairDropdownMenu({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-b-3xl border border-zinc-200 bg-white p-5 shadow-2xl shadow-zinc-950/10 dark:border-zinc-800 dark:bg-zinc-950">
+      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600">{title}</p>
+      <div className="grid gap-2">{children}</div>
+    </div>
+  );
+}
+
+export function RepairPageHero({
+  eyebrow,
+  title,
+  description,
+  actions,
+}: {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  actions?: React.ReactNode;
+}) {
+  return (
+    <section className="relative overflow-hidden bg-zinc-950 text-white">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.22),transparent_28%),radial-gradient(circle_at_80%_0%,rgba(6,182,212,0.18),transparent_30%),linear-gradient(135deg,rgba(15,23,42,0.2),rgba(0,0,0,0.8))]" />
+      <div className="absolute inset-0 opacity-30 [background-image:linear-gradient(120deg,transparent_0,transparent_48%,rgba(255,255,255,0.08)_49%,transparent_50%)] [background-size:42px_42px]" />
+      <RepairContainer className="relative py-12 sm:py-16">
+        {eyebrow ? (
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-300">{eyebrow}</p>
+        ) : null}
+        <div className="mt-4 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+            <h1 className="text-3xl font-black tracking-tight sm:text-5xl">{title}</h1>
+            {description ? (
+              <p className="mt-4 max-w-2xl text-sm leading-6 text-zinc-300 sm:text-base">{description}</p>
+            ) : null}
+          </div>
+          {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}
+        </div>
+      </RepairContainer>
+    </section>
+  );
+}
+
+export function RepairContainer({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return <div className={`mx-auto w-full max-w-7xl px-4 sm:px-6 ${className}`}>{children}</div>;
+}
+
+export function RepairSection({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return <section className={`space-y-5 ${className}`}>{children}</section>;
+}
+
+export function RepairCard({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm shadow-zinc-950/5 transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-950/10 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-emerald-800 ${className}`}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function RepairPanel({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={`rounded-2xl border border-zinc-200 bg-white/90 p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-950/90 ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+export function RepairButton({
+  children,
+  href,
+  as = "link",
+  tone = "primary",
+  size = "md",
+}: {
+  children: React.ReactNode;
+  href?: string;
+  as?: "link" | "button";
+  tone?: "primary" | "secondary" | "ghost";
+  size?: "sm" | "md";
+}) {
+  const toneClass = {
+    primary: "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 hover:bg-emerald-600",
+    secondary:
+      "border border-zinc-200 bg-white text-zinc-900 hover:border-emerald-300 hover:text-emerald-700 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100",
+    ghost:
+      "border border-zinc-200 bg-zinc-50 text-zinc-800 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100",
+  }[tone];
+  const sizeClass = size === "sm" ? "min-h-10 px-4 py-2 text-xs" : "min-h-11 px-5 py-2.5 text-sm";
+  const className = `inline-flex items-center justify-center rounded-full font-bold transition focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 dark:focus:ring-offset-zinc-950 ${toneClass} ${sizeClass}`;
+
+  if (as === "button") {
+    return (
+      <button type="submit" className={className}>
+        {children}
+      </button>
+    );
+  }
+
+  return (
+    <Link className={className} href={href ?? "#"}>
+      {children}
+    </Link>
+  );
+}
+
+export function RepairBadge({
+  children,
+  tone = "neutral",
+}: {
+  children: React.ReactNode;
+  tone?: "neutral" | "emerald" | "cyan" | "warning" | "danger" | "violet";
+}) {
+  const classes = {
+    neutral: "border-zinc-200 bg-zinc-50 text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200",
+    emerald: "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100",
+    cyan: "border-cyan-200 bg-cyan-50 text-cyan-800 dark:border-cyan-900 dark:bg-cyan-950 dark:text-cyan-100",
+    warning: "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100",
+    danger: "border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-100",
+    violet: "border-violet-200 bg-violet-50 text-violet-800 dark:border-violet-900 dark:bg-violet-950 dark:text-violet-100",
+  }[tone];
+
+  return <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-bold ${classes}`}>{children}</span>;
+}
+
+export function RepairTable({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
+      <div className="overflow-x-auto">{children}</div>
+    </div>
+  );
+}
+
+export function RepairStatCard({
+  label,
+  value,
+  tone = "emerald",
+}: {
+  label: string;
+  value: string | number;
+  tone?: "emerald" | "cyan" | "warning" | "neutral";
+}) {
+  const glow = {
+    emerald: "from-emerald-500/18",
+    cyan: "from-cyan-500/18",
+    warning: "from-amber-500/18",
+    neutral: "from-zinc-500/12",
+  }[tone];
+
+  return (
+    <RepairCard className={`relative overflow-hidden bg-gradient-to-br ${glow} to-transparent`}>
+      <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">{label}</p>
+      <p className="mt-3 break-words text-3xl font-black tracking-tight text-zinc-950 dark:text-zinc-50">
+        {value}
+      </p>
+    </RepairCard>
+  );
+}
+
+export function RepairEmptyState({
+  title,
+  description,
+  action,
+}: {
+  title: string;
+  description?: string;
+  action?: React.ReactNode;
+}) {
+  return (
+    <RepairPanel className="py-10 text-center">
+      <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-200">
+        RL
+      </div>
+      <h2 className="mt-4 text-lg font-black text-zinc-950 dark:text-zinc-50">{title}</h2>
+      {description ? <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">{description}</p> : null}
+      {action ? <div className="mt-5">{action}</div> : null}
+    </RepairPanel>
+  );
+}
+
+export function RepairSearchBar({ children }: { children: React.ReactNode }) {
+  return <RepairPanel className="bg-white shadow-lg shadow-zinc-950/5 dark:bg-zinc-950">{children}</RepairPanel>;
+}
+
+export function RepairActionBar({ children }: { children: React.ReactNode }) {
+  return <div className="grid gap-2 sm:flex sm:flex-wrap sm:items-center">{children}</div>;
+}
+
+export function RepairFooter() {
+  return (
+    <footer className="bg-zinc-950 text-zinc-300">
+      <RepairContainer className="grid gap-8 py-10 md:grid-cols-[1.1fr_2fr]">
+        <div>
+          <p className="text-2xl font-black text-white">
+            Repair<span className="text-emerald-400">Lab</span>
+          </p>
+          <p className="mt-3 max-w-sm text-sm leading-6 text-zinc-400">
+            Plataforma interna para operar reparaciones, clientes, cotizaciones, pagos e inventario.
+          </p>
+        </div>
+        <div className="grid gap-6 sm:grid-cols-3">
+          <FooterGroup title="Operaciones" items={["Recepcion", "Tickets", "Cotizaciones", "Facturas"]} />
+          <FooterGroup title="Gestion" items={["Clientes", "Inventario", "Mensajes", "Dashboard"]} />
+          <FooterGroup title="Contacto" items={["soporte@repairlab.local", "+506 0000-0000", "Lun - Vie"]} />
+        </div>
+      </RepairContainer>
+      <div className="border-t border-zinc-800 py-5 text-center text-xs text-zinc-500">
+        RepairLab System. Documento visual interno para demo controlada.
+      </div>
+    </footer>
+  );
+}
+
+function FooterGroup({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div>
+      <h3 className="font-bold text-white">{title}</h3>
+      <ul className="mt-3 space-y-2 text-sm text-zinc-400">
+        {items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}

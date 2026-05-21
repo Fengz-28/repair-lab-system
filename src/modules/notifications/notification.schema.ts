@@ -31,6 +31,7 @@ export const notificationRequestSchema = z.object({
     "intake.received",
     "ticket.status_changed",
     "quote.sent",
+    "quote.approved",
     "ticket.ready_for_pickup",
     "ticket.delivered",
   ]),
@@ -40,4 +41,3 @@ export const notificationRequestSchema = z.object({
 
 export type NotificationTemplate = z.infer<typeof notificationRequestSchema>["template"];
 export type NotificationRequest = z.infer<typeof notificationRequestSchema>;
-

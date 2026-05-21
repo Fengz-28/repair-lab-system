@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { requireLocalStaff } from "@/server/auth/local-admin";
+import { requireLocalStaff, UserRole } from "@/server/auth/local-admin";
 import { convertQuoteToInvoiceSchema } from "@/modules/invoices/invoice.schema";
 import { convertQuoteToInvoice } from "@/modules/invoices/invoice.service";
 import type { TicketActionState } from "@/modules/tickets/ticket.action-state";
@@ -23,7 +23,9 @@ export async function changeTicketStatusAction(
   _previousState: TicketActionState,
   formData: FormData,
 ): Promise<TicketActionState> {
-  const session = await requireLocalStaff();
+  const session = await requireLocalStaff({
+    roles: [UserRole.ADMIN, UserRole.TECHNICIAN],
+  });
 
   const parsed = changeTicketStatusSchema.safeParse({
     ticketId: formData.get("ticketId"),
@@ -59,7 +61,9 @@ export async function addInternalCommentAction(
   _previousState: TicketActionState,
   formData: FormData,
 ): Promise<TicketActionState> {
-  const session = await requireLocalStaff();
+  const session = await requireLocalStaff({
+    roles: [UserRole.ADMIN, UserRole.TECHNICIAN],
+  });
 
   const parsed = addInternalCommentSchema.safeParse({
     ticketId: formData.get("ticketId"),
@@ -94,7 +98,9 @@ export async function updateTechnicalNotesAction(
   _previousState: TicketActionState,
   formData: FormData,
 ): Promise<TicketActionState> {
-  const session = await requireLocalStaff();
+  const session = await requireLocalStaff({
+    roles: [UserRole.ADMIN, UserRole.TECHNICIAN],
+  });
 
   const parsed = updateTechnicalNotesSchema.safeParse({
     ticketId: formData.get("ticketId"),
@@ -131,7 +137,9 @@ export async function addTicketAttachmentPlaceholderAction(
   _previousState: TicketActionState,
   formData: FormData,
 ): Promise<TicketActionState> {
-  const session = await requireLocalStaff();
+  const session = await requireLocalStaff({
+    roles: [UserRole.ADMIN, UserRole.TECHNICIAN],
+  });
   const file = formData.get("attachment");
 
   const parsed = ticketAttachmentPlaceholderSchema.safeParse({
@@ -169,7 +177,9 @@ export async function convertQuoteToInvoiceAction(
   _previousState: TicketActionState,
   formData: FormData,
 ): Promise<TicketActionState> {
-  const session = await requireLocalStaff();
+  const session = await requireLocalStaff({
+    roles: [UserRole.ADMIN, UserRole.TECHNICIAN],
+  });
   const ticketId = String(formData.get("ticketId") ?? "");
 
   const parsed = convertQuoteToInvoiceSchema.safeParse({

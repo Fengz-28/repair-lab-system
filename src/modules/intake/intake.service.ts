@@ -1,3 +1,5 @@
+import { randomBytes } from "crypto";
+
 import { Prisma, TicketStatus } from "@prisma/client";
 
 import { writeAuditLog } from "@/server/audit/audit.service";
@@ -5,6 +7,7 @@ import { prisma } from "@/server/db/prisma";
 import { preparePrivateIntakePhoto } from "@/server/storage/private-upload-placeholder";
 import { registerEmailNotificationPlaceholder } from "@/modules/notifications/notification.service";
 import { createReceptionReceiptPlaceholder } from "@/modules/receipts/receipt.service";
+import { buildPublicPortalUrl } from "@/modules/email/email.service";
 
 import type { CreateIntakeInput } from "./intake.schema";
 
@@ -52,6 +55,7 @@ export async function receiveDeviceForRepair(
     const ticket = await tx.ticket.create({
       data: {
         ticketNumber: issuedNumbers.ticketNumber,
+        publicAccessToken: createPublicAccessToken(),
         customerId: customer.id,
         deviceId: device.id,
         intakeId: intake.id,
@@ -157,6 +161,8 @@ export async function receiveDeviceForRepair(
         deviceLabel,
         reportedIssue: ticket.reportedIssue,
         receiptNumber: intake.receiptNumber ?? issuedNumbers.receiptNumber,
+        receivedAt: intake.createdAt.toLocaleString("es-CR"),
+        portalUrl: buildPublicPortalUrl(ticket.publicAccessToken),
       },
     });
 
@@ -218,4 +224,8 @@ function createReceptionNumbers() {
     receiptNumber: `R-${datePart}-${suffix}`,
     ticketNumber: `T-${datePart}-${suffix}`,
   };
+}
+
+function createPublicAccessToken() {
+  return randomBytes(32).toString("base64url");
 }

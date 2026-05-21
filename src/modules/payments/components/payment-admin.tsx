@@ -5,6 +5,8 @@ import { useFormStatus } from "react-dom";
 import type { PaymentMethod, PaymentStatus } from "@prisma/client";
 
 import { registerManualPaymentAction } from "@/app/admin/tickets/[ticketId]/invoices/[invoiceId]/actions";
+import { RepairPanel } from "@/components/repairlab";
+import { RepairInventoryTable } from "@/components/repairlab/inventory-table";
 import { initialTicketActionState } from "@/modules/tickets/ticket.action-state";
 
 type PaymentRecord = {
@@ -38,7 +40,7 @@ export function PaymentAdmin({
   const isPaid = Number(balanceDue) <= 0;
 
   return (
-    <section className="grid gap-6 lg:grid-cols-[1fr_360px]">
+    <section className="grid gap-6 lg:grid-cols-[1fr_380px]">
       <div className="space-y-4">
         <FinancialSummary
           currency={currency}
@@ -73,25 +75,30 @@ function FinancialSummary({
   paymentStatus: PaymentStatus;
 }) {
   return (
-    <section className="space-y-3 rounded border border-zinc-200 p-4 dark:border-zinc-800">
+    <RepairPanel className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Resumen financiero</h2>
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
+            Payment dashboard
+          </p>
+          <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Resumen financiero</h2>
+        </div>
         <PaymentStatusBadge status={paymentStatus} />
       </div>
-      <div className="grid gap-3 md:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-3">
         <SummaryBox label="Total factura" value={`${currency} ${invoiceTotal}`} />
         <SummaryBox label="Total pagado" value={`${currency} ${paidTotal}`} />
         <SummaryBox label="Saldo pendiente" value={`${currency} ${balanceDue}`} />
       </div>
-    </section>
+    </RepairPanel>
   );
 }
 
 function SummaryBox({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded border border-zinc-100 p-3 dark:border-zinc-800">
-      <p className="text-xs font-medium uppercase text-zinc-500 dark:text-zinc-400">{label}</p>
-      <p className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">{value}</p>
+    <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/70">
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">{label}</p>
+      <p className="mt-2 break-words text-xl font-black text-zinc-950 dark:text-zinc-50">{value}</p>
     </div>
   );
 }
@@ -113,17 +120,20 @@ function RegisterPaymentForm({
   );
 
   return (
-    <form action={formAction} className="space-y-4 rounded border border-zinc-200 p-4 dark:border-zinc-800">
+    <form action={formAction} className="space-y-5 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm shadow-zinc-950/5 dark:border-zinc-800 dark:bg-zinc-950 lg:sticky lg:top-28">
       <input type="hidden" name="ticketId" value={ticketId} />
       <input type="hidden" name="invoiceId" value={invoiceId} />
       <div>
-        <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Registrar pago</h2>
-        <p className="text-sm text-zinc-600 dark:text-zinc-300">
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
+          Accion financiera
+        </p>
+        <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Registrar pago</h2>
+        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
           Registra pagos internos manuales. No procesa dinero ni contacta proveedores externos.
         </p>
       </div>
       {disabled ? (
-        <p className="rounded border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">
+        <p className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-semibold text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">
           Esta factura ya esta pagada.
         </p>
       ) : (
@@ -137,7 +147,7 @@ function RegisterPaymentForm({
               step="0.01"
               max={balanceDue}
               required
-              className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+              className={fieldClassName}
             />
           </label>
           <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
@@ -145,7 +155,7 @@ function RegisterPaymentForm({
             <select
               name="method"
               defaultValue="CASH"
-              className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+              className={fieldClassName}
             >
               <option value="CASH">Efectivo</option>
               <option value="CARD">Tarjeta</option>
@@ -159,7 +169,7 @@ function RegisterPaymentForm({
             <input
               name="reference"
               placeholder="Opcional"
-              className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm placeholder:text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+              className={fieldClassName}
             />
           </label>
           <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
@@ -168,7 +178,7 @@ function RegisterPaymentForm({
               name="notes"
               rows={3}
               placeholder="Opcional"
-              className="rounded border border-zinc-300 px-3 py-2 text-sm placeholder:text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+              className={fieldClassName}
             />
           </label>
           <ActionMessage ok={state.ok} message={state.message} />
@@ -187,13 +197,18 @@ function PaymentHistory({
   currency: string;
 }) {
   return (
-    <section className="space-y-3 rounded border border-zinc-200 p-4 dark:border-zinc-800">
-      <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Historial de pagos</h2>
+    <RepairPanel className="space-y-4">
+      <div>
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
+          Actividad de pagos
+        </p>
+        <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Historial de pagos</h2>
+      </div>
       {payments.length === 0 ? (
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">No hay pagos registrados.</p>
+        <p className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 text-sm text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-400">No hay pagos registrados.</p>
       ) : (
-        <div className="overflow-x-auto rounded border border-zinc-200 dark:border-zinc-800">
-          <table className="w-full border-collapse text-left text-sm">
+        <RepairInventoryTable>
+          <table className="w-full min-w-[720px] border-collapse text-left text-sm">
             <thead className="bg-zinc-50 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">
               <tr>
                 <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Fecha</th>
@@ -205,19 +220,19 @@ function PaymentHistory({
             </thead>
             <tbody>
               {payments.map((payment) => (
-                <tr key={payment.id} className="border-b border-zinc-100 last:border-0 dark:border-zinc-800">
+                <tr key={payment.id} className="border-b border-zinc-100 transition last:border-0 hover:bg-emerald-50/50 dark:border-zinc-800 dark:hover:bg-emerald-950/20">
                   <td className="px-3 py-2">{payment.createdAt}</td>
                   <td className="px-3 py-2">{currency} {payment.amount}</td>
                   <td className="px-3 py-2">{paymentMethodLabel(payment.method)}</td>
-                  <td className="px-3 py-2">{payment.reference ?? "-"}</td>
-                  <td className="px-3 py-2">{payment.notes ?? "-"}</td>
+                  <td className="px-3 py-2 break-words">{payment.reference ?? "-"}</td>
+                  <td className="px-3 py-2 break-words">{payment.notes ?? "-"}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
+        </RepairInventoryTable>
       )}
-    </section>
+    </RepairPanel>
   );
 }
 
@@ -231,7 +246,7 @@ function PaymentStatusBadge({ status }: { status: PaymentStatus }) {
   };
 
   return (
-    <span className={`inline-flex rounded border px-3 py-1 text-xs font-medium ${classes[status]}`}>
+    <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-bold ${classes[status]}`}>
       {paymentStatusLabel(status)}
     </span>
   );
@@ -244,7 +259,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="rounded bg-zinc-950 px-4 py-2 text-sm font-medium text-white disabled:bg-zinc-400 dark:bg-zinc-100 dark:text-zinc-950 dark:disabled:bg-zinc-700 dark:disabled:text-zinc-300"
+      className="min-h-11 w-full rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-black text-white shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-600 disabled:bg-zinc-400 sm:w-auto"
     >
       {pending ? "Registrando..." : "Registrar pago"}
     </button>
@@ -259,7 +274,7 @@ function ActionMessage({ ok, message }: { ok: boolean; message: string }) {
   return (
     <p
       className={`rounded border p-2 text-sm ${
-        ok ? "border-green-200 bg-green-50 text-green-800" : "border-red-200 bg-red-50 text-red-800"
+        ok ? "border-emerald-200 bg-emerald-50 text-emerald-800" : "border-red-200 bg-red-50 text-red-800"
       }`}
       role="status"
     >
@@ -291,3 +306,6 @@ function paymentMethodLabel(method: PaymentMethod) {
 
   return labels[method] ?? method;
 }
+
+const fieldClassName =
+  "min-h-11 rounded-2xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-950 placeholder:text-zinc-500 shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:ring-emerald-900";

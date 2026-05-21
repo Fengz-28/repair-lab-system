@@ -25,7 +25,7 @@ export function IntakeForm() {
   );
 
   return (
-    <form action={formAction} className="space-y-8 rounded border border-zinc-200 p-6 dark:border-zinc-800">
+    <form action={formAction} className="space-y-6 rounded border border-zinc-200 p-4 dark:border-zinc-800 sm:space-y-8 sm:p-6">
       <FormSection title="Cliente">
         <TextInput label="Nombre" name="customer.firstName" required />
         <TextInput label="Apellido" name="customer.lastName" />
@@ -108,7 +108,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="rounded bg-zinc-950 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:bg-zinc-400"
+      className="min-h-11 w-full rounded bg-zinc-950 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:bg-zinc-400 sm:w-auto"
     >
       {pending ? "Registrando..." : "Registrar recepcion"}
     </button>
@@ -125,7 +125,7 @@ function FormSection({
   return (
     <fieldset className="grid gap-4">
       <legend className="mb-2 text-base font-semibold text-zinc-950 dark:text-zinc-50">{title}</legend>
-      <div className="grid gap-4 md:grid-cols-2">{children}</div>
+      <div className="grid gap-4 sm:grid-cols-2">{children}</div>
     </fieldset>
   );
 }
@@ -151,7 +151,7 @@ function TextInput({
         name={name}
         type={type}
         required={required}
-        className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+        className="min-h-11 w-full rounded border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
       />
     </div>
   );
@@ -167,7 +167,7 @@ function TextareaInput({
   required?: boolean;
 }) {
   return (
-    <div className="grid gap-2 md:col-span-2">
+    <div className="grid gap-2 sm:col-span-2">
       <label className="text-sm font-medium text-zinc-800 dark:text-zinc-200" htmlFor={name}>
         {label}
       </label>
@@ -176,7 +176,7 @@ function TextareaInput({
         name={name}
         required={required}
         rows={3}
-        className="rounded border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+        className="min-h-24 w-full rounded border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
       />
     </div>
   );
@@ -202,7 +202,7 @@ function SelectInput<T extends string>({
         id={name}
         name={name}
         defaultValue={defaultValue}
-        className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+        className="min-h-11 w-full rounded border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
       >
         {options.map((option) => (
           <option key={option} value={option}>

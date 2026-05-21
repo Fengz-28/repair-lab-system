@@ -1,7 +1,9 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { InvoiceType } from "@prisma/client";
 
+import { AdminNav } from "@/components/admin-nav";
+import { QuoteHero } from "@/components/repairlab/quote-hero";
+import { RepairContainer } from "@/components/repairlab";
 import { QuoteAdmin } from "@/modules/quotes/components/quote-admin";
 import { getAllowedQuoteStatuses } from "@/modules/quotes/quote.lifecycle";
 import { requireLocalStaff } from "@/server/auth/local-admin";
@@ -53,55 +55,58 @@ export default async function TicketQuotesPage({
     }),
   ]);
 
-  return (
-    <main className="mx-auto w-full max-w-6xl space-y-8 px-6 py-8">
-      <header className="space-y-2">
-        <Link className="text-sm text-zinc-600 underline dark:text-zinc-300" href={`/admin/tickets/${ticket.id}`}>
-          Volver al ticket
-        </Link>
-        <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
-          Ticket {ticket.ticketNumber} / Cotizaciones
-        </p>
-        <h1 className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50">
-          Cotizaciones para {ticket.device.brand} {ticket.device.model ?? ""}
-        </h1>
-        <p className="max-w-3xl text-sm text-zinc-600 dark:text-zinc-300">
-          Aqui se definen los precios de reparacion. La cotizacion puede enviarse para aprobacion sin activar pagos, PDF ni envio real.
-        </p>
-      </header>
+  const quoteDtos = quotes.map((quote) => ({
+    id: quote.id,
+    invoiceNumber: quote.invoiceNumber,
+    status: quote.status,
+    subtotal: quote.subtotal.toString(),
+    total: quote.total.toString(),
+    currency: quote.currency,
+    customerNotes: quote.customerNotes,
+    internalNotes: quote.internalNotes,
+    approvalToken: quote.approvalToken,
+    approvalExpiresAt: quote.approvalExpiresAt?.toLocaleDateString("es-CR") ?? null,
+    allowedNextStatuses: getAllowedQuoteStatuses(quote.status),
+    items: quote.items.map((item) => ({
+      id: item.id,
+      itemType: item.itemType,
+      description: item.description,
+      quantity: item.quantity,
+      unitPrice: item.unitPrice.toString(),
+      lineTotal: item.lineTotal.toString(),
+      catalogItemName: item.catalogItem?.name ?? null,
+    })),
+  }));
+  const latestQuote = quoteDtos[0];
+  const customerName = `${ticket.customer.firstName} ${ticket.customer.lastName ?? ""}`.trim();
+  const deviceLabel = `${ticket.device.brand} ${ticket.device.model ?? ""}`.trim();
 
-      <QuoteAdmin
+  return (
+    <main className="min-h-screen bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-100">
+      <AdminNav />
+      <QuoteHero
         ticketId={ticket.id}
-        ticketStatus={ticket.status}
-        catalogItems={catalogItems.map((item) => ({
-          id: item.id,
-          label: `${catalogTypeLabel(item.type)} - ${item.name}${item.basePrice ? ` (CRC ${item.basePrice.toString()})` : ""}`,
-          type: item.type,
-          basePrice: item.basePrice?.toString() ?? null,
-        }))}
-        quotes={quotes.map((quote) => ({
-          id: quote.id,
-          invoiceNumber: quote.invoiceNumber,
-          status: quote.status,
-          subtotal: quote.subtotal.toString(),
-          total: quote.total.toString(),
-          currency: quote.currency,
-          customerNotes: quote.customerNotes,
-          internalNotes: quote.internalNotes,
-          approvalToken: quote.approvalToken,
-          approvalExpiresAt: quote.approvalExpiresAt?.toLocaleDateString("es-CR") ?? null,
-          allowedNextStatuses: getAllowedQuoteStatuses(quote.status),
-          items: quote.items.map((item) => ({
-            id: item.id,
-            itemType: item.itemType,
-            description: item.description,
-            quantity: item.quantity,
-            unitPrice: item.unitPrice.toString(),
-            lineTotal: item.lineTotal.toString(),
-            catalogItemName: item.catalogItem?.name ?? null,
-          })),
-        }))}
+        ticketNumber={ticket.ticketNumber}
+        customerName={customerName}
+        deviceLabel={deviceLabel}
+        quoteCount={quotes.length}
+        latestTotal={latestQuote ? `${latestQuote.currency} ${latestQuote.total}` : "Sin cotizacion"}
+        latestStatus={latestQuote ? quoteStatusLabel(latestQuote.status) : "Pendiente"}
       />
+
+      <RepairContainer className="space-y-6 py-8">
+        <QuoteAdmin
+          ticketId={ticket.id}
+          ticketStatus={ticket.status}
+          catalogItems={catalogItems.map((item) => ({
+            id: item.id,
+            label: `${catalogTypeLabel(item.type)} - ${item.name}${item.basePrice ? ` (CRC ${item.basePrice.toString()})` : ""}`,
+            type: item.type,
+            basePrice: item.basePrice?.toString() ?? null,
+          }))}
+          quotes={quoteDtos}
+        />
+      </RepairContainer>
     </main>
   );
 }
@@ -114,4 +119,20 @@ function catalogTypeLabel(type: string) {
   };
 
   return labels[type] ?? type;
+}
+
+function quoteStatusLabel(status: string) {
+  const labels: Record<string, string> = {
+    DRAFT: "Borrador",
+    SENT: "Enviada",
+    APPROVED: "Aprobada",
+    REJECTED: "Rechazada",
+    EXPIRED: "Expirada",
+    CANCELLED: "Cancelada",
+    PAID: "Pagada",
+    PARTIALLY_PAID: "Pago parcial",
+    UNPAID: "Sin pago",
+  };
+
+  return labels[status] ?? status;
 }

@@ -107,7 +107,7 @@ export function TicketStatusForm({
             Siguiente estado
             <select
               name="nextStatus"
-              className="min-h-10 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+              className="min-h-10 w-full rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
             >
               {allowedNextStatuses.map((status) => (
                 <option key={status.value} value={status.value}>
@@ -121,7 +121,7 @@ export function TicketStatusForm({
             <textarea
               name="internalComment"
               rows={3}
-              className="rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+              className="min-h-24 w-full rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
             />
           </label>
           <ActionMessage ok={state.ok} message={state.message} />
@@ -146,7 +146,7 @@ export function InternalCommentForm({ ticketId }: { ticketId: string }) {
         name="body"
         rows={4}
         required
-        className="w-full rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+        className="min-h-24 w-full rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
       />
       <ActionMessage ok={state.ok} message={state.message} />
       <SubmitButton label="Agregar comentario" pendingLabel="Agregando..." />
@@ -238,7 +238,7 @@ export function GenerateInvoiceForm({
       <input type="hidden" name="quoteId" value={quoteId} />
       <button
         type="submit"
-        className="rounded bg-zinc-950 px-4 py-2 text-sm font-medium text-white dark:bg-zinc-100 dark:text-zinc-950"
+        className="min-h-10 w-full rounded bg-zinc-950 px-4 py-2 text-sm font-medium text-white dark:bg-zinc-100 dark:text-zinc-950 sm:w-auto"
       >
         Generar factura
       </button>
@@ -266,7 +266,7 @@ function TextArea({
         name={name}
         rows={4}
         defaultValue={defaultValue}
-        className="rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+        className="min-h-24 w-full rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
       />
     </label>
   );
@@ -301,7 +301,7 @@ function OperationalActionForm({
       <button
         type="submit"
         disabled={Boolean(blockedReason)}
-        className="w-full rounded bg-zinc-950 px-4 py-2 text-left text-sm font-medium text-white disabled:cursor-not-allowed disabled:bg-zinc-300 disabled:text-zinc-600 dark:bg-zinc-100 dark:text-zinc-950 dark:disabled:bg-zinc-800 dark:disabled:text-zinc-400"
+        className="min-h-10 w-full rounded bg-zinc-950 px-4 py-2 text-left text-sm font-medium text-white disabled:cursor-not-allowed disabled:bg-zinc-300 disabled:text-zinc-600 dark:bg-zinc-100 dark:text-zinc-950 dark:disabled:bg-zinc-800 dark:disabled:text-zinc-400"
       >
         {label}
       </button>
@@ -389,7 +389,7 @@ function SubmitButton({
     <button
       type="submit"
       disabled={pending}
-      className="rounded bg-zinc-950 px-4 py-2 text-sm font-medium text-white disabled:bg-zinc-400 dark:bg-zinc-100 dark:text-zinc-950 dark:disabled:bg-zinc-700 dark:disabled:text-zinc-300"
+      className="min-h-10 w-full rounded bg-zinc-950 px-4 py-2 text-sm font-medium text-white disabled:bg-zinc-400 dark:bg-zinc-100 dark:text-zinc-950 dark:disabled:bg-zinc-700 dark:disabled:text-zinc-300 sm:w-auto"
     >
       {pending ? pendingLabel : label}
     </button>

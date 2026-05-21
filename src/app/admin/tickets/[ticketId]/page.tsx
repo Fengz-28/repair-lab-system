@@ -3,6 +3,27 @@ import { notFound } from "next/navigation";
 import { InvoiceType } from "@prisma/client";
 import type { InvoiceStatus, PaymentStatus, TicketStatus } from "@prisma/client";
 
+import { AdminNav } from "@/components/admin-nav";
+import { ActivityFeed } from "@/components/repairlab/activity-feed";
+import { FinancialSummaryCard } from "@/components/repairlab/financial-summary-card";
+import { TechnicalNotesPanel } from "@/components/repairlab/technical-notes-panel";
+import { TicketCustomerCard } from "@/components/repairlab/ticket-customer-card";
+import { TicketDeviceCard } from "@/components/repairlab/ticket-device-card";
+import { TicketHero } from "@/components/repairlab/ticket-hero";
+import { TicketSidebar, TicketSidebarCard } from "@/components/repairlab/ticket-sidebar";
+import { RepairTicketTimeline, TimelineStageRail } from "@/components/repairlab/ticket-timeline";
+import {
+  RepairBadge,
+  RepairButton,
+  RepairContainer,
+  RepairPanel,
+} from "@/components/repairlab";
+import {
+  messageStatusLabel,
+  providerLabel,
+  templateLabel,
+} from "@/modules/messages/message-labels";
+import { parseMessageMetadata } from "@/modules/messages/message-metadata";
 import {
   AttachmentPlaceholderForm,
   GenerateInvoiceForm,
@@ -11,7 +32,6 @@ import {
   TicketGuidedActions,
   TicketStatusForm,
 } from "@/modules/tickets/components/ticket-actions";
-import { TicketTimeline } from "@/modules/tickets/components/ticket-timeline";
 import { getAllowedNextStatuses } from "@/modules/tickets/ticket.lifecycle.service";
 import { requireLocalStaff } from "@/server/auth/local-admin";
 import { prisma } from "@/server/db/prisma";
@@ -43,6 +63,10 @@ export default async function TicketDetailPage({
       },
       files: {
         orderBy: { createdAt: "desc" },
+      },
+      messages: {
+        orderBy: { createdAt: "desc" },
+        take: 5,
       },
       invoices: {
         where: {
@@ -89,6 +113,8 @@ export default async function TicketDetailPage({
     approvedQuote && approvedQuote._count.items > 0 && Number(approvedQuote.total) > 0 && !generatedInvoice,
   );
   const hasResolution = Boolean(ticket.resolution?.trim());
+  const customerName = `${ticket.customer.firstName} ${ticket.customer.lastName ?? ""}`.trim();
+  const deviceLabel = `${ticket.device.brand} ${ticket.device.model ?? ""}`.trim();
 
   const timelineItems = [
     ...ticket.statusHistory.map((entry) => ({
@@ -120,175 +146,170 @@ export default async function TicketDetailPage({
       createdAt: file.createdAt,
     })),
   ].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  const visualTimelineItems = timelineItems.map((item) => ({
+    ...item,
+    tone: timelineTone(item.type, item.title),
+  }));
 
   return (
-    <main className="mx-auto grid w-full max-w-6xl gap-6 px-6 py-8 lg:grid-cols-[1fr_360px]">
-      <section className="space-y-6">
-        <header className="space-y-2">
-          <Link className="text-sm text-zinc-600 underline dark:text-zinc-300" href="/admin/tickets">
-            Volver a tickets
-          </Link>
-          <Link className="block text-sm text-zinc-600 underline dark:text-zinc-300" href="/admin/intake">
-            Volver a recepcion
-          </Link>
-          <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Ticket {ticket.ticketNumber}</p>
-          <h1 className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50">{ticket.title}</h1>
-          <div className="flex flex-wrap gap-2">
-            <StatusBadge label="Ticket" value={ticketStatusLabel(ticket.status)} tone="ticket" />
-            {quotes[0] ? (
-              <StatusBadge
-                label="Cotizacion"
-                value={quoteStatusLabel(quotes[0].status)}
-                tone="quote"
+    <main className="min-h-screen bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50">
+      <AdminNav />
+      <TicketHero
+        ticketNumber={ticket.ticketNumber}
+        title={ticket.title}
+        customerName={customerName}
+        deviceLabel={deviceLabel}
+        status={ticketStatusLabel(ticket.status)}
+        createdAt={ticket.createdAt}
+      >
+        <TimelineStageRail stages={ticketWorkflowStages(ticket.status)} />
+      </TicketHero>
+
+      <RepairContainer className="py-8 sm:py-10">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,8fr)_minmax(320px,4fr)]">
+          <section className="space-y-6">
+            <RepairPanel className="border-emerald-200 bg-emerald-50/80 text-emerald-950 dark:border-emerald-900 dark:bg-emerald-950/60 dark:text-emerald-100">
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">
+                Siguiente paso recomendado
+              </p>
+              <p className="mt-2 text-sm leading-6">{getRecommendedTicketStep(ticket.status, Boolean(approvedQuote))}</p>
+            </RepairPanel>
+
+            <RepairTicketTimeline items={visualTimelineItems} />
+
+            <div className="grid gap-6 xl:grid-cols-2">
+              <TicketCustomerCard
+                name={customerName}
+                phone={ticket.customer.phone ?? "No registrado"}
+                whatsapp={ticket.customer.whatsappPhone ?? "No registrado"}
+                email={ticket.customer.email ?? "No registrado"}
               />
-            ) : null}
-          </div>
-          <Link className="text-sm text-zinc-600 underline dark:text-zinc-300" href={`/admin/tickets/${ticket.id}/quotes`}>
-            Ver cotizaciones
-          </Link>
-        </header>
-
-        <section className="space-y-3 rounded border border-blue-200 bg-blue-50 p-4 text-blue-950 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-100">
-          <h2 className="text-base font-semibold">Siguiente paso recomendado</h2>
-          <p className="text-sm">{getRecommendedTicketStep(ticket.status, Boolean(approvedQuote))}</p>
-        </section>
-
-        <section className="grid gap-4 rounded border border-zinc-200 p-4 dark:border-zinc-800 md:grid-cols-2">
-          <InfoItem
-            label="Cliente"
-            value={`${ticket.customer.firstName} ${ticket.customer.lastName ?? ""}`}
-          />
-          <InfoItem
-            label="Contacto"
-            value={ticket.customer.whatsappPhone ?? ticket.customer.phone ?? ticket.customer.email ?? "Sin contacto"}
-          />
-          <InfoItem
-            label="Equipo"
-            value={`${ticket.device.brand} ${ticket.device.model ?? ""}`}
-          />
-          <InfoItem label="Serial" value={ticket.device.serial ?? "No registrado"} />
-          <InfoItem label="Problema reportado" value={ticket.reportedIssue} wide />
-          <InfoItem
-            label="Condicion inicial"
-            value={ticket.intake?.physicalCondition ?? "Sin intake asociado"}
-            wide
-          />
-        </section>
-
-        <section className="space-y-3 rounded border border-zinc-200 p-4 dark:border-zinc-800">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Cotizaciones</h2>
-            <Link className="text-sm text-zinc-600 underline dark:text-zinc-300" href={`/admin/tickets/${ticket.id}/quotes`}>
-              Abrir cotizaciones
-            </Link>
-          </div>
-          {quotes.length === 0 ? (
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              No hay cotizaciones. Cuando el diagnostico tenga precio, crea una cotizacion y agrega sus lineas.
-            </p>
-          ) : (
-            <ul className="space-y-2">
-              {quotes.map((quote) => (
-                <li
-                  key={quote.id}
-                  className="flex flex-wrap items-center justify-between gap-3 rounded border border-zinc-100 p-3 text-sm dark:border-zinc-800"
-                >
-                  <div>
-                    <p className="font-medium text-zinc-950 dark:text-zinc-50">{quote.invoiceNumber}</p>
-                    <p className="text-zinc-500 dark:text-zinc-400">
-                      Total estimado: {quote.currency} {quote.total.toString()}
-                    </p>
-                    <p className="text-zinc-500 dark:text-zinc-400">
-                      Creada: {quote.createdAt.toLocaleString("es-CR")}
-                    </p>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <StatusBadge label="Cotizacion" value={quoteStatusLabel(quote.status)} tone="quote" />
-                    <Link
-                      className="text-zinc-600 underline dark:text-zinc-300"
-                      href={`/admin/tickets/${ticket.id}/quotes`}
-                    >
-                      Abrir
-                    </Link>
-                    <a
-                      className="text-zinc-600 underline dark:text-zinc-300"
-                      href={`/admin/tickets/${ticket.id}/quotes/${quote.id}/pdf`}
-                    >
-                      PDF
-                    </a>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
-        <section className="space-y-3 rounded border border-zinc-200 p-4 dark:border-zinc-800">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Factura interna</h2>
-            {generatedInvoice ? (
-              <Link
-                className="text-sm text-zinc-600 underline dark:text-zinc-300"
-                href={`/admin/tickets/${ticket.id}/invoices/${generatedInvoice.id}`}
-              >
-                Ver factura
-              </Link>
-            ) : null}
-          </div>
-          {generatedInvoice ? (
-            <div className="flex flex-wrap items-center justify-between gap-3 rounded border border-zinc-100 p-3 text-sm dark:border-zinc-800">
-              <div>
-                <p className="font-medium text-zinc-950 dark:text-zinc-50">{generatedInvoice.invoiceNumber}</p>
-                <p className="text-zinc-500 dark:text-zinc-400">
-                  Total facturado: {generatedInvoice.currency} {generatedInvoice.total.toString()}
-                </p>
-                <p className="text-zinc-500 dark:text-zinc-400">
-                  Creada: {generatedInvoice.createdAt.toLocaleString("es-CR")}
-                </p>
-              </div>
-              <div className="flex flex-wrap items-center gap-2">
-                <StatusBadge label="Factura" value={quoteStatusLabel(generatedInvoice.status)} tone="invoice" />
-                <StatusBadge label="Pago" value={paymentStatusLabel(generatedInvoice.paymentStatus)} tone="invoice" />
-                <a
-                  className="text-zinc-600 underline dark:text-zinc-300"
-                  href={`/admin/tickets/${ticket.id}/invoices/${generatedInvoice.id}/pdf`}
-                >
-                  Descargar factura PDF
-                </a>
-              </div>
+              <TicketDeviceCard
+                device={deviceLabel}
+                serial={ticket.device.serial ?? "No registrado"}
+                issue={ticket.reportedIssue}
+                condition={ticket.intake?.physicalCondition ?? "Sin intake asociado"}
+              />
             </div>
-          ) : approvedQuote ? (
-            <div className="space-y-3 rounded border border-zinc-100 p-3 text-sm dark:border-zinc-800">
-              <div>
-                <p className="font-medium text-zinc-950 dark:text-zinc-50">
-                  Cotizacion aprobada: {approvedQuote.invoiceNumber}
-                </p>
-                <p className="text-zinc-500 dark:text-zinc-400">
-                  Total aprobado: {approvedQuote.currency} {approvedQuote.total.toString()}
-                </p>
+
+            <FinancialSummaryCard
+              title="Cotizaciones"
+              number={quotes[0]?.invoiceNumber ?? "Sin cotizacion"}
+              total={quotes[0] ? `${quotes[0].currency} ${quotes[0].total.toString()}` : undefined}
+              status={quotes[0] ? quoteStatusLabel(quotes[0].status) : undefined}
+            >
+              <div className="space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                    {quotes.length === 0
+                      ? "No hay cotizaciones. Cuando el diagnostico tenga precio, crea una cotizacion."
+                      : `${quotes.length} cotizacion(es) registradas.`}
+                  </p>
+                  <RepairButton href={`/admin/tickets/${ticket.id}/quotes`} tone="secondary" size="sm">
+                    Abrir cotizaciones
+                  </RepairButton>
+                </div>
+                {quotes.length > 0 ? (
+                  <ul className="space-y-2">
+                    {quotes.map((quote) => (
+                      <li key={quote.id} className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-zinc-100 bg-zinc-50 p-3 text-sm dark:border-zinc-800 dark:bg-zinc-900/70">
+                        <div className="min-w-0">
+                          <p className="font-black text-zinc-950 dark:text-zinc-50">{quote.invoiceNumber}</p>
+                          <p className="text-zinc-500 dark:text-zinc-400">
+                            Creada: {quote.createdAt.toLocaleString("es-CR")}
+                          </p>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <StatusBadge label="Cotizacion" value={quoteStatusLabel(quote.status)} tone="quote" />
+                          <a className="text-sm font-bold text-emerald-700 underline dark:text-emerald-300" href={`/admin/tickets/${ticket.id}/quotes/${quote.id}/pdf`}>
+                            PDF
+                          </a>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
               </div>
-              {canGenerateInvoice ? (
-                <GenerateInvoiceForm ticketId={ticket.id} quoteId={approvedQuote.id} />
+            </FinancialSummaryCard>
+
+            <FinancialSummaryCard
+              title="Factura interna"
+              number={generatedInvoice?.invoiceNumber ?? (approvedQuote ? `Cotizacion aprobada: ${approvedQuote.invoiceNumber}` : "Sin factura")}
+              total={generatedInvoice ? `${generatedInvoice.currency} ${generatedInvoice.total.toString()}` : approvedQuote ? `${approvedQuote.currency} ${approvedQuote.total.toString()}` : undefined}
+              status={generatedInvoice ? paymentStatusLabel(generatedInvoice.paymentStatus) : undefined}
+            >
+              {generatedInvoice ? (
+                <div className="flex flex-wrap items-center gap-2">
+                  <RepairButton href={`/admin/tickets/${ticket.id}/invoices/${generatedInvoice.id}`} tone="secondary" size="sm">
+                    Ver factura
+                  </RepairButton>
+                  <a className="min-h-10 rounded-full border border-zinc-300 px-4 py-2 text-xs font-bold text-zinc-800 transition hover:border-emerald-300 hover:text-emerald-700 dark:border-zinc-700 dark:text-zinc-100" href={`/admin/tickets/${ticket.id}/invoices/${generatedInvoice.id}/pdf`}>
+                    PDF factura
+                  </a>
+                </div>
+              ) : approvedQuote ? (
+                canGenerateInvoice ? (
+                  <GenerateInvoiceForm ticketId={ticket.id} quoteId={approvedQuote.id} />
+                ) : (
+                  <p className="text-sm text-amber-700 dark:text-amber-200">
+                    La factura no puede generarse hasta que la cotizacion tenga lineas y total mayor a cero.
+                  </p>
+                )
               ) : (
-                <p className="text-sm text-amber-700 dark:text-amber-200">
-                  La factura no puede generarse hasta que la cotizacion tenga lineas y total mayor a cero.
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                  La factura se podra generar cuando exista una cotizacion aprobada.
                 </p>
               )}
-            </div>
+            </FinancialSummaryCard>
+
+            <ActivityFeed title="Mensajes enviados" eyebrow="Comunicaciones" empty={ticket.messages.length === 0}>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Link className="text-sm text-zinc-600 underline dark:text-zinc-300" href={`/admin/messages?search=${encodeURIComponent(ticket.ticketNumber)}`}>
+              Ver historial
+            </Link>
+          </div>
+          {ticket.messages.length > 0 ? (
+            <ul className="space-y-2">
+              {ticket.messages.map((message) => {
+                const metadata = parseMessageMetadata(message.metadata);
+
+                return (
+                  <li
+                    key={message.id}
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-zinc-100 bg-zinc-50 p-3 text-sm dark:border-zinc-800 dark:bg-zinc-900/70"
+                  >
+                    <div className="min-w-0">
+                      <Link className="break-words font-medium text-zinc-950 underline dark:text-zinc-50" href={`/admin/messages/${message.id}`}>
+                        {message.subject ?? "Sin asunto"}
+                      </Link>
+                      <p className="break-words text-zinc-500 dark:text-zinc-400">
+                        {message.recipient ?? "Sin destinatario"} / {message.createdAt.toLocaleString("es-CR")}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded border border-zinc-200 bg-zinc-50 px-2 py-1 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200">
+                        {templateLabel(metadata.template)}
+                      </span>
+                      <span className="rounded border border-zinc-200 bg-zinc-50 px-2 py-1 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200">
+                        {providerLabel(message.provider)}
+                      </span>
+                      <span className="rounded border border-blue-200 bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-100">
+                        {messageStatusLabel(message.status, message.provider)}
+                      </span>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
           ) : (
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              La factura se podra generar cuando exista una cotizacion aprobada.
-            </p>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">No hay mensajes registrados para este ticket.</p>
           )}
-        </section>
+            </ActivityFeed>
 
-        <TicketTimeline items={timelineItems} />
-
-        <section className="space-y-3 rounded border border-zinc-200 p-4 dark:border-zinc-800">
-          <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Historial de estado</h2>
-          <ul className="space-y-2 text-sm">
-            {ticket.statusHistory.map((entry) => (
-              <li key={entry.id} className="rounded border border-zinc-100 p-3 dark:border-zinc-800">
+            <ActivityFeed title="Historial de estado" eyebrow="Estados" empty={ticket.statusHistory.length === 0}>
+              <ul className="space-y-2 text-sm">
+                {ticket.statusHistory.map((entry) => (
+                  <li key={entry.id} className="rounded-2xl border border-zinc-100 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-900/70">
                 <p>
                   {entry.fromStatus ? ticketStatusLabel(entry.fromStatus) : "Inicio"} {"->"} {ticketStatusLabel(entry.toStatus)}
                 </p>
@@ -296,68 +317,98 @@ export default async function TicketDetailPage({
                 {entry.internalComment ? (
                   <p className="text-zinc-700 dark:text-zinc-300">{entry.internalComment}</p>
                 ) : null}
-              </li>
-            ))}
-          </ul>
-        </section>
+                  </li>
+                ))}
+              </ul>
+            </ActivityFeed>
 
-        <section className="space-y-3 rounded border border-zinc-200 p-4 dark:border-zinc-800">
-          <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Archivos privados</h2>
-          {ticket.files.length === 0 ? (
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">No hay archivos registrados.</p>
-          ) : (
-            <ul className="space-y-2 text-sm">
-              {ticket.files.map((file) => (
-                <li key={file.id} className="rounded border border-zinc-100 p-3 dark:border-zinc-800">
-                  <p className="font-medium">{file.originalName}</p>
-                  <p className="text-zinc-500 dark:text-zinc-400">{file.storageKey}</p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      </section>
+            <ActivityFeed title="Archivos privados" eyebrow="Adjuntos" empty={ticket.files.length === 0}>
+              <ul className="space-y-2 text-sm">
+                {ticket.files.map((file) => (
+                  <li key={file.id} className="rounded-2xl border border-zinc-100 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-900/70">
+                    <p className="font-medium">{file.originalName}</p>
+                    <p className="text-zinc-500 dark:text-zinc-400">{file.storageKey}</p>
+                  </li>
+                ))}
+              </ul>
+            </ActivityFeed>
+          </section>
 
-      <aside className="space-y-4">
-        <TicketGuidedActions
-          ticketId={ticket.id}
-          currentStatus={ticket.status as TicketStatus}
-          allowedNextStatuses={allowedNextStatuses}
-          hasApprovedQuote={Boolean(approvedQuote)}
-          hasResolution={hasResolution}
-        />
-        <TicketStatusForm
-          ticketId={ticket.id}
-          currentStatus={ticket.status as TicketStatus}
-          allowedNextStatuses={allowedNextStatuses}
-        />
-        <InternalCommentForm ticketId={ticket.id} />
-        <TechnicalNotesForm
-          ticketId={ticket.id}
-          diagnosis={ticket.diagnosis ?? ""}
-          resolution={ticket.resolution ?? ""}
-          internalNotes={ticket.internalNotes ?? ""}
-        />
-        <AttachmentPlaceholderForm ticketId={ticket.id} />
-      </aside>
+          <TicketSidebar>
+            <TicketSidebarCard title="Estado actual" eyebrow="Operacion">
+              <div className="space-y-3">
+                <StatusBadge label="Ticket" value={ticketStatusLabel(ticket.status)} tone="ticket" />
+                {quotes[0] ? <StatusBadge label="Cotizacion" value={quoteStatusLabel(quotes[0].status)} tone="quote" /> : null}
+                {generatedInvoice ? <StatusBadge label="Pago" value={paymentStatusLabel(generatedInvoice.paymentStatus)} tone="invoice" /> : null}
+              </div>
+            </TicketSidebarCard>
+
+            <TicketSidebarCard title="Acciones rapidas" eyebrow="Workflow">
+              <div className="space-y-4">
+                <TicketGuidedActions
+                  ticketId={ticket.id}
+                  currentStatus={ticket.status as TicketStatus}
+                  allowedNextStatuses={allowedNextStatuses}
+                  hasApprovedQuote={Boolean(approvedQuote)}
+                  hasResolution={hasResolution}
+                />
+                <TicketStatusForm
+                  ticketId={ticket.id}
+                  currentStatus={ticket.status as TicketStatus}
+                  allowedNextStatuses={allowedNextStatuses}
+                />
+              </div>
+            </TicketSidebarCard>
+
+            <TicketSidebarCard title="Portal del cliente" eyebrow="Publico">
+              <div className="space-y-3">
+                <RepairBadge tone="emerald">Disponible</RepairBadge>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                  Comparte este enlace con el cliente para consultar el estado.
+                </p>
+                <a className="block break-all rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-bold text-emerald-900 underline dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100" href={`/track/${ticket.publicAccessToken}`} target="_blank" rel="noreferrer">
+                  /track/{ticket.publicAccessToken}
+                </a>
+              </div>
+            </TicketSidebarCard>
+
+            <TicketSidebarCard title="Descargas" eyebrow="PDFs">
+              <div className="grid gap-2">
+                {quotes[0] ? (
+                  <a className="min-h-10 rounded-full border border-zinc-300 px-4 py-2 text-center text-xs font-bold text-zinc-800 transition hover:border-emerald-300 hover:text-emerald-700 dark:border-zinc-700 dark:text-zinc-100" href={`/admin/tickets/${ticket.id}/quotes/${quotes[0].id}/pdf`}>
+                    PDF cotizacion
+                  </a>
+                ) : null}
+                {generatedInvoice ? (
+                  <a className="min-h-10 rounded-full border border-zinc-300 px-4 py-2 text-center text-xs font-bold text-zinc-800 transition hover:border-emerald-300 hover:text-emerald-700 dark:border-zinc-700 dark:text-zinc-100" href={`/admin/tickets/${ticket.id}/invoices/${generatedInvoice.id}/pdf`}>
+                    PDF factura
+                  </a>
+                ) : null}
+                {!quotes[0] && !generatedInvoice ? (
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400">No hay PDFs disponibles todavia.</p>
+                ) : null}
+              </div>
+            </TicketSidebarCard>
+
+            <TechnicalNotesPanel>
+              <TechnicalNotesForm
+                ticketId={ticket.id}
+                diagnosis={ticket.diagnosis ?? ""}
+                resolution={ticket.resolution ?? ""}
+                internalNotes={ticket.internalNotes ?? ""}
+              />
+            </TechnicalNotesPanel>
+
+            <TicketSidebarCard title="Comentarios y archivos" eyebrow="Interno">
+              <div className="space-y-4">
+                <InternalCommentForm ticketId={ticket.id} />
+                <AttachmentPlaceholderForm ticketId={ticket.id} />
+              </div>
+            </TicketSidebarCard>
+          </TicketSidebar>
+        </div>
+      </RepairContainer>
     </main>
-  );
-}
-
-function InfoItem({
-  label,
-  value,
-  wide = false,
-}: {
-  label: string;
-  value: string;
-  wide?: boolean;
-}) {
-  return (
-    <div className={wide ? "md:col-span-2" : undefined}>
-      <p className="text-xs font-medium uppercase text-zinc-500 dark:text-zinc-400">{label}</p>
-      <p className="text-sm text-zinc-900 dark:text-zinc-100">{value}</p>
-    </div>
   );
 }
 
@@ -385,6 +436,45 @@ function StatusBadge({
       <span>{value}</span>
     </span>
   );
+}
+
+function ticketWorkflowStages(currentStatus: TicketStatus) {
+  const stages: { status: TicketStatus; label: string }[] = [
+    { status: "RECEIVED", label: "Recibido" },
+    { status: "DIAGNOSIS", label: "Diagnostico" },
+    { status: "WAITING_APPROVAL", label: "Aprobacion" },
+    { status: "APPROVED", label: "Aprobado" },
+    { status: "REPAIR_IN_PROGRESS", label: "Reparacion" },
+    { status: "READY_FOR_PICKUP", label: "Listo entrega" },
+    { status: "DELIVERED", label: "Entregado" },
+  ];
+  const currentIndex = stages.findIndex((stage) => stage.status === currentStatus);
+
+  return stages.map((stage, index) => ({
+    label: stage.label,
+    active: stage.status === currentStatus,
+    done: currentIndex > -1 && index < currentIndex,
+  }));
+}
+
+function timelineTone(type: string, title: string) {
+  if (title.includes("aprob") || title.includes("Listo") || title.includes("cerrado")) {
+    return "emerald" as const;
+  }
+
+  if (title.includes("Diagnostico") || title.includes("Reparacion")) {
+    return "cyan" as const;
+  }
+
+  if (title.includes("Esperando") || title.includes("enviada")) {
+    return "warning" as const;
+  }
+
+  if (type === "comment") {
+    return "violet" as const;
+  }
+
+  return "neutral" as const;
 }
 
 function getTicketEventTitle(type: string, payload: unknown) {
