@@ -1,3 +1,5 @@
+import { headers } from "next/headers";
+
 import { ClientTrackingHero } from "@/components/repairlab/client-tracking-hero";
 import { RepairContainer, RepairEmptyState } from "@/components/repairlab";
 import { PublicContactCard, PublicTrackingFooter } from "@/components/repairlab/public-contact-card";
@@ -7,6 +9,8 @@ import { PublicRepairProgress } from "@/components/repairlab/public-repair-progr
 import { QuotePublicCard } from "@/components/repairlab/public-quote-card";
 import { PublicTimeline } from "@/components/repairlab/public-timeline";
 import { getPublicTrackingData } from "@/modules/customer-portal/tracking.service";
+import { getClientIdentity } from "@/server/security/client-identity";
+import { checkRateLimit, publicRateLimitConfig } from "@/server/security/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +20,14 @@ export default async function PublicTrackingPage({
   params: Promise<{ token: string }>;
 }) {
   const { token } = await params;
+  const requestHeaders = await headers();
+  const client = getClientIdentity(requestHeaders);
+  const rateLimit = checkRateLimit(`public-track:${client.ip}:${token}`, publicRateLimitConfig());
+
+  if (!rateLimit.allowed) {
+    return <RateLimitedPage retryAfterSeconds={rateLimit.retryAfterSeconds} />;
+  }
+
   const data = await getPublicTrackingData(token);
 
   if (!data) {
@@ -52,6 +64,21 @@ export default async function PublicTrackingPage({
         </div>
       </RepairContainer>
 
+      <PublicTrackingFooter />
+    </main>
+  );
+}
+
+function RateLimitedPage({ retryAfterSeconds }: { retryAfterSeconds: number }) {
+  return (
+    <main className="min-h-screen bg-zinc-950 text-zinc-100">
+      <ClientTrackingHero />
+      <RepairContainer className="-mt-8 relative z-10 pb-12">
+        <RepairEmptyState
+          title="Demasiadas solicitudes"
+          description={`Por seguridad, espera ${retryAfterSeconds} segundos antes de volver a consultar este enlace.`}
+        />
+      </RepairContainer>
       <PublicTrackingFooter />
     </main>
   );
