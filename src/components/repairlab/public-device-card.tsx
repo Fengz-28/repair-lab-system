@@ -8,7 +8,7 @@ export function DevicePublicCard({
   reportedIssue: string;
 }) {
   return (
-    <section className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm shadow-zinc-950/5 dark:border-zinc-800 dark:bg-zinc-950 sm:p-6">
+    <section className="rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/30 sm:p-6">
       <div className="flex items-start gap-4">
         <div className="grid size-14 shrink-0 place-items-center rounded-2xl bg-emerald-50 text-lg font-black text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200">
           EQ
@@ -24,7 +24,7 @@ export function DevicePublicCard({
         </div>
       </div>
 
-      <div className="mt-5 rounded-2xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/70">
+      <div className="mt-5 rounded-2xl border border-white/10 bg-zinc-950/75 p-4">
         <p className="text-xs font-bold uppercase tracking-[0.16em] text-zinc-500 dark:text-zinc-400">
           Problema reportado
         </p>

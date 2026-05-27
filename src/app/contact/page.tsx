@@ -96,7 +96,7 @@ function Input({ label }: { label: string }) {
 
 function Info({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-900/70">
+    <div className="rounded-2xl border border-white/10 bg-zinc-950/75 p-3">
       <p className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">{label}</p>
       <p className="mt-1 break-words font-black text-zinc-950 dark:text-zinc-50">{value}</p>
     </div>

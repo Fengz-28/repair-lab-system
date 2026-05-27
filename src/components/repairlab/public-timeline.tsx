@@ -8,7 +8,7 @@ export function PublicTimeline({
   }[];
 }) {
   return (
-    <section className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm shadow-zinc-950/5 dark:border-zinc-800 dark:bg-zinc-950 sm:p-6">
+    <section className="rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/30 sm:p-6">
       <div>
         <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
           Actividad publica
@@ -17,7 +17,7 @@ export function PublicTimeline({
       </div>
 
       {items.length === 0 ? (
-        <p className="mt-5 rounded-2xl border border-zinc-200 bg-zinc-50 p-4 text-sm text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-400">
+        <p className="mt-5 rounded-2xl border border-white/10 bg-zinc-950/75 p-4 text-sm text-zinc-400">
           Aun no hay eventos publicos para mostrar.
         </p>
       ) : (
@@ -32,7 +32,7 @@ export function PublicTimeline({
                   <span className="absolute top-10 h-[calc(100%+1rem)] w-px bg-zinc-200 dark:bg-zinc-800" />
                 ) : null}
               </div>
-              <div className="min-w-0 rounded-2xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/70">
+              <div className="min-w-0 rounded-2xl border border-white/10 bg-zinc-950/75 p-4">
                 <p className="break-words text-sm font-black text-zinc-950 dark:text-zinc-50">{item.title}</p>
                 <p className="mt-1 text-xs font-medium text-zinc-500 dark:text-zinc-400">
                   {item.createdAt.toLocaleString("es-CR")}

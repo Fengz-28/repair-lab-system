@@ -52,7 +52,7 @@ export function TicketGuidedActions({
         </p>
       </div>
       {actions.length === 0 ? (
-        <p className="rounded border border-zinc-200 bg-zinc-50 p-3 text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
+        <p className="rounded-2xl border border-white/10 bg-zinc-950/75 p-3 text-sm text-zinc-300">
           Este ticket no tiene mas acciones operativas.
         </p>
       ) : (
@@ -98,7 +98,7 @@ export function TicketStatusForm({
         </p>
       </div>
       {isFinal ? (
-        <p className="rounded border border-zinc-200 bg-zinc-50 p-3 text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
+        <p className="rounded-2xl border border-white/10 bg-zinc-950/75 p-3 text-sm text-zinc-300">
           Este ticket esta en estado final.
         </p>
       ) : (

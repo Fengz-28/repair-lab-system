@@ -295,7 +295,7 @@ export function RepairStatCard({
       <p className="mt-3 break-words text-3xl font-black tracking-tight text-zinc-950 dark:text-zinc-50">
         {value}
       </p>
-      <div className="mt-5 h-1 overflow-hidden rounded-full bg-white/5">
+      <div className="mt-5 h-1 overflow-hidden rounded-full bg-zinc-900/35">
         <div className={`h-full w-2/3 rounded-full bg-gradient-to-r ${bar} transition-[width] duration-700`} />
       </div>
     </RepairCard>

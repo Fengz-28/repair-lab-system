@@ -34,7 +34,7 @@ export function TicketHero({
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-3">
               <RepairBadge tone="emerald">{status}</RepairBadge>
-              <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold text-zinc-200">
+              <span className="rounded-full border border-white/15 bg-zinc-900/45 px-3 py-1 text-xs font-semibold text-zinc-200">
                 Ingreso {createdAt.toLocaleDateString("es-CR")}
               </span>
             </div>

@@ -33,7 +33,7 @@ export function TicketDeviceCard({
 
 function Info({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-zinc-100 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/70">
+    <div className="rounded-2xl border border-white/10 bg-zinc-950/75 p-4">
       <p className="text-xs font-bold uppercase text-zinc-500 dark:text-zinc-400">{label}</p>
       <p className="mt-2 break-words text-sm leading-6 text-zinc-700 dark:text-zinc-200">{value}</p>
     </div>

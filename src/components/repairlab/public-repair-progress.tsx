@@ -16,7 +16,7 @@ export function PublicRepairProgress({ status }: { status: TicketStatus }) {
   const isCancelled = status === "CANCELLED";
 
   return (
-    <section className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm shadow-zinc-950/5 dark:border-zinc-800 dark:bg-zinc-950 sm:p-6">
+    <section className="rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/30 sm:p-6">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
@@ -39,12 +39,12 @@ export function PublicRepairProgress({ status }: { status: TicketStatus }) {
             ? "border-emerald-300 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100"
             : isCurrent
               ? "border-cyan-300 bg-cyan-50 text-cyan-800 ring-2 ring-cyan-200 dark:border-cyan-900 dark:bg-cyan-950 dark:text-cyan-100 dark:ring-cyan-900/70"
-              : "border-zinc-200 bg-zinc-50 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400";
+              : "border-white/10 bg-zinc-950/75 text-zinc-400";
 
           return (
             <li key={stage.status} className={`relative rounded-2xl border p-4 ${stateClass}`}>
               <div className="flex items-center gap-3 md:block">
-                <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white text-xs font-black shadow-sm dark:bg-zinc-950">
+                <span className="grid size-9 shrink-0 place-items-center rounded-full bg-zinc-950 text-xs font-black shadow-sm shadow-black/30">
                   {isDone ? "OK" : index + 1}
                 </span>
                 <div className="min-w-0 md:mt-3">

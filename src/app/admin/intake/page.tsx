@@ -41,15 +41,15 @@ export default async function AdminIntakePage() {
 
       <section className="space-y-3">
         <h2 className="text-lg font-semibold text-zinc-950 dark:text-zinc-50">Recepciones recientes</h2>
-        <div className="overflow-x-auto rounded border border-zinc-200 dark:border-zinc-800">
+        <div className="overflow-x-auto rounded-2xl border border-white/10">
           <table className="w-full min-w-[760px] border-collapse text-left text-sm">
-            <thead className="bg-zinc-50 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">
+            <thead className="bg-zinc-950/95 text-zinc-300">
               <tr>
-                <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Ticket</th>
-                <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Cliente</th>
-                <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Equipo</th>
-                <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Estado</th>
-                <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Fotos</th>
+                <th className="border-b border-white/10 px-3 py-2">Ticket</th>
+                <th className="border-b border-white/10 px-3 py-2">Cliente</th>
+                <th className="border-b border-white/10 px-3 py-2">Equipo</th>
+                <th className="border-b border-white/10 px-3 py-2">Estado</th>
+                <th className="border-b border-white/10 px-3 py-2">Fotos</th>
               </tr>
             </thead>
             <tbody>

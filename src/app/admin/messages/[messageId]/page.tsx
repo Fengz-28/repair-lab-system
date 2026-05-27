@@ -28,14 +28,14 @@ export default async function AdminMessageDetailPage({
   }
 
   return (
-    <main className="min-h-screen bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-100">
+    <main className="min-h-screen bg-black text-zinc-100">
       <AdminNav />
       <RepairPageHero
         eyebrow="Admin / Mensaje"
         title={message.subject ?? "Sin asunto"}
         description="Detalle seguro del mensaje transaccional. El HTML se muestra como texto para evitar ejecutar contenido dentro del admin."
         actions={
-          <Link className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-black text-white transition hover:bg-white/20" href="/admin/messages">
+          <Link className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/20 bg-zinc-900/45 px-5 py-2.5 text-sm font-black text-white transition hover:bg-zinc-800/70" href="/admin/messages">
             Volver a mensajes
           </Link>
         }
@@ -121,7 +121,7 @@ function ContentPanel({
     <RepairPanel className="space-y-3">
       <h2 className="text-xl font-black text-zinc-950 dark:text-zinc-50">{title}</h2>
       {description ? <p className="text-sm text-zinc-500 dark:text-zinc-400">{description}</p> : null}
-      <pre className={`${compact ? "max-h-[520px] text-xs" : "text-sm"} overflow-auto whitespace-pre-wrap break-words rounded-2xl border border-zinc-200 bg-zinc-50 p-4 text-zinc-800 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100`}>
+      <pre className={`${compact ? "max-h-[520px] text-xs" : "text-sm"} overflow-auto whitespace-pre-wrap break-words rounded-2xl border border-white/10 bg-zinc-950 p-4 text-zinc-100`}>
         {content}
       </pre>
     </RepairPanel>

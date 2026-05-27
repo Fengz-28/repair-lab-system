@@ -83,7 +83,7 @@ export function CustomerSidebar({
 
 function Info({ label, value }: { label: string; value: string }) {
   return (
-    <div className="min-w-0 rounded-2xl border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-900/70">
+    <div className="min-w-0 rounded-2xl border border-white/10 bg-zinc-950/75 p-3">
       <p className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">{label}</p>
       <p className="mt-1 break-words font-semibold text-zinc-950 dark:text-zinc-50">{value}</p>
     </div>
@@ -92,7 +92,7 @@ function Info({ label, value }: { label: string; value: string }) {
 
 function MiniMetric({ label, value, highlight = false }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <div className="flex flex-wrap justify-between gap-3 border-b border-zinc-200 pb-2 last:border-0 last:pb-0 dark:border-zinc-800">
+    <div className="flex flex-wrap justify-between gap-3 border-b border-white/10 pb-2 last:border-0 last:pb-0">
       <span className="text-sm text-zinc-500 dark:text-zinc-400">{label}</span>
       <span className={highlight ? "break-words text-right text-sm font-black text-amber-700 dark:text-amber-200" : "break-words text-right text-sm font-black text-zinc-950 dark:text-zinc-50"}>
         {value}

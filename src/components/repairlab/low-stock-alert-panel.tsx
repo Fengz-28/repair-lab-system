@@ -35,7 +35,7 @@ export function LowStockAlertPanel({
       </div>
       <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {items.slice(0, 6).map((item) => (
-          <div key={item.id} className="rounded-2xl border border-amber-200 bg-white p-4 dark:border-amber-900 dark:bg-zinc-950">
+          <div key={item.id} className="rounded-2xl border border-amber-300/25 bg-amber-500/10 p-4">
             <p className="break-words font-black text-zinc-950 dark:text-zinc-50">{item.name}</p>
             <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{item.sku ? `SKU: ${item.sku}` : "Sin SKU"}</p>
             <p className="mt-2 text-sm font-bold text-amber-700 dark:text-amber-200">

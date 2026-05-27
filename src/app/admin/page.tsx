@@ -78,7 +78,7 @@ export default async function AdminHomePage() {
             ) : (
               <ul className="mt-4 space-y-3 text-sm">
                 {recentTickets.map((ticket) => (
-                  <li key={ticket.id} className="flex flex-wrap justify-between gap-3 rounded-2xl border border-zinc-100 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/70">
+                  <li key={ticket.id} className="flex flex-wrap justify-between gap-3 rounded-2xl border border-white/10 bg-zinc-950/75 p-4">
                     <div className="min-w-0">
                       <Link className="font-bold text-zinc-950 underline decoration-emerald-400 underline-offset-4 dark:text-zinc-50" href={`/admin/tickets/${ticket.id}`}>
                         {ticket.ticketNumber}

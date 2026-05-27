@@ -72,7 +72,7 @@ export function PublicNavbar() {
 
 export function PublicShell({ children }: { children: React.ReactNode }) {
   return (
-    <main className="min-h-screen bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-100">
+    <main className="min-h-screen bg-black text-zinc-100">
       <PublicTopbar />
       <PublicNavbar />
       {children}
@@ -155,7 +155,7 @@ export function PublicServiceCard({
   href?: string;
 }) {
   return (
-    <article className="group rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm shadow-zinc-950/5 transition hover:-translate-y-1 hover:border-emerald-300 hover:shadow-2xl hover:shadow-emerald-950/10 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-emerald-800">
+    <article className="group rounded-3xl border border-white/10 bg-zinc-950/90 p-6 shadow-sm shadow-black/30 transition hover:-translate-y-1 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-950/20">
       <div className="grid size-14 place-items-center rounded-2xl bg-emerald-50 text-sm font-black text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200">
         RL
       </div>
@@ -199,7 +199,7 @@ function TechVisual() {
   return (
     <div className="relative mx-auto w-full max-w-md">
       <div className="absolute -inset-6 rounded-[2rem] bg-emerald-500/15 blur-3xl" />
-      <div className="relative rounded-[2rem] border border-white/10 bg-white/10 p-5 shadow-2xl shadow-black/30 backdrop-blur">
+      <div className="relative rounded-[2rem] border border-white/10 bg-zinc-900/45 p-5 shadow-2xl shadow-black/30 backdrop-blur">
         <div className="rounded-3xl border border-white/10 bg-zinc-950/80 p-5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-black uppercase tracking-[0.18em] text-emerald-300">Repair bench</span>
@@ -207,7 +207,7 @@ function TechVisual() {
           </div>
           <div className="mt-5 grid gap-3">
             {["Recepcion segura", "Diagnostico tecnico", "Cotizacion transparente", "Entrega documentada"].map((item, index) => (
-              <div key={item} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-3">
+              <div key={item} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-zinc-900/35 p-3">
                 <span className="grid size-9 place-items-center rounded-full bg-emerald-500 text-xs font-black text-white">
                   {index + 1}
                 </span>

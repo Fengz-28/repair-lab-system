@@ -15,7 +15,7 @@ export default async function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-white text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50">
+    <main className="min-h-screen bg-black text-zinc-50">
       <RepairPageHero
         eyebrow="Home / Login"
         title="Acceso administrativo"
@@ -24,7 +24,7 @@ export default async function LoginPage() {
 
       <section className="px-4 py-12 sm:py-16">
         <div className="mx-auto w-full max-w-md">
-          <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl shadow-zinc-950/10 dark:border-zinc-800 dark:bg-zinc-950">
+          <div className="rounded-2xl border border-white/10 bg-zinc-950/90 p-6 shadow-2xl shadow-black/40">
             <div className="text-center">
               <p className="text-sm font-bold uppercase tracking-[0.18em] text-emerald-600">RepairLab</p>
               <h1 className="mt-2 text-3xl font-black">Login</h1>

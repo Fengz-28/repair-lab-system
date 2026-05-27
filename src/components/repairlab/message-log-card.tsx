@@ -26,7 +26,7 @@ export type MessageLogCardData = {
 
 export function MessageLogCard({ message }: { message: MessageLogCardData }) {
   return (
-    <article className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm shadow-zinc-950/5 transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-2xl hover:shadow-emerald-950/10 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-emerald-800">
+    <article className="rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/30 transition hover:-translate-y-0.5 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-950/20">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
@@ -44,7 +44,7 @@ export function MessageLogCard({ message }: { message: MessageLogCardData }) {
           </p>
         </div>
         <Link
-          className="inline-flex min-h-10 items-center justify-center rounded-full border border-zinc-200 bg-white px-4 py-2 text-xs font-black text-zinc-900 transition hover:border-emerald-300 hover:text-emerald-700 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
+          className="inline-flex min-h-10 items-center justify-center rounded-full border border-white/15 bg-zinc-800 px-4 py-2 text-xs font-black text-zinc-100 transition hover:border-cyan-300/35 hover:bg-zinc-700 hover:text-white"
           href={`/admin/messages/${message.id}`}
         >
           Ver detalle
@@ -73,7 +73,7 @@ export function MessageLogCard({ message }: { message: MessageLogCardData }) {
 
 function Info({ label, value, href }: { label: string; value: string; href?: string }) {
   return (
-    <div className="min-w-0 rounded-2xl border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-900/70">
+    <div className="min-w-0 rounded-2xl border border-white/10 bg-zinc-950/75 p-3">
       <p className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">{label}</p>
       {href ? (
         <Link className="mt-1 block break-words text-sm font-black text-zinc-950 underline-offset-4 hover:underline dark:text-zinc-50" href={href}>

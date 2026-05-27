@@ -37,7 +37,7 @@ export function ClientTrackingHero({
             </div>
           </div>
 
-          <div className="w-full rounded-3xl border border-white/10 bg-white/10 p-5 shadow-2xl shadow-black/20 backdrop-blur lg:max-w-sm">
+          <div className="w-full rounded-3xl border border-white/10 bg-zinc-900/45 p-5 shadow-2xl shadow-black/20 backdrop-blur lg:max-w-sm">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-200">Equipo en taller</p>
             <p className="mt-3 break-words text-2xl font-black">{deviceLabel ?? "Seguimiento seguro"}</p>
             <p className="mt-2 text-sm leading-6 text-zinc-300">

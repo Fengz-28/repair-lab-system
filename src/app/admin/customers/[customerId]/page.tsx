@@ -26,7 +26,7 @@ export default async function AdminCustomerDetailPage({
   }
 
   return (
-    <main className="min-h-screen bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-100">
+    <main className="min-h-screen bg-black text-zinc-100">
       <AdminNav />
       <CustomerHero
         name={data.customer.name}

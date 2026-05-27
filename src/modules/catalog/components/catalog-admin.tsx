@@ -171,7 +171,7 @@ function CatalogList({ items }: { items: CatalogAdminItem[] }) {
 
           <RepairInventoryTable>
             <table className="w-full min-w-[980px] border-collapse text-left text-sm">
-              <thead className="bg-zinc-50 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">
+              <thead className="bg-zinc-950/95 text-zinc-300">
                 <tr>
                   <TableHeader>Tipo</TableHeader>
                   <TableHeader>Nombre</TableHeader>
@@ -236,7 +236,7 @@ function CatalogStatusForm({ item }: { item: CatalogAdminItem }) {
 function InventoryPanel({ item }: { item: CatalogAdminItem }) {
   if (item.type === "SERVICE") {
     return (
-      <RepairPanel className="bg-white dark:bg-zinc-950">
+      <RepairPanel className="bg-zinc-950/90">
         <p className="text-sm font-semibold text-zinc-600 dark:text-zinc-300">Servicio sin control de stock.</p>
         <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
           Los servicios alimentan precios y cotizaciones, pero no descuentan inventario.
@@ -424,7 +424,7 @@ function CheckField({
   defaultChecked?: boolean;
 }) {
   return (
-    <label className="flex min-h-12 items-center gap-3 rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm font-bold text-zinc-800 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-200">
+    <label className="flex min-h-12 items-center gap-3 rounded-2xl border border-white/10 bg-zinc-950/75 px-4 py-3 text-sm font-bold text-zinc-200">
       <input name={name} type="checkbox" defaultChecked={defaultChecked} className="size-4 accent-emerald-500" />
       {label}
     </label>
@@ -441,7 +441,7 @@ function StockMetric({ label, value }: { label: string; value: string }) {
 }
 
 function TableHeader({ children }: { children: React.ReactNode }) {
-  return <th className="border-b border-zinc-200 px-4 py-3 text-xs font-black uppercase tracking-[0.14em] dark:border-zinc-800">{children}</th>;
+  return <th className="border-b border-white/10 px-4 py-3 text-xs font-black uppercase tracking-[0.14em]">{children}</th>;
 }
 
 function itemTypeLabel(type: string) {

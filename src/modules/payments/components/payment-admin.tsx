@@ -209,13 +209,13 @@ function PaymentHistory({
       ) : (
         <RepairInventoryTable>
           <table className="w-full min-w-[720px] border-collapse text-left text-sm">
-            <thead className="bg-zinc-50 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">
+            <thead className="bg-zinc-950/95 text-zinc-300">
               <tr>
-                <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Fecha</th>
-                <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Monto</th>
-                <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Metodo</th>
-                <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Referencia</th>
-                <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Notas</th>
+                <th className="border-b border-white/10 px-3 py-2">Fecha</th>
+                <th className="border-b border-white/10 px-3 py-2">Monto</th>
+                <th className="border-b border-white/10 px-3 py-2">Metodo</th>
+                <th className="border-b border-white/10 px-3 py-2">Referencia</th>
+                <th className="border-b border-white/10 px-3 py-2">Notas</th>
               </tr>
             </thead>
             <tbody>
@@ -241,8 +241,8 @@ function PaymentStatusBadge({ status }: { status: PaymentStatus }) {
     UNPAID: "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100",
     PARTIALLY_PAID: "border-cyan-400/30 bg-cyan-500/15 text-cyan-100",
     PAID: "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100",
-    REFUNDED: "border-zinc-200 bg-zinc-50 text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200",
-    VOID: "border-zinc-200 bg-zinc-50 text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200",
+    REFUNDED: "border-white/10 bg-zinc-900 text-zinc-200",
+    VOID: "border-white/10 bg-zinc-900 text-zinc-200",
   };
 
   return (

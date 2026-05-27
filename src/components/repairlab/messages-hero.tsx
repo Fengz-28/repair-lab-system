@@ -36,7 +36,7 @@ export function MessagesHero({ messages }: { messages: MessageHeroItem[] }) {
               <RepairBadge tone={failed > 0 ? "danger" : "emerald"}>{failed} fallidos</RepairBadge>
             </div>
           </div>
-          <div className="w-full rounded-3xl border border-white/10 bg-white/10 p-5 shadow-2xl shadow-black/20 backdrop-blur lg:max-w-md">
+          <div className="w-full rounded-3xl border border-white/10 bg-zinc-900/45 p-5 shadow-2xl shadow-black/20 backdrop-blur lg:max-w-md">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-200">Pulso de notificaciones</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <HeroMetric label="Ultimos 7 dias" value={String(recent)} />
@@ -54,7 +54,7 @@ export function MessagesHero({ messages }: { messages: MessageHeroItem[] }) {
 
 function HeroMetric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+    <div className="rounded-2xl border border-white/10 bg-zinc-900/45 p-4">
       <p className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-300">{label}</p>
       <p className="mt-2 break-words text-lg font-black text-white">{value}</p>
     </div>

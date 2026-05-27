@@ -230,13 +230,13 @@ function QuoteItemsTable({ items }: { items: QuoteItem[] }) {
   return (
     <RepairInventoryTable>
       <table className="w-full min-w-[720px] border-collapse text-left text-sm">
-        <thead className="bg-zinc-50 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">
+        <thead className="bg-zinc-950/95 text-zinc-300">
           <tr>
-            <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Tipo</th>
-            <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Descripcion</th>
-            <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Cantidad</th>
-            <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Unitario</th>
-            <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">Total</th>
+            <th className="border-b border-white/10 px-3 py-2">Tipo</th>
+            <th className="border-b border-white/10 px-3 py-2">Descripcion</th>
+            <th className="border-b border-white/10 px-3 py-2">Cantidad</th>
+            <th className="border-b border-white/10 px-3 py-2">Unitario</th>
+            <th className="border-b border-white/10 px-3 py-2">Total</th>
           </tr>
         </thead>
         <tbody>

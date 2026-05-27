@@ -21,7 +21,7 @@ export function PublicContactCard({ ticketNumber }: { ticketNumber: string }) {
         </div>
         <RepairBadge tone="emerald">Codigo {ticketNumber}</RepairBadge>
       </div>
-      <div className="mt-5 rounded-2xl border border-emerald-200 bg-white/80 p-4 text-sm font-semibold text-emerald-900 dark:border-emerald-900 dark:bg-zinc-950/70 dark:text-emerald-100">
+      <div className="mt-5 rounded-2xl border border-emerald-300/25 bg-emerald-500/10 p-4 text-sm font-semibold text-emerald-100">
         Canal de contacto del taller disponible para seguimiento manual. WhatsApp automatico se implementara en una
         etapa futura.
       </div>

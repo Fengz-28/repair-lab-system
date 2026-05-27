@@ -34,13 +34,13 @@ export function CustomerTicketHistory({ tickets }: { tickets: CustomerTicket[] }
         <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Tickets del cliente</h2>
       </div>
       {tickets.length === 0 ? (
-        <p className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 text-sm text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-400">
+        <p className="rounded-2xl border border-white/10 bg-zinc-950/75 p-4 text-sm text-zinc-400">
           No hay tickets para este cliente.
         </p>
       ) : (
         <div className="grid gap-4">
           {tickets.map((ticket) => (
-            <article key={ticket.id} className="rounded-3xl border border-zinc-200 bg-zinc-50 p-4 transition hover:border-emerald-300 hover:bg-white dark:border-zinc-800 dark:bg-zinc-900/70 dark:hover:border-emerald-800 dark:hover:bg-zinc-950">
+            <article key={ticket.id} className="rounded-3xl border border-white/10 bg-zinc-950/75 p-4 transition hover:border-cyan-300/35 hover:bg-zinc-900/80">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
@@ -61,7 +61,7 @@ export function CustomerTicketHistory({ tickets }: { tickets: CustomerTicket[] }
                   </p>
                 </div>
 
-                <div className="w-full rounded-2xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950 lg:max-w-xs">
+                <div className="w-full rounded-2xl border border-white/10 bg-zinc-950/90 p-4 lg:max-w-xs">
                   {ticket.invoice && ticket.totals ? (
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between gap-3">

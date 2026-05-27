@@ -17,7 +17,7 @@ export function InvoicePublicCard({ invoice, token }: { invoice: PublicInvoice; 
   const isPaid = invoice.paymentStatus === "PAID";
 
   return (
-    <section className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm shadow-zinc-950/5 dark:border-zinc-800 dark:bg-zinc-950 sm:p-6">
+    <section className="rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/30 sm:p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
@@ -55,7 +55,7 @@ function FinancialTile({
   tone?: "neutral" | "emerald" | "warning";
 }) {
   const toneClass = {
-    neutral: "border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/70",
+    neutral: "border-white/10 bg-zinc-950/75",
     emerald: "border-emerald-200 bg-emerald-50 dark:border-emerald-900 dark:bg-emerald-950/50",
     warning: "border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950/50",
   }[tone];

@@ -22,7 +22,7 @@ export function CustomerActivityFeed({
         <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Movimientos recientes</h2>
       </div>
       {activity.length === 0 ? (
-        <p className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 text-sm text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-400">
+        <p className="rounded-2xl border border-white/10 bg-zinc-950/75 p-4 text-sm text-zinc-400">
           No hay actividad registrada.
         </p>
       ) : (
@@ -37,7 +37,7 @@ export function CustomerActivityFeed({
                   <span className="absolute top-10 h-[calc(100%+1rem)] w-px bg-zinc-200 dark:bg-zinc-800" />
                 ) : null}
               </div>
-              <div className="min-w-0 rounded-2xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/70">
+              <div className="min-w-0 rounded-2xl border border-white/10 bg-zinc-950/75 p-4">
                 <div className="flex flex-wrap items-center gap-2">
                   <Link className="font-black text-zinc-950 underline-offset-4 hover:underline dark:text-zinc-50" href={`/admin/tickets/${event.ticketId}`}>
                     {event.ticketNumber}

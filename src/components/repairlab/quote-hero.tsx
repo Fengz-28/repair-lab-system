@@ -39,7 +39,7 @@ export function QuoteHero({
               <RepairBadge tone="violet">{quoteCount} cotizaciones</RepairBadge>
             </div>
           </div>
-          <div className="w-full rounded-3xl border border-white/10 bg-white/10 p-5 shadow-2xl shadow-black/20 backdrop-blur lg:max-w-md">
+          <div className="w-full rounded-3xl border border-white/10 bg-zinc-900/45 p-5 shadow-2xl shadow-black/20 backdrop-blur lg:max-w-md">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-200">Ultima cotizacion</p>
             <p className="mt-3 break-words text-3xl font-black">{latestTotal}</p>
             <p className="mt-2 text-sm text-zinc-300">Estado: {latestStatus}</p>
