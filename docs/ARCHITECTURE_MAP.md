@@ -423,6 +423,7 @@ Ejemplos de eventos:
   - `scripts/backup-db.mjs`
   - `scripts/backup-storage.mjs`
   - `scripts/backup.mjs`
+  - `scripts/process-integration-events.mjs`
 - Endpoint:
   - `/api/health`
 
@@ -435,7 +436,31 @@ GET /api/health
   -> DB SELECT 1
   -> storage read/write check
   -> JSON sin secretos
+
+npm run worker:events
+  -> busca IntegrationEvent pendientes/reintentables
+  -> claim atomico a PROCESSING
+  -> handler local por tipo
+  -> PROCESSED / FAILED / CANCELLED
 ```
+
+## Outbox local inicial
+
+`IntegrationEvent` funciona como outbox persistente en PostgreSQL. Los flujos principales escriben datos de negocio y eventos en la misma transaccion cuando aplica. El worker local `npm run worker:events` procesa batches separados del request principal.
+
+Estados:
+
+- `PENDING`: listo para procesar cuando `availableAt <= now`.
+- `PROCESSING`: reclamado por un worker.
+- `PROCESSED`: handler completado.
+- `FAILED`: fallo reintentable con `attempts` y nuevo `availableAt`.
+- `CANCELLED`: evento no soportado o payload no procesable.
+
+Eventos actuales:
+
+- Los eventos de dominio (`ticket.*`, `quote.*`, `invoice.*`, `inventory.*`, `product.*`, `service.*`, `receipt.created`) se procesan como no-op local seguro para dejar preparado el relay futuro.
+- `notification.email.placeholder_created`, `notification.email.sent` y `notification.email.failed` se validan/procesan sin reenviar emails.
+- `notification.email.requested` queda reservado para migrar email al outbox; hoy falla con retry para evitar envios accidentales.
 
 ## Flujo funcional completo
 

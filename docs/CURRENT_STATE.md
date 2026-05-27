@@ -4,7 +4,7 @@ Actualizado: 2026-05-25, America/Costa_Rica.
 
 ## Estado general del proyecto
 
-RepairLab tiene una base funcional amplia y modular. Ya no es solo una maqueta: existe flujo operativo interno, persistencia real en PostgreSQL, validacion Zod en acciones principales, autenticacion admin basica, eventos, auditoria, PDFs y portal publico.
+RepairLab tiene una base funcional amplia y modular. Ya no es solo una maqueta: existe flujo operativo interno, persistencia real en PostgreSQL, validacion Zod en acciones principales, autenticacion admin basica, eventos, auditoria, PDFs, portal publico y worker outbox local inicial.
 
 El proyecto sigue siendo pre-produccion. Hay varios puntos pensados correctamente pero aun incompletos: storage cloud, integraciones externas, workers, backups productivos externos, CI/CD, observabilidad y hardening de seguridad avanzado.
 
@@ -115,7 +115,7 @@ El proyecto sigue siendo pre-produccion. Hay varios puntos pensados correctament
 
 - Uploads/fotos: storage local privado implementado para intake/tickets. Pendiente storage cloud/S3, antivirus y politicas avanzadas de retencion.
 - Email: funcional basico, sin cola, retries avanzados, SMTP ni plantillas externas.
-- Integration events: se escriben en DB, pero no existe worker real que procese eventos.
+- Integration events: se escriben en DB y existe `npm run worker:events` para procesar batches locales. Aun no hay scheduler externo, cola distribuida ni integraciones reales n8n/WhatsApp.
 - Webhooks: modelo `WebhookEndpoint` existe; no se observo flujo real con firma/idempotencia.
 - Appointments/calendario: modelo existe; no se observo UI/servicio operacional completo.
 - IA/RAG: schema y providers placeholder; no hay RAG funcional ni llamadas Ollama activas.
@@ -279,3 +279,18 @@ Implementado:
 Limitacion:
 
 - Los backups son locales/manuales. Produccion requiere automatizacion externa, retencion, copias remotas y pruebas de restore.
+
+## IntegrationEvent outbox worker - 2026-05-27
+
+Implementado:
+
+- `npm run worker:events`: procesa un batch y termina.
+- Claim atomico de eventos `PENDING`, `FAILED` reintentables o `PROCESSING` stale.
+- Estados usados: `PENDING`, `PROCESSING`, `PROCESSED`, `FAILED`, `CANCELLED`.
+- Reintentos con `attempts`, `availableAt` y backoff exponencial simple.
+- Handlers no-op seguros para eventos de dominio actuales.
+- Handler de eventos de email ya generados (`notification.email.placeholder_created`, `notification.email.sent`, `notification.email.failed`) sin reenviar correos.
+
+Limitacion:
+
+- Worker local inicial. No hay daemon, scheduler externo, Redis/BullMQ/RabbitMQ/Kafka ni consumidores reales para WhatsApp/n8n.

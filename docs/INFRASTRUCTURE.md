@@ -108,6 +108,9 @@ Contrato en `.env.example`:
 - `WHATSAPP_*`
 - `GOOGLE_CALENDAR_*`
 - `N8N_*`
+- `INTEGRATION_WORKER_BATCH_SIZE`
+- `INTEGRATION_WORKER_MAX_RETRIES`
+- `INTEGRATION_WORKER_STALE_PROCESSING_MINUTES`
 - `OLLAMA_*`
 - `AI_*`
 - `TRELLO_*`
@@ -197,6 +200,7 @@ npm run seed:admin
 npm run backup:db
 npm run backup:storage
 npm run backup
+npm run worker:events
 ```
 
 `seed:admin` crea/actualiza admin usando:
@@ -208,6 +212,8 @@ npm run backup
 La password debe tener al menos 10 caracteres.
 
 Los scripts de backup local estan documentados en [BACKUP_AND_RESTORE.md](./BACKUP_AND_RESTORE.md).
+
+`worker:events` procesa un batch de `IntegrationEvent` pendientes/reintentables y termina. Es un worker local inicial, no un daemon ni una cola distribuida.
 
 ## ngrok readiness
 
@@ -421,3 +427,32 @@ Implementado:
 Limitacion:
 
 - Solucion local/manual. No reemplaza backups productivos externos ni automatizacion con monitoreo.
+
+## IntegrationEvent outbox worker - 2026-05-27
+
+Script:
+
+```txt
+npm run worker:events
+```
+
+Variables:
+
+- `INTEGRATION_WORKER_BATCH_SIZE`: cantidad maxima de eventos por ejecucion. Default: `10`.
+- `INTEGRATION_WORKER_MAX_RETRIES`: maximo de fallos antes de dejar de reintentar. Default: `5`.
+- `INTEGRATION_WORKER_STALE_PROCESSING_MINUTES`: minutos para reclamar eventos `PROCESSING` abandonados. Default: `15`.
+
+Comportamiento:
+
+- Busca eventos `PENDING` o `FAILED` con `availableAt <= now`.
+- Reclama cada evento con una actualizacion atomica a `PROCESSING`.
+- Marca `PROCESSED` cuando el handler local termina.
+- Marca `FAILED`, incrementa `attempts` y calcula `availableAt` con backoff si hay error.
+- Marca `CANCELLED` para tipos no soportados o payloads no procesables.
+
+Limitaciones:
+
+- Es un worker local `run once`; no hay scheduler externo ni daemon.
+- No usa Redis, BullMQ, RabbitMQ ni Kafka.
+- No envia WhatsApp/n8n reales.
+- Los eventos de email actuales `notification.email.placeholder_created`, `notification.email.sent` y `notification.email.failed` se reconocen como eventos ya generados; no se reenvian correos para evitar duplicados.

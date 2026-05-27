@@ -65,19 +65,27 @@ El mayor gap funcional actual es fotos/archivos.
 
 ## Fase 3 - Outbox worker para integraciones
 
-`IntegrationEvent` ya existe; falta procesador.
+`IntegrationEvent` ya existe y ahora tiene un procesador local inicial. Falta convertirlo en una operacion productiva automatizada y conectar integraciones reales.
 
-- Crear worker local simple o comando script.
-- Procesar eventos pendientes con idempotencia.
-- Reintentos con backoff.
-- Estados:
+- Implementado el 2026-05-27:
+  - `npm run worker:events`.
+  - Procesamiento local por batch.
+  - Claim atomico a `PROCESSING`.
+  - Reintentos con `attempts` y `availableAt`.
+  - Reconocimiento no-op de eventos de dominio existentes.
+  - Eventos de email ya generados sin reenvio para evitar duplicados.
+- Estados usados:
   - `PENDING`
   - `PROCESSING`
   - `PROCESSED`
   - `FAILED`
   - `CANCELLED`
-- Mover email real hacia outbox gradualmente.
-- Dejar n8n como consumidor, no como fuente de verdad.
+- Pendiente:
+  - Scheduler externo o servicio daemon controlado.
+  - Mover email real hacia outbox gradualmente usando eventos `notification.email.requested`.
+  - Consumidor n8n firmado.
+  - WhatsApp provider real con consentimiento y templates.
+  - Store/cola distribuida si hay multiples instancias.
 
 ## Fase 4 - Observabilidad y backups
 

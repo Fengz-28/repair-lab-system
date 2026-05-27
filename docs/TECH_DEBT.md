@@ -61,9 +61,9 @@ Mitigacion:
 - Agregar antivirus/escaneo si se aceptan PDFs u otros documentos.
 - Definir retencion y borrado seguro.
 
-### 5. Emails/integraciones ocurren dentro del flujo operativo
+### 5. Emails reales aun ocurren dentro del flujo operativo
 
-El servicio de email registra y envia en el mismo flujo. Captura errores, pero sigue siendo I/O externo cercano al dominio.
+Existe worker local para `IntegrationEvent`, pero el servicio de email transaccional todavia registra y envia en el mismo flujo. Captura errores, pero sigue siendo I/O externo cercano al dominio.
 
 Riesgo:
 
@@ -76,6 +76,7 @@ Mitigacion:
 - Usar `IntegrationEvent` como outbox real.
 - Worker separado para emails e integraciones.
 - Reintentos e idempotencia.
+- Migrar gradualmente a eventos `notification.email.requested` para evitar dual writes sin duplicar correos.
 
 ### 6. Backups locales sin automatizacion externa ni observabilidad
 
