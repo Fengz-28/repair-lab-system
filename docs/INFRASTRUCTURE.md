@@ -4,7 +4,12 @@ Actualizado: 2026-05-25, America/Costa_Rica.
 
 ## Infraestructura real versionada
 
-El repositorio versiona solo una pieza de infraestructura: PostgreSQL con pgvector mediante Docker Compose.
+El repositorio versiona una base operativa local con Docker Compose:
+
+- PostgreSQL con pgvector.
+- App Next.js en contenedor.
+- Volumen persistente para `storage/private`.
+- Volumen persistente para backups locales.
 
 ```yaml
 services:
@@ -15,6 +20,17 @@ services:
       - "5432:5432"
     volumes:
       - repair_lab_pgdata:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: repair_lab_app
+    ports:
+      - "3000:3000"
+    volumes:
+      - repair_lab_storage:/app/storage/private
+      - repair_lab_backups:/app/backups
 ```
 
 Variables del contenedor:
@@ -27,7 +43,6 @@ Esto es adecuado para desarrollo local, no para produccion.
 
 ## Servicios que NO estan orquestados por Docker Compose
 
-- App Next.js.
 - n8n.
 - Ollama.
 - ngrok.
@@ -44,13 +59,18 @@ Si esos servicios se usan localmente, se ejecutan fuera de la infraestructura ve
 ```txt
 Host Windows
   |
-  +-- npm run dev / next dev  (puerto usual 3000, no definido en docker-compose)
+  +-- Docker Compose app
+  |     localhost:3000 -> app:3000
   |
   +-- Docker PostgreSQL
         localhost:5432 -> container:5432
+
+Docker network
+  |
+  +-- app -> postgres:5432
 ```
 
-No se observo red Docker compartida con app Next ni servicios auxiliares.
+Dentro de Docker, la app debe usar `postgres:5432`, no `localhost:5432`. `localhost` dentro del contenedor apunta al propio contenedor de la app, no al contenedor PostgreSQL.
 
 ## Variables de entorno
 
@@ -66,6 +86,7 @@ Contrato en `.env.example`:
 ### DB
 
 - `DATABASE_URL`
+- `DOCKER_DATABASE_URL`
 
 ### Auth
 
@@ -215,6 +236,80 @@ Los scripts de backup local estan documentados en [BACKUP_AND_RESTORE.md](./BACK
 
 `worker:events` procesa un batch de `IntegrationEvent` pendientes/reintentables y termina. Es un worker local inicial, no un daemon ni una cola distribuida.
 
+## Docker app local - 2026-05-27
+
+Archivos:
+
+- `Dockerfile`
+- `.dockerignore`
+- `docker-compose.yml`
+
+Servicios:
+
+- `postgres`: `pgvector/pgvector:pg17`, contenedor `repair_lab_postgres`.
+- `app`: imagen local `repair-lab-system-app`, contenedor `repair_lab_app`.
+
+Volumenes:
+
+- `repair_lab_pgdata`: datos PostgreSQL.
+- `repair_lab_storage`: montado en `/app/storage/private`.
+- `repair_lab_backups`: montado en `/app/backups`.
+
+Comandos validados:
+
+```txt
+docker compose build app
+docker compose up -d postgres app
+docker compose ps
+```
+
+Healthcheck:
+
+```txt
+GET http://localhost:3000/api/health
+```
+
+Respuesta validada:
+
+```json
+{
+  "status": "ok",
+  "database": "ok",
+  "storage": "ok",
+  "timestamp": "2026-05-27T16:39:44.462Z"
+}
+```
+
+Prisma dentro de Docker:
+
+```txt
+docker compose exec -T app npx prisma migrate status
+docker compose exec -T app npx prisma migrate deploy
+```
+
+`migrate status` fue validado contra `postgres:5432` dentro de la red Docker. `migrate deploy` es el comando recomendado para aplicar migraciones versionadas en un entorno Docker controlado; no es destructivo, pero debe ejecutarse conscientemente antes de iniciar uso real si la DB no esta al dia.
+
+Worker dentro de Docker:
+
+```txt
+docker compose exec -T app npm run worker:events
+```
+
+`DOCKER_DATABASE_URL`:
+
+- Es un override opcional para la app en Docker.
+- Si esta vacio, `docker-compose.yml` usa `postgresql://repairlab:repairlab_password@postgres:5432/repairlab?schema=public`.
+- Evita que la app Docker use accidentalmente `DATABASE_URL` con `localhost:5432`.
+
+Limitaciones:
+
+- No hay TLS.
+- No hay reverse proxy.
+- No hay CI/CD.
+- No hay gestion formal de secretos.
+- No hay backups externos automaticos.
+- No hay n8n/Ollama/WhatsApp dentro de Compose.
+
 ## ngrok readiness
 
 No hay configuracion versionada de ngrok. Para demo, ngrok puede apuntar a la app local, pero antes hay que revisar:
@@ -231,8 +326,7 @@ El proyecto es portable conceptualmente, pero no esta listo para VPS sin trabajo
 
 Falta:
 
-- Dockerfile de app.
-- Compose productivo con app + DB + red privada.
+- Compose productivo final con reverse proxy, TLS y secretos reales.
 - Reverse proxy con TLS.
 - Secrets management.
 - Backups productivos automatizados.
@@ -248,10 +342,10 @@ Falta:
 ### Desarrollo actual
 
 ```txt
-Next dev local
-Postgres docker local
+Next dev local o app Docker local
+Postgres Docker local
 Email console/disabled/resend
-Storage placeholder
+Storage privado local
 Integraciones disabled
 ```
 
@@ -285,8 +379,7 @@ Plan de rollback
 
 - CI/CD.
 - Tests automatizados.
-- Dockerfile de app.
-- Compose productivo.
+- Compose productivo final.
 - Backups.
 - Restore procedure.
 - Health checks.

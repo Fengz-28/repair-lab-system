@@ -142,8 +142,14 @@ Hacer solo con migraciones pequenas y justificadas.
 
 ## Fase 7 - Produccion controlada
 
-- Dockerfile de app.
-- `docker-compose.prod.yml` o despliegue VPS.
+- Implementado el 2026-05-27:
+  - Dockerfile de app.
+  - `docker-compose.yml` local con `postgres` + `app`.
+  - Healthcheck Docker contra `/api/health`.
+  - Volumenes `repair_lab_pgdata`, `repair_lab_storage`, `repair_lab_backups`.
+  - Worker ejecutable dentro del contenedor app con `docker compose exec -T app npm run worker:events`.
+- Pendiente:
+  - `docker-compose.prod.yml` o despliegue VPS final.
 - Reverse proxy con TLS.
 - Variables por ambiente.
 - Backups automatizados.

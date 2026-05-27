@@ -6,7 +6,7 @@ Actualizado: 2026-05-25, America/Costa_Rica.
 
 RepairLab tiene una base funcional amplia y modular. Ya no es solo una maqueta: existe flujo operativo interno, persistencia real en PostgreSQL, validacion Zod en acciones principales, autenticacion admin basica, eventos, auditoria, PDFs, portal publico y worker outbox local inicial.
 
-El proyecto sigue siendo pre-produccion. Hay varios puntos pensados correctamente pero aun incompletos: storage cloud, integraciones externas, workers, backups productivos externos, CI/CD, observabilidad y hardening de seguridad avanzado.
+El proyecto sigue siendo pre-produccion. Hay varios puntos pensados correctamente pero aun incompletos: storage cloud, integraciones externas, automatizacion productiva de workers, backups productivos externos, CI/CD, observabilidad y hardening de seguridad avanzado.
 
 ## Funcionalidades terminadas o usables
 
@@ -135,7 +135,7 @@ El proyecto sigue siendo pre-produccion. Hay varios puntos pensados correctament
 - Facturacion fiscal oficial.
 - Cliente con cuenta/login.
 - Multi-tenant.
-- Deployment productivo versionado.
+- Deployment productivo final.
 - Backups automatizados.
 - CI/CD.
 - Observabilidad centralizada.
@@ -294,3 +294,27 @@ Implementado:
 Limitacion:
 
 - Worker local inicial. No hay daemon, scheduler externo, Redis/BullMQ/RabbitMQ/Kafka ni consumidores reales para WhatsApp/n8n.
+
+## Docker app local - 2026-05-27
+
+Implementado y validado:
+
+- `Dockerfile` para la app Next.js.
+- `.dockerignore`.
+- `docker-compose.yml` con servicios `postgres` y `app`.
+- `docker compose build app`: OK.
+- `docker compose up -d postgres app`: OK.
+- `docker compose ps`: `repair_lab_postgres` y `repair_lab_app` en estado `healthy`.
+- `/api/health`: HTTP 200 con `database: ok` y `storage: ok`.
+- `docker compose exec -T app npx prisma migrate status`: OK usando `postgres:5432`.
+- `docker compose exec -T app npm run worker:events`: OK.
+
+Volumenes Docker:
+
+- `repair_lab_pgdata`.
+- `repair_lab_storage`.
+- `repair_lab_backups`.
+
+Limitacion:
+
+- Es una base Docker local/operativa, no despliegue productivo final. Faltan TLS, reverse proxy, CI/CD, gestion formal de secretos y backups externos automaticos.
