@@ -6,7 +6,7 @@ Actualizado: 2026-05-25, America/Costa_Rica.
 
 RepairLab tiene una base funcional amplia y modular. Ya no es solo una maqueta: existe flujo operativo interno, persistencia real en PostgreSQL, validacion Zod en acciones principales, autenticacion admin basica, eventos, auditoria, PDFs y portal publico.
 
-El proyecto sigue siendo pre-produccion. Hay varios puntos pensados correctamente pero aun incompletos: storage cloud/backup de archivos, integraciones externas, workers, backups, CI/CD, observabilidad y hardening de seguridad.
+El proyecto sigue siendo pre-produccion. Hay varios puntos pensados correctamente pero aun incompletos: storage cloud, integraciones externas, workers, backups productivos externos, CI/CD, observabilidad y hardening de seguridad avanzado.
 
 ## Funcionalidades terminadas o usables
 
@@ -265,3 +265,17 @@ No implementado:
 Limitacion:
 
 - Si se migra a multiples instancias o servidor separado, `./storage/private` debe convertirse en volumen persistente compartido o migrarse a S3/MinIO.
+
+## Backups locales y healthcheck - 2026-05-26
+
+Implementado:
+
+- `npm run backup:db`: dump PostgreSQL comprimido en `backups/postgres`.
+- `npm run backup:storage`: backup comprimido de `PRIVATE_STORAGE_ROOT` en `backups/storage`.
+- `npm run backup`: ejecuta ambos backups.
+- `/api/health`: verifica app viva, DB y storage sin exponer secretos.
+- Guia de restore en `docs/BACKUP_AND_RESTORE.md`.
+
+Limitacion:
+
+- Los backups son locales/manuales. Produccion requiere automatizacion externa, retencion, copias remotas y pruebas de restore.

@@ -77,21 +77,22 @@ Mitigacion:
 - Worker separado para emails e integraciones.
 - Reintentos e idempotencia.
 
-### 6. Sin backups ni observabilidad
+### 6. Backups locales sin automatizacion externa ni observabilidad
 
-No hay scripts de backup, monitoreo, health checks de app, logs estructurados ni alertas.
+Ya existen scripts de backup local y `/api/health`, pero no hay automatizacion externa, backups remotos, logs estructurados ni alertas.
 
 Riesgo:
 
 - Perdida de datos.
 - Dificultad para diagnosticar produccion.
+- Falsa sensacion de seguridad si los backups locales quedan en el mismo disco.
 
 Mitigacion:
 
-- Backup diario PostgreSQL.
+- Automatizar backup diario PostgreSQL y storage.
 - Retencion y restore test.
+- Copia externa/offsite.
 - Logs JSON.
-- Health endpoint.
 - Monitoreo de errores y uptime.
 
 ## Deuda de modelo de datos
@@ -261,7 +262,7 @@ Mitigacion:
 
 ## Prioridad sugerida de deuda
 
-1. Backups para PostgreSQL y `storage/private`.
+1. Automatizar backups y probar restore.
 2. Outbox worker para `IntegrationEvent` y email.
 3. Paginacion e indices para listados grandes.
 4. FK `sourceQuoteId` para factura generada desde quote.

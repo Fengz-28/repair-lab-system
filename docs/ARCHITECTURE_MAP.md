@@ -417,6 +417,26 @@ Ejemplos de eventos:
 - `email.sent`
 - `email.failed`
 
+## Infraestructura operativa minima
+
+- Scripts:
+  - `scripts/backup-db.mjs`
+  - `scripts/backup-storage.mjs`
+  - `scripts/backup.mjs`
+- Endpoint:
+  - `/api/health`
+
+```txt
+npm run backup
+  -> backup PostgreSQL en backups/postgres
+  -> backup storage privado en backups/storage
+
+GET /api/health
+  -> DB SELECT 1
+  -> storage read/write check
+  -> JSON sin secretos
+```
+
 ## Flujo funcional completo
 
 ```txt

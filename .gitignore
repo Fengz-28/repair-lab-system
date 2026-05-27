@@ -48,3 +48,13 @@ next-env.d.ts
 /storage
 /uploads
 /.local
+
+# local backups
+/backups/*
+!/backups/.gitkeep
+!/backups/postgres/
+/backups/postgres/*
+!/backups/postgres/.gitkeep
+!/backups/storage/
+/backups/storage/*
+!/backups/storage/.gitkeep

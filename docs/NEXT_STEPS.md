@@ -59,7 +59,7 @@ El mayor gap funcional actual es fotos/archivos.
   - Route handler protegido `/admin/files/[fileAssetId]`.
   - Portal cliente sin archivos privados.
 - Pendiente:
-  - Backup de `storage/private`.
+  - Backups externos/automatizados de `storage/private`.
   - Antivirus/escaneo si se aceptan PDFs.
   - Migracion futura a S3/MinIO para multiples instancias.
 
@@ -81,8 +81,16 @@ El mayor gap funcional actual es fotos/archivos.
 
 ## Fase 4 - Observabilidad y backups
 
-- Script de backup PostgreSQL.
-- Procedimiento de restore probado.
+- Implementado el 2026-05-26:
+  - `npm run backup:db`.
+  - `npm run backup:storage`.
+  - `npm run backup`.
+  - `/api/health`.
+  - Guia [BACKUP_AND_RESTORE.md](./BACKUP_AND_RESTORE.md).
+- Pendiente:
+  - Restore probado de punta a punta.
+  - Automatizacion externa con cron/Task Scheduler.
+  - Backups remotos y alertas.
 - Logs estructurados para:
   - auth
   - pagos
@@ -90,7 +98,7 @@ El mayor gap funcional actual es fotos/archivos.
   - PDFs
   - emails
   - integration events
-- Health check.
+- Health check externo/monitoreado.
 - Error boundary/reporting.
 - Documentar retencion.
 

@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seed:admin": "node scripts/seed-admin.mjs"
+    "seed:admin": "node scripts/seed-admin.mjs",
+    "backup:db": "node scripts/backup-db.mjs",
+    "backup:storage": "node scripts/backup-storage.mjs",
+    "backup": "node scripts/backup.mjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",

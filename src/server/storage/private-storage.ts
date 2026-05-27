@@ -180,7 +180,7 @@ function resolveStorageKey(storageKey: string) {
   return absolutePath;
 }
 
-function privateStorageRoot() {
+export function privateStorageRoot() {
   const configuredRoot = process.env.PRIVATE_STORAGE_ROOT || "./storage/private";
   const root = path.resolve(process.cwd(), configuredRoot);
   const relative = path.relative(process.cwd(), root);

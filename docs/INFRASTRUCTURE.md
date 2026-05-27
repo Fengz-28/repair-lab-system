@@ -194,6 +194,9 @@ npm run build
 npm run start
 npm run lint
 npm run seed:admin
+npm run backup:db
+npm run backup:storage
+npm run backup
 ```
 
 `seed:admin` crea/actualiza admin usando:
@@ -204,13 +207,15 @@ npm run seed:admin
 
 La password debe tener al menos 10 caracteres.
 
+Los scripts de backup local estan documentados en [BACKUP_AND_RESTORE.md](./BACKUP_AND_RESTORE.md).
+
 ## ngrok readiness
 
 No hay configuracion versionada de ngrok. Para demo, ngrok puede apuntar a la app local, pero antes hay que revisar:
 
 - `NEXT_PUBLIC_APP_URL` / `APP_URL` / `PUBLIC_SITE_URL` para links en emails/PDFs/portal.
 - Cookies secure/sameSite en entorno expuesto.
-- Rate limiting no implementado.
+- Rate limiting inicial implementado para login, portal publico y PDFs publicos; sigue siendo in-memory.
 - No exponer n8n/Ollama.
 - No usar credenciales demo debiles.
 
@@ -224,12 +229,12 @@ Falta:
 - Compose productivo con app + DB + red privada.
 - Reverse proxy con TLS.
 - Secrets management.
-- Backups.
-- Health checks.
+- Backups productivos automatizados.
+- Health checks externos/monitoreados.
 - Logs persistentes.
 - Politica de migraciones.
 - Worker de eventos.
-- Rate limiting.
+- Rate limiting productivo con store compartido o reverse proxy.
 - Configuracion de dominio.
 
 ## Produccion vs desarrollo
@@ -383,3 +388,36 @@ Migracion futura:
 - Para VPS con una sola instancia, montar `storage/private` como volumen persistente y respaldarlo.
 - Para multiples instancias, migrar provider a S3/MinIO o storage compartido.
 - Mantener `FileAsset.storageKey` como identificador interno portable.
+
+## Healthcheck - 2026-05-26
+
+Ruta:
+
+```txt
+/api/health
+```
+
+Respuesta OK:
+
+```json
+{
+  "status": "ok",
+  "database": "ok",
+  "storage": "ok",
+  "timestamp": "2026-05-26T00:00:00.000Z"
+}
+```
+
+Si la DB o storage fallan, responde `503` con `status: "degraded"`. No expone secretos, rutas absolutas, stack traces ni conteos de datos.
+
+## Backups locales - 2026-05-26
+
+Implementado:
+
+- `npm run backup:db`: dump PostgreSQL comprimido en `backups/postgres`.
+- `npm run backup:storage`: archivo `.tar.gz` de `PRIVATE_STORAGE_ROOT` en `backups/storage`, o marcador si no hay archivos.
+- `npm run backup`: ejecuta ambos y muestra resumen.
+
+Limitacion:
+
+- Solucion local/manual. No reemplaza backups productivos externos ni automatizacion con monitoreo.
