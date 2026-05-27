@@ -52,16 +52,16 @@ Prioridad alta si se va a usar ngrok o demo externa.
 
 El mayor gap funcional actual es fotos/archivos.
 
-- Implementar provider local privado para archivos.
-- Guardar binarios fuera de `public`.
-- Validar:
-  - extension
-  - MIME
-  - size
-  - cantidad por intake/ticket
-- Crear route handlers protegidos para descarga admin.
-- No exponer fotos en portal cliente por defecto.
-- Documentar migracion de storage local a S3/MinIO.
+- Implementado el 2026-05-25:
+  - Provider local privado.
+  - Binarios fuera de `public`.
+  - Validacion de extension, MIME, tamano y cantidad.
+  - Route handler protegido `/admin/files/[fileAssetId]`.
+  - Portal cliente sin archivos privados.
+- Pendiente:
+  - Backup de `storage/private`.
+  - Antivirus/escaneo si se aceptan PDFs.
+  - Migracion futura a S3/MinIO para multiples instancias.
 
 ## Fase 3 - Outbox worker para integraciones
 

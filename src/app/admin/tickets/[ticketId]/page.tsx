@@ -326,8 +326,22 @@ export default async function TicketDetailPage({
               <ul className="space-y-2 text-sm">
                 {ticket.files.map((file) => (
                   <li key={file.id} className="rounded-2xl border border-zinc-100 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-900/70">
-                    <p className="font-medium">{file.originalName}</p>
-                    <p className="text-zinc-500 dark:text-zinc-400">{file.storageKey}</p>
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="break-words font-medium">{file.originalName}</p>
+                        <p className="text-zinc-500 dark:text-zinc-400">
+                          {file.mimeType} / {formatBytes(file.byteSize)}
+                        </p>
+                      </div>
+                      <a
+                        className="rounded-full border border-emerald-300 px-3 py-1 text-xs font-bold text-emerald-700 transition hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-200 dark:hover:bg-emerald-950"
+                        href={`/admin/files/${file.id}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Abrir archivo
+                      </a>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -653,4 +667,16 @@ function paymentStatusLabel(status: PaymentStatus) {
   };
 
   return labels[status] ?? status;
+}
+
+function formatBytes(bytes: number) {
+  if (bytes < 1024) {
+    return `${bytes} B`;
+  }
+
+  if (bytes < 1024 * 1024) {
+    return `${(bytes / 1024).toFixed(1)} KB`;
+  }
+
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }

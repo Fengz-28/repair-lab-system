@@ -338,7 +338,8 @@ Observaciones:
 Observaciones:
 
 - Guarda metadata y relaciones a intake/ticket.
-- No garantiza por si sola que exista binario almacenado.
+- El binario local se guarda bajo `PRIVATE_STORAGE_ROOT` y se resuelve mediante `storageKey`.
+- La ruta admin `/admin/files/[fileAssetId]` valida sesion y sirve el archivo desde storage privado.
 - `ownerType/ownerId` da flexibilidad pero no integridad referencial.
 
 ### Tablas IA/RAG

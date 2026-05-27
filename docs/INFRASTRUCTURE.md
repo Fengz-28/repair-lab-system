@@ -89,6 +89,10 @@ Contrato en `.env.example`:
 
 - `STORAGE_PROVIDER`
 - `PRIVATE_STORAGE_ROOT`
+- `MAX_UPLOAD_FILE_SIZE_MB`
+- `MAX_UPLOAD_FILES_PER_INTAKE`
+- `MAX_UPLOAD_FILES_PER_TICKET`
+- `ALLOWED_UPLOAD_MIME_TYPES`
 - `S3_*`
 
 ### Email
@@ -356,3 +360,26 @@ Implementacion:
 Limitacion:
 
 - No es apto para multiples instancias ni serverless distribuido. Para produccion se debe reemplazar por Redis/Upstash/DB o un rate limiter del reverse proxy.
+
+## Storage privado local - 2026-05-25
+
+Variables:
+
+- `PRIVATE_STORAGE_ROOT`: raiz local privada. Default recomendado: `./storage/private`.
+- `MAX_UPLOAD_FILE_SIZE_MB`: tamano maximo por archivo. Default: `10`.
+- `MAX_UPLOAD_FILES_PER_INTAKE`: maximo por recepcion. Default: `12`.
+- `MAX_UPLOAD_FILES_PER_TICKET`: maximo por ticket. Default: `8`.
+- `ALLOWED_UPLOAD_MIME_TYPES`: lista separada por coma. Default: `image/jpeg,image/png,image/webp,application/pdf`.
+
+Comportamiento:
+
+- Los archivos se guardan fuera de `public`, `.next`, `src` y `prisma`.
+- La ruta local `storage/` esta ignorada por Git.
+- Los archivos se sirven solo mediante `/admin/files/[fileAssetId]` con `requireLocalStaff`.
+- El portal cliente no muestra ni sirve archivos privados.
+
+Migracion futura:
+
+- Para VPS con una sola instancia, montar `storage/private` como volumen persistente y respaldarlo.
+- Para multiples instancias, migrar provider a S3/MinIO o storage compartido.
+- Mantener `FileAsset.storageKey` como identificador interno portable.

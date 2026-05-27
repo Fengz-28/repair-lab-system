@@ -15,6 +15,18 @@ export async function createIntakeAction(
     roles: [UserRole.ADMIN, UserRole.RECEPTIONIST],
   });
 
+  const photos = await Promise.all(
+    formData
+      .getAll("photos")
+      .filter((entry): entry is File => entry instanceof File && entry.size > 0)
+      .map(async (file) => ({
+        originalName: file.name,
+        mimeType: file.type || "application/octet-stream",
+        byteSize: file.size,
+        bytes: new Uint8Array(await file.arrayBuffer()),
+      })),
+  );
+
   const parsed = createIntakeSchema.safeParse({
     customer: {
       firstName: formData.get("customer.firstName"),
@@ -39,14 +51,7 @@ export async function createIntakeAction(
       reportedIssue: formData.get("intake.reportedIssue"),
       internalNotes: formData.get("intake.internalNotes"),
     },
-    photos: formData
-      .getAll("photos")
-      .filter((entry): entry is File => entry instanceof File && entry.size > 0)
-      .map((file) => ({
-        originalName: file.name,
-        mimeType: file.type || "application/octet-stream",
-        byteSize: file.size,
-      })),
+    photos,
   });
 
   if (!parsed.success) {

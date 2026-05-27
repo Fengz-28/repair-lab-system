@@ -1,6 +1,11 @@
 import { TicketStatus } from "@prisma/client";
 import { z } from "zod";
 
+import {
+  allowedUploadMimeTypes,
+  maxUploadFileSizeBytes,
+} from "@/server/storage/private-storage";
+
 const emptyToUndefined = (value: unknown) => {
   if (typeof value !== "string") {
     return value;
@@ -33,8 +38,13 @@ export const updateTechnicalNotesSchema = z.object({
 export const ticketAttachmentPlaceholderSchema = z.object({
   ticketId: ticketIdSchema,
   originalName: z.string().min(1).max(255),
-  mimeType: z.string().min(1).max(255),
-  byteSize: z.number().int().positive().max(15 * 1024 * 1024),
+  mimeType: z
+    .string()
+    .min(1)
+    .max(255)
+    .refine((value) => allowedUploadMimeTypes().includes(value), "Tipo de archivo no permitido."),
+  byteSize: z.number().int().positive().max(maxUploadFileSizeBytes()),
+  bytes: z.instanceof(Uint8Array),
 });
 
 export type ChangeTicketStatusInput = z.infer<typeof changeTicketStatusSchema>;
@@ -43,4 +53,3 @@ export type UpdateTechnicalNotesInput = z.infer<typeof updateTechnicalNotesSchem
 export type TicketAttachmentPlaceholderInput = z.infer<
   typeof ticketAttachmentPlaceholderSchema
 >;
-

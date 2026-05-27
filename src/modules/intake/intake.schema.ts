@@ -1,6 +1,12 @@
 import { DeviceType, PreferredContactMethod } from "@prisma/client";
 import { z } from "zod";
 
+import {
+  allowedUploadMimeTypes,
+  maxUploadFileSizeBytes,
+  maxUploadFilesPerIntake,
+} from "@/server/storage/private-storage";
+
 const emptyToUndefined = (value: unknown) => {
   if (typeof value !== "string") {
     return value;
@@ -15,12 +21,13 @@ export const intakePhotoSchema = z.object({
   mimeType: z
     .string()
     .min(1)
-    .refine((value) => value.startsWith("image/"), "Solo se aceptan imagenes."),
+    .refine((value) => allowedUploadMimeTypes().includes(value), "Tipo de archivo no permitido."),
   byteSize: z
     .number()
     .int()
     .positive()
-    .max(10 * 1024 * 1024, "Cada foto debe pesar 10MB o menos."),
+    .max(maxUploadFileSizeBytes(), "El archivo supera el maximo permitido."),
+  bytes: z.instanceof(Uint8Array),
 });
 
 export const createIntakeSchema = z.object({
@@ -47,8 +54,10 @@ export const createIntakeSchema = z.object({
     reportedIssue: z.preprocess(emptyToUndefined, z.string().min(1).max(2000)),
     internalNotes: z.preprocess(emptyToUndefined, z.string().max(2000).optional()),
   }),
-  photos: z.array(intakePhotoSchema).max(12, "Maximo 12 fotos por recepcion.").default([]),
+  photos: z
+    .array(intakePhotoSchema)
+    .max(maxUploadFilesPerIntake(), "Se supero el maximo de archivos por recepcion.")
+    .default([]),
 });
 
 export type CreateIntakeInput = z.infer<typeof createIntakeSchema>;
-

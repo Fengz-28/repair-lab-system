@@ -4,7 +4,11 @@ import { Prisma, TicketStatus } from "@prisma/client";
 
 import { writeAuditLog } from "@/server/audit/audit.service";
 import { prisma } from "@/server/db/prisma";
-import { preparePrivateIntakePhoto } from "@/server/storage/private-upload-placeholder";
+import {
+  deletePrivateFiles,
+  savePrivateFile,
+  validateUploadFile,
+} from "@/server/storage/private-storage";
 import { registerEmailNotificationPlaceholder } from "@/modules/notifications/notification.service";
 import { createReceptionReceiptPlaceholder } from "@/modules/receipts/receipt.service";
 import { buildPublicPortalUrl } from "@/modules/email/email.service";
@@ -29,8 +33,13 @@ export async function receiveDeviceForRepair(
   options: ReceiveDeviceOptions = {},
 ): Promise<ReceiveDeviceResult> {
   const issuedNumbers = createReceptionNumbers();
+  input.photos.forEach(validateUploadFile);
+  const savedPhotos = await Promise.all(
+    input.photos.map((photo) => savePrivateFile("intakes", photo)),
+  );
 
-  return prisma.$transaction(async (tx) => {
+  try {
+    return await prisma.$transaction(async (tx) => {
     const customer = await tx.customer.create({
       data: input.customer,
     });
@@ -89,27 +98,24 @@ export async function receiveDeviceForRepair(
       },
     });
 
-    if (input.photos.length > 0) {
+    if (savedPhotos.length > 0) {
       await tx.fileAsset.createMany({
-        data: input.photos.map((photo, index) => {
-          const preparedPhoto = preparePrivateIntakePhoto(intake.id, index, photo);
-
-          return {
+        data: savedPhotos.map((photo) => ({
             ownerType: "Intake",
             ownerId: intake.id,
             intakeId: intake.id,
             ticketId: ticket.id,
-            storageKey: preparedPhoto.storageKey,
-            originalName: preparedPhoto.originalName,
-            mimeType: preparedPhoto.mimeType,
-            byteSize: preparedPhoto.byteSize,
+            storageKey: photo.storageKey,
+            originalName: photo.originalName,
+            mimeType: photo.mimeType,
+            byteSize: photo.byteSize,
+            checksum: photo.checksum,
             visibility: "PRIVATE" as const,
             metadata: {
-              placeholder: true,
-              storage: "private-placeholder",
+              storage: "local-private",
+              source: "intake",
             } satisfies Prisma.InputJsonValue,
-          };
-        }),
+          })),
       });
     }
 
@@ -176,7 +182,7 @@ export async function receiveDeviceForRepair(
         deviceId: device.id,
         ticketId: ticket.id,
         receiptNumber: intake.receiptNumber,
-        photoCount: input.photos.length,
+        photoCount: savedPhotos.length,
       },
       metadata: {
         module: "intake",
@@ -200,7 +206,7 @@ export async function receiveDeviceForRepair(
       },
     });
 
-    return {
+      return {
       customerId: customer.id,
       deviceId: device.id,
       intakeId: intake.id,
@@ -208,7 +214,11 @@ export async function receiveDeviceForRepair(
       ticketNumber: ticket.ticketNumber,
       receiptNumber: intake.receiptNumber ?? issuedNumbers.receiptNumber,
     };
-  });
+    });
+  } catch (error) {
+    await deletePrivateFiles(savedPhotos.map((photo) => photo.storageKey));
+    throw error;
+  }
 }
 
 function createReceptionNumbers() {

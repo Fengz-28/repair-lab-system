@@ -63,12 +63,12 @@ export function IntakeForm() {
             id="photos"
             name="photos"
             type="file"
-            accept="image/*"
+            accept="image/jpeg,image/png,image/webp,application/pdf"
             multiple
             className="block w-full text-sm dark:text-zinc-100"
           />
           <p className="text-xs text-zinc-500 dark:text-zinc-400">
-            Placeholder privado: se registra metadata y storageKey; no se publica en /public.
+            Archivos privados: se guardan fuera de /public y solo el admin puede abrirlos.
           </p>
         </div>
       </FormSection>

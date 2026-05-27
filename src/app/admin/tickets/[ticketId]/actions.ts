@@ -147,6 +147,7 @@ export async function addTicketAttachmentPlaceholderAction(
     originalName: file instanceof File ? file.name : "",
     mimeType: file instanceof File ? file.type || "application/octet-stream" : "",
     byteSize: file instanceof File ? file.size : 0,
+    bytes: file instanceof File ? new Uint8Array(await file.arrayBuffer()) : new Uint8Array(),
   });
 
   if (!parsed.success) {

@@ -44,21 +44,22 @@ Mitigacion:
 
 - Evaluar CSRF tokens para acciones criticas: pagos, inventario, estado de ticket, facturas.
 
-### 4. Uploads/fotos son placeholder
+### 4. Storage local privado requiere hardening productivo
 
-Se crean `FileAsset` y metadata, pero no hay almacenamiento binario real ni descarga protegida completa.
+Existe storage binario local privado para intake/tickets, pero sigue siendo una implementacion local.
 
 Riesgo:
 
-- El negocio puede creer que guarda fotos cuando solo guarda metadata.
-- Al implementar storage, hay riesgo de exponer fotos si se sirve desde public.
+- En multiples instancias, un archivo podria existir solo en una maquina.
+- No hay antivirus ni analisis de contenido.
+- No hay politica de retencion ni backup especifico de storage.
 
 Mitigacion:
 
-- Definir provider local privado.
-- Guardar archivos fuera de `public`.
-- Crear route handler autorizado para descarga.
-- Validar mime/size, antivirus si aplica, y permisos.
+- Respaldar `storage/private`.
+- Migrar a S3/MinIO para produccion multi-instancia.
+- Agregar antivirus/escaneo si se aceptan PDFs u otros documentos.
+- Definir retencion y borrado seguro.
 
 ### 5. Emails/integraciones ocurren dentro del flujo operativo
 
@@ -260,11 +261,11 @@ Mitigacion:
 
 ## Prioridad sugerida de deuda
 
-1. Storage privado real para fotos.
+1. Backups para PostgreSQL y `storage/private`.
 2. Outbox worker para `IntegrationEvent` y email.
-3. Backup/restore PostgreSQL.
-4. Paginacion e indices para listados grandes.
-5. FK `sourceQuoteId` para factura generada desde quote.
-6. CI con lint, typecheck y prisma validate.
-7. Observabilidad minima.
-8. Migrar rate limiting in-memory a store compartido antes de multi-instancia.
+3. Paginacion e indices para listados grandes.
+4. FK `sourceQuoteId` para factura generada desde quote.
+5. CI con lint, typecheck y prisma validate.
+6. Observabilidad minima.
+7. Migrar rate limiting in-memory a store compartido antes de multi-instancia.
+8. Migrar storage local a S3/MinIO antes de multiples instancias.

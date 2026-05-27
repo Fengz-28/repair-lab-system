@@ -210,10 +210,15 @@ export function AttachmentPlaceholderForm({ ticketId }: { ticketId: string }) {
       <div>
         <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Archivo privado</h2>
         <p className="text-sm text-zinc-600 dark:text-zinc-300">
-          Registra un adjunto interno. No se publica ni expone al cliente.
+          Sube un adjunto interno privado. No se publica ni expone al cliente.
         </p>
       </div>
-      <input name="attachment" type="file" className="block w-full text-sm dark:text-zinc-100" />
+      <input
+        name="attachment"
+        type="file"
+        accept="image/jpeg,image/png,image/webp,application/pdf"
+        className="block w-full text-sm dark:text-zinc-100"
+      />
       <ActionMessage ok={state.ok} message={state.message} />
       <SubmitButton label="Agregar archivo" pendingLabel="Agregando..." />
     </form>

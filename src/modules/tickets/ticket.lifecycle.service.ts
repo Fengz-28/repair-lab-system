@@ -2,7 +2,11 @@ import { InvoiceStatus, InvoiceType, Prisma, TicketStatus } from "@prisma/client
 
 import { writeAuditLog } from "@/server/audit/audit.service";
 import { prisma } from "@/server/db/prisma";
-import { preparePrivateTicketAttachment } from "@/server/storage/private-ticket-attachment-placeholder";
+import {
+  deletePrivateFile,
+  savePrivateFile,
+  validateUploadFile,
+} from "@/server/storage/private-storage";
 import {
   buildPublicInvoicePdfUrl,
   buildPublicPortalUrl,
@@ -364,7 +368,11 @@ export async function addTicketAttachmentPlaceholder(
   input: TicketAttachmentPlaceholderInput,
   actorUserId?: string | null,
 ) {
-  return prisma.$transaction(async (tx) => {
+  validateUploadFile(input);
+  const savedAttachment = await savePrivateFile("tickets", input);
+
+  try {
+    return await prisma.$transaction(async (tx) => {
     const ticket = await tx.ticket.findUnique({
       where: { id: input.ticketId },
       select: {
@@ -378,22 +386,20 @@ export async function addTicketAttachmentPlaceholder(
       throw new Error("Ticket not found.");
     }
 
-    const preparedAttachment = preparePrivateTicketAttachment(ticket.id, input);
-
     const fileAsset = await tx.fileAsset.create({
       data: {
         ownerType: "Ticket",
         ownerId: ticket.id,
         ticketId: ticket.id,
         intakeId: ticket.intakeId,
-        storageKey: preparedAttachment.storageKey,
-        originalName: preparedAttachment.originalName,
-        mimeType: preparedAttachment.mimeType,
-        byteSize: preparedAttachment.byteSize,
+        storageKey: savedAttachment.storageKey,
+        originalName: savedAttachment.originalName,
+        mimeType: savedAttachment.mimeType,
+        byteSize: savedAttachment.byteSize,
+        checksum: savedAttachment.checksum,
         visibility: "PRIVATE",
         metadata: {
-          placeholder: true,
-          storage: "private-placeholder",
+          storage: "local-private",
           source: "ticket-lifecycle",
         } satisfies Prisma.InputJsonValue,
       },
@@ -406,7 +412,7 @@ export async function addTicketAttachmentPlaceholder(
         payload: {
           fileAssetId: fileAsset.id,
           originalName: fileAsset.originalName,
-          placeholder: true,
+          storage: "local-private",
         },
       },
     });
@@ -419,7 +425,7 @@ export async function addTicketAttachmentPlaceholder(
       after: {
         ticketId: ticket.id,
         visibility: fileAsset.visibility,
-        placeholder: true,
+        storage: "local-private",
       },
       metadata: {
         ticketNumber: ticket.ticketNumber,
@@ -427,7 +433,11 @@ export async function addTicketAttachmentPlaceholder(
     });
 
     return fileAsset;
-  });
+    });
+  } catch (error) {
+    await deletePrivateFile(savedAttachment.storageKey);
+    throw error;
+  }
 }
 
 function integrationEventForStatus(status: TicketStatus) {

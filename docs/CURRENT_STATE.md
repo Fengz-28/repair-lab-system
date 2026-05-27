@@ -6,7 +6,7 @@ Actualizado: 2026-05-25, America/Costa_Rica.
 
 RepairLab tiene una base funcional amplia y modular. Ya no es solo una maqueta: existe flujo operativo interno, persistencia real en PostgreSQL, validacion Zod en acciones principales, autenticacion admin basica, eventos, auditoria, PDFs y portal publico.
 
-El proyecto sigue siendo pre-produccion. Hay varios puntos pensados correctamente pero aun incompletos: storage privado real, rate limiting, integraciones externas, workers, backups, CI/CD, observabilidad y hardening de seguridad.
+El proyecto sigue siendo pre-produccion. Hay varios puntos pensados correctamente pero aun incompletos: storage cloud/backup de archivos, integraciones externas, workers, backups, CI/CD, observabilidad y hardening de seguridad.
 
 ## Funcionalidades terminadas o usables
 
@@ -30,7 +30,7 @@ El proyecto sigue siendo pre-produccion. Hay varios puntos pensados correctament
 
 ### Intake / recepcion
 
-- `/admin/intake` permite registrar cliente, equipo, problema, condicion, accesorios, notas y fotos como placeholders.
+- `/admin/intake` permite registrar cliente, equipo, problema, condicion, accesorios, notas y archivos privados locales.
 - Crea `Customer`, `Device`, `Intake` y `Ticket` en una transaccion.
 - Genera `ticketNumber`, `receiptNumber` y `publicAccessToken`.
 - Crea `TicketStatusHistory`, `TicketEvent`, `IntegrationEvent`, `AuditLog` y email transaccional si hay email.
@@ -113,7 +113,7 @@ El proyecto sigue siendo pre-produccion. Hay varios puntos pensados correctament
 
 ## Parcialmente implementado
 
-- Uploads/fotos: se registran metadata y `FileAsset`, pero no se observo almacenamiento binario real ni serving protegido de archivos.
+- Uploads/fotos: storage local privado implementado para intake/tickets. Pendiente storage cloud/S3, antivirus y politicas avanzadas de retencion.
 - Email: funcional basico, sin cola, retries avanzados, SMTP ni plantillas externas.
 - Integration events: se escriben en DB, pero no existe worker real que procese eventos.
 - Webhooks: modelo `WebhookEndpoint` existe; no se observo flujo real con firma/idempotencia.
@@ -147,7 +147,7 @@ El proyecto sigue siendo pre-produccion. Hay varios puntos pensados correctament
 - `src/integrations/n8n/n8n.provider.ts`: disabled placeholder.
 - `src/integrations/trello/trello.provider.ts`: disabled placeholder.
 - `src/ai/ai.provider.ts`: disabled provider.
-- `src/server/storage/private-upload.ts`: placeholder de almacenamiento privado.
+- `src/server/storage/private-storage.ts`: provider local privado para binarios.
 - `src/modules/receipts/receipt.service.ts`: comprobante/receipt placeholder.
 - `src/modules/notifications/notification.service.ts`: capa placeholder historica; email real inicial vive en `src/modules/email`.
 - `/products` y `/contact`: paginas publicas sin ecommerce/envio real.
@@ -242,3 +242,26 @@ Limitaciones:
 - Para produccion multi-instancia se debe migrar a Redis, Upstash o un store compartido.
 - Los PDFs publicos devuelven `429` con `Retry-After`.
 - La pagina `/track/[token]` es Server Component; se bloquea con pantalla segura, pero no fija status HTTP `429` sin reestructurar la ruta.
+
+## Storage privado local - 2026-05-25
+
+Implementado:
+
+- Provider local privado basado en `PRIVATE_STORAGE_ROOT`.
+- Guardado binario real para archivos de recepcion/intake.
+- Guardado binario real para adjuntos internos de ticket.
+- Ruta admin protegida `/admin/files/[fileAssetId]` para abrir/descargar archivos.
+- Validacion de tamano, cantidad, MIME type y extension.
+- Archivos resueltos por `FileAsset.id`; no se aceptan paths libres por query param.
+- `storageKey` se resuelve server-side y rechaza rutas absolutas o traversal.
+
+No implementado:
+
+- S3/MinIO/cloud storage.
+- Exposicion de archivos al portal cliente.
+- Antivirus o analisis de contenido.
+- Retencion/lifecycle automatico.
+
+Limitacion:
+
+- Si se migra a multiples instancias o servidor separado, `./storage/private` debe convertirse en volumen persistente compartido o migrarse a S3/MinIO.
