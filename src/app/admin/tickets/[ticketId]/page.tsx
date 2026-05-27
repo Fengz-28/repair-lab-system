@@ -448,7 +448,7 @@ function StatusBadge({
 
   return (
     <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-bold shadow-sm shadow-black/20 ${classes}`}>
-      <span className={`size-1.5 rounded-full repair-status-dot ${dotClasses}`} />
+      <span className={`size-1.5 rounded-full ${dotClasses}`} />
       <span className="uppercase">{label}</span>
       <span>{value}</span>
     </span>

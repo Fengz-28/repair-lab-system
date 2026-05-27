@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type React from "react";
 
+import { RepairNavLinks } from "@/components/repairlab/repair-nav-links";
+
 type NavLink = {
   href: string;
   label: string;
@@ -50,7 +52,7 @@ export function RepairNavbar({
     <div className="sticky top-0 z-30 border-b border-white/10 bg-black/90 shadow-sm shadow-black/30 backdrop-blur-xl">
       <RepairContainer className="flex flex-col gap-4 py-4 lg:flex-row lg:items-center lg:justify-between">
         <Link className="group flex items-center gap-3" href="/admin">
-            <span className="grid size-12 place-items-center rounded-2xl bg-emerald-500 text-lg font-black text-black shadow-lg shadow-emerald-500/25 transition group-hover:scale-105 group-hover:shadow-cyan-400/20">
+            <span className="repair-card-motion grid size-12 place-items-center rounded-2xl bg-emerald-500 text-lg font-black text-black shadow-lg shadow-emerald-500/25 group-hover:shadow-cyan-400/20">
             R
           </span>
           <span>
@@ -63,17 +65,7 @@ export function RepairNavbar({
           </span>
         </Link>
 
-        <div className="flex min-w-0 flex-1 gap-2 overflow-x-auto pb-1 lg:justify-center lg:overflow-visible lg:pb-0">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              className="min-h-11 shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold text-zinc-200 transition hover:bg-emerald-500/10 hover:text-emerald-200"
-              href={link.href}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
+        <RepairNavLinks links={links} />
 
         {user ? (
           <div className="flex flex-wrap items-center gap-3">
@@ -97,7 +89,7 @@ export function RepairNavbar({
 
 export function RepairDropdownMenu({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-b-3xl border border-white/10 bg-zinc-950 p-5 shadow-2xl shadow-black/40">
+    <div className="repair-panel-reveal rounded-b-3xl border border-white/10 bg-zinc-950 p-5 shadow-2xl shadow-black/40">
       <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600">{title}</p>
       <div className="grid gap-2">{children}</div>
     </div>
@@ -166,7 +158,7 @@ export function RepairCard({
 }) {
   return (
     <div
-      className={`repair-animate-in relative overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(24,24,27,0.96),rgba(3,7,18,0.9))] p-5 shadow-sm shadow-black/30 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-950/20 ${className}`}
+      className={`repair-panel-reveal repair-card-motion relative overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(24,24,27,0.96),rgba(3,7,18,0.9))] p-5 shadow-sm shadow-black/30 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-950/20 ${className}`}
     >
       <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/35 to-transparent" />
       {children}
@@ -182,7 +174,7 @@ export function RepairPanel({
   className?: string;
 }) {
   return (
-    <div className={`repair-animate-in relative overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(18,18,20,0.96),rgba(3,3,3,0.92))] p-5 shadow-sm shadow-black/30 backdrop-blur ${className}`}>
+    <div className={`repair-panel-reveal relative overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(18,18,20,0.96),rgba(3,3,3,0.92))] p-5 shadow-sm shadow-black/30 backdrop-blur ${className}`}>
       <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-emerald-300/25 to-transparent" />
       {children}
     </div>
@@ -210,7 +202,7 @@ export function RepairButton({
       "border border-white/15 bg-zinc-900/90 text-zinc-100 shadow-sm shadow-black/20 hover:border-white/25 hover:bg-zinc-800 hover:text-white",
   }[tone];
   const sizeClass = size === "sm" ? "min-h-10 px-4 py-2 text-xs" : "min-h-11 px-5 py-2.5 text-sm";
-  const className = `inline-flex items-center justify-center rounded-full font-bold transition duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:cursor-not-allowed disabled:border-white/5 disabled:bg-zinc-900 disabled:text-zinc-500 ${toneClass} ${sizeClass}`;
+  const className = `repair-button-motion repair-focus-ring inline-flex items-center justify-center rounded-full font-bold disabled:cursor-not-allowed disabled:border-white/5 disabled:bg-zinc-900 disabled:text-zinc-500 disabled:shadow-none ${toneClass} ${sizeClass}`;
 
   if (as === "button") {
     return (
@@ -251,17 +243,36 @@ export function RepairBadge({
     violet: "bg-violet-300",
   }[tone];
 
+  const shouldPulse = tone === "cyan" || tone === "warning" || tone === "violet";
+
   return (
     <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-bold shadow-sm shadow-black/20 ${classes}`}>
-      <span className={`size-1.5 rounded-full ${dotClasses} ${tone === "neutral" ? "" : "repair-status-dot"}`} />
+      <span className={`size-1.5 rounded-full ${dotClasses} ${shouldPulse ? "repair-status-dot" : ""}`} />
       {children}
     </span>
   );
 }
 
+export function RepairDropdownItem({
+  children,
+  href,
+}: {
+  children: React.ReactNode;
+  href: string;
+}) {
+  return (
+    <Link
+      className="repair-dropdown-item repair-focus-ring rounded-2xl border border-transparent px-3 py-2 text-sm font-semibold text-zinc-200 hover:border-cyan-300/25 hover:bg-cyan-500/10 hover:text-cyan-100"
+      href={href}
+    >
+      {children}
+    </Link>
+  );
+}
+
 export function RepairTable({ children }: { children: React.ReactNode }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(18,18,20,0.96),rgba(3,3,3,0.92))] shadow-sm shadow-black/30">
+    <div className="repair-panel-reveal overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(18,18,20,0.96),rgba(3,3,3,0.92))] shadow-sm shadow-black/30">
       <div className="overflow-x-auto">{children}</div>
     </div>
   );
@@ -329,6 +340,29 @@ export function RepairSearchBar({ children }: { children: React.ReactNode }) {
 
 export function RepairActionBar({ children }: { children: React.ReactNode }) {
   return <div className="grid gap-2 sm:flex sm:flex-wrap sm:items-center">{children}</div>;
+}
+
+export function RepairSkeleton({
+  className = "",
+}: {
+  className?: string;
+}) {
+  return (
+    <div
+      aria-hidden="true"
+      className={`repair-skeleton overflow-hidden rounded-2xl border border-white/10 bg-zinc-950/80 ${className}`}
+    />
+  );
+}
+
+export function RepairSkeletonCard() {
+  return (
+    <div className="repair-panel-reveal rounded-2xl border border-white/10 bg-zinc-950/80 p-5 shadow-sm shadow-black/30">
+      <RepairSkeleton className="h-4 w-28" />
+      <RepairSkeleton className="mt-4 h-9 w-40" />
+      <RepairSkeleton className="mt-5 h-2 w-full" />
+    </div>
+  );
 }
 
 export function RepairFooter() {

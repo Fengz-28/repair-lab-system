@@ -123,12 +123,12 @@ function TicketFilters({ filters }: { filters: TicketListData["filters"] }) {
         <div className="flex flex-col gap-2 sm:flex-row lg:items-end">
           <button
             type="submit"
-            className="min-h-11 rounded-full border border-emerald-300/40 bg-emerald-500 px-5 py-2 text-sm font-black text-black shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-400 hover:shadow-cyan-400/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+            className="repair-button-motion repair-focus-ring min-h-11 rounded-full border border-emerald-300/40 bg-emerald-500 px-5 py-2 text-sm font-black text-black shadow-lg shadow-emerald-500/25 hover:bg-emerald-400 hover:shadow-cyan-400/20"
           >
             Aplicar
           </button>
           <Link
-            className="min-h-11 rounded-full border border-white/15 bg-zinc-800 px-5 py-2 text-center text-sm font-bold text-zinc-100 transition hover:border-cyan-300/35 hover:bg-zinc-700 hover:text-white"
+            className="repair-button-motion repair-focus-ring min-h-11 rounded-full border border-white/15 bg-zinc-800 px-5 py-2 text-center text-sm font-bold text-zinc-100 hover:border-cyan-300/35 hover:bg-zinc-700 hover:text-white"
             href="/admin/tickets"
           >
             Limpiar
@@ -224,7 +224,7 @@ function TicketTable({ tickets }: { tickets: TicketListItem[] }) {
           </thead>
           <tbody>
             {tickets.map((ticket) => (
-              <tr key={ticket.id} className="border-b border-white/10 transition hover:bg-cyan-500/5 last:border-0">
+              <tr key={ticket.id} className="repair-table-row border-b border-white/10 last:border-0 hover:border-cyan-300/20">
                 <td className="px-3 py-3 font-medium text-zinc-950 dark:text-zinc-50">{ticket.ticketNumber}</td>
                 <td className="px-3 py-3">
                   <p className="text-zinc-800 dark:text-zinc-200">{ticket.customerName}</p>
@@ -344,8 +344,8 @@ function ActionLink({
     <Link
       className={
         primary
-        ? "min-h-10 rounded-full border border-emerald-300/40 bg-emerald-500 px-3 py-2 text-xs font-black text-black shadow-sm shadow-emerald-500/25 transition hover:bg-emerald-400"
-        : "min-h-10 rounded-full border border-white/15 bg-zinc-800 px-3 py-2 text-xs font-bold text-zinc-100 transition hover:border-cyan-300/35 hover:bg-zinc-700 hover:text-white"
+        ? "repair-button-motion repair-focus-ring min-h-10 rounded-full border border-emerald-300/40 bg-emerald-500 px-3 py-2 text-xs font-black text-black shadow-sm shadow-emerald-500/25 hover:bg-emerald-400"
+        : "repair-button-motion repair-focus-ring min-h-10 rounded-full border border-white/15 bg-zinc-800 px-3 py-2 text-xs font-bold text-zinc-100 hover:border-cyan-300/35 hover:bg-zinc-700 hover:text-white"
       }
       href={href}
     >

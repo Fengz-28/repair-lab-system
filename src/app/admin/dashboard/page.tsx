@@ -156,7 +156,7 @@ function PaymentsPanel({ dashboard }: { dashboard: DashboardData }) {
           <EmptyText>No hay pagos registrados.</EmptyText>
         ) : (
           dashboard.payments.byMethod.map((method) => (
-          <div key={method.method} className="flex flex-wrap justify-between gap-2 rounded-2xl border border-white/10 bg-zinc-950/80 p-3 text-sm transition hover:border-cyan-300/30 hover:bg-zinc-900/80">
+          <div key={method.method} className="repair-card-motion flex flex-wrap justify-between gap-2 rounded-2xl border border-white/10 bg-zinc-950/80 p-3 text-sm hover:border-cyan-300/30 hover:bg-zinc-900/80">
               <span>{paymentMethodLabel(method.method)}</span>
               <span className="break-words font-medium">{formatMoney(method.total)} ({method.count})</span>
             </div>
@@ -337,7 +337,7 @@ function ListPanel({
 
 function ListItem({ children }: { children: React.ReactNode }) {
   return (
-    <div className="group flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-zinc-950/80 p-3 text-sm shadow-sm shadow-black/20 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-300/30 hover:bg-zinc-900/80 hover:shadow-lg hover:shadow-cyan-950/15">
+    <div className="repair-card-motion group flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-zinc-950/80 p-3 text-sm shadow-sm shadow-black/20 hover:border-cyan-300/30 hover:bg-zinc-900/80 hover:shadow-lg hover:shadow-cyan-950/15">
       {children}
     </div>
   );
@@ -355,7 +355,7 @@ function MetricRow({ label, value }: { label: string; value: string | number }) 
 function Badge({ children }: { children: React.ReactNode }) {
   return (
     <span className="inline-flex items-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-500/10 px-2.5 py-1 text-xs font-bold text-cyan-100 shadow-sm shadow-black/20">
-      <span className="size-1.5 rounded-full bg-cyan-300 repair-status-dot" />
+      <span className="size-1.5 rounded-full bg-cyan-300" />
       {children}
     </span>
   );
