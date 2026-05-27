@@ -125,6 +125,22 @@ Hacer solo con migraciones pequenas y justificadas.
 
 ## Fase 6 - Testing y CI
 
+- Implementado el 2026-05-27:
+  - GitHub Actions `.github/workflows/ci.yml`.
+  - `push` a `master`.
+  - `pull_request` hacia `master`.
+  - Node.js `24`.
+  - `npm ci`.
+  - `npx prisma generate`.
+  - `npx prisma validate`.
+  - `npm run lint`.
+  - `npx tsc --noEmit`.
+- No incluido todavia:
+  - Deploy/CD.
+  - Secrets productivos.
+  - Migraciones contra DB real.
+  - Tests E2E.
+  - Docker build en CI.
 - Unit tests para:
   - ticket transitions
   - quote transitions
@@ -134,10 +150,8 @@ Hacer solo con migraciones pequenas y justificadas.
   - public tracking data filtering
 - Integration tests con DB test.
 - CI:
-  - `npm run lint`
-  - `npx tsc --noEmit`
-  - `npx prisma validate`
-  - tests
+  - agregar tests unitarios e integracion;
+  - evaluar `docker compose build app` como job separado si el tiempo de CI es aceptable.
 - No depender de `next build` en Windows hasta resolver Turbopack/permisos.
 
 ## Fase 7 - Produccion controlada

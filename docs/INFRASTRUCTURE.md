@@ -305,10 +305,56 @@ Limitaciones:
 
 - No hay TLS.
 - No hay reverse proxy.
-- No hay CI/CD.
+- CI basico existe; no hay CD/deploy.
 - No hay gestion formal de secretos.
 - No hay backups externos automaticos.
 - No hay n8n/Ollama/WhatsApp dentro de Compose.
+
+## GitHub Actions CI - 2026-05-27
+
+Workflow:
+
+```txt
+.github/workflows/ci.yml
+```
+
+Disparadores:
+
+- `push` a `master`.
+- `pull_request` hacia `master`.
+
+Job:
+
+- `validate` en `ubuntu-latest`.
+- Node.js `24`, alineado con el `Dockerfile`.
+
+Comandos:
+
+```txt
+npm ci
+npx prisma generate
+npx prisma validate
+npm run lint
+npx tsc --noEmit
+```
+
+Variables dummy:
+
+```txt
+DATABASE_URL=postgresql://repairlab:repairlab_password@localhost:5432/repairlab?schema=public
+NEXT_TELEMETRY_DISABLED=1
+```
+
+Alcance:
+
+- Valida instalacion, Prisma Client, schema Prisma, lint y TypeScript.
+- No usa secretos productivos.
+- No hace deploy.
+- No ejecuta `prisma migrate deploy`.
+- No toca DB productiva.
+- No levanta PostgreSQL real.
+- No corre `next build`.
+- No valida `docker compose build app`; queda como fase posterior si se quiere ampliar el tiempo/costo del CI.
 
 ## ngrok readiness
 
@@ -377,7 +423,7 @@ Plan de rollback
 
 ### No observado
 
-- CI/CD.
+- CI basico existe; no hay CD/deploy automatizado.
 - Tests automatizados.
 - Compose productivo final.
 - Backups.
@@ -399,6 +445,8 @@ install
   -> tests
   -> build en ambiente Linux/CI
 ```
+
+El CI inicial implementa `install`, `prisma generate`, `prisma validate`, `lint` y `tsc --noEmit`. Tests, Docker build y deploy quedan fuera por ahora.
 
 ## Verificacion local de infraestructura - 2026-05-25
 

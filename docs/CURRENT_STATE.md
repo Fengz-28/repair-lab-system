@@ -6,7 +6,7 @@ Actualizado: 2026-05-25, America/Costa_Rica.
 
 RepairLab tiene una base funcional amplia y modular. Ya no es solo una maqueta: existe flujo operativo interno, persistencia real en PostgreSQL, validacion Zod en acciones principales, autenticacion admin basica, eventos, auditoria, PDFs, portal publico y worker outbox local inicial.
 
-El proyecto sigue siendo pre-produccion. Hay varios puntos pensados correctamente pero aun incompletos: storage cloud, integraciones externas, automatizacion productiva de workers, backups productivos externos, CI/CD, observabilidad y hardening de seguridad avanzado.
+El proyecto sigue siendo pre-produccion. Hay varios puntos pensados correctamente pero aun incompletos: storage cloud, integraciones externas, automatizacion productiva de workers, backups productivos externos, CD/deploy, observabilidad y hardening de seguridad avanzado.
 
 ## Funcionalidades terminadas o usables
 
@@ -137,7 +137,7 @@ El proyecto sigue siendo pre-produccion. Hay varios puntos pensados correctament
 - Multi-tenant.
 - Deployment productivo final.
 - Backups automatizados.
-- CI/CD.
+- CD/deploy automatizado.
 - Observabilidad centralizada.
 
 ## Placeholders y mocks relevantes
@@ -317,4 +317,23 @@ Volumenes Docker:
 
 Limitacion:
 
-- Es una base Docker local/operativa, no despliegue productivo final. Faltan TLS, reverse proxy, CI/CD, gestion formal de secretos y backups externos automaticos.
+- Es una base Docker local/operativa, no despliegue productivo final. Faltan TLS, reverse proxy, CD/deploy, gestion formal de secretos y backups externos automaticos.
+
+## GitHub Actions CI - 2026-05-27
+
+Implementado:
+
+- Workflow `.github/workflows/ci.yml`.
+- Se ejecuta en `push` a `master` y `pull_request` hacia `master`.
+- Usa `ubuntu-latest` y Node.js `24`.
+- Corre `npm ci`, `npx prisma generate`, `npx prisma validate`, `npm run lint` y `npx tsc --noEmit`.
+- Usa `DATABASE_URL` dummy local para Prisma.
+
+No implementado:
+
+- Deploy/CD.
+- Docker registry.
+- Secrets productivos.
+- Tests E2E.
+- Migraciones contra DB real.
+- Docker build en CI.
