@@ -1,6 +1,5 @@
 import {
   InventoryMovementType,
-  InvoiceStatus,
   InvoiceType,
   PaymentStatus,
   Prisma,
@@ -10,7 +9,15 @@ import {
 import { writeAuditLog } from "@/server/audit/audit.service";
 import { prisma } from "@/server/db/prisma";
 
+import {
+  assertManualPaymentAllowed,
+  calculatePaymentTotals,
+  invoiceStatusForPaymentStatus,
+  paymentStatusForBalance,
+} from "./payment.rules";
 import type { RegisterManualPaymentInput } from "./payment.schema";
+
+export { calculatePaymentTotals } from "./payment.rules";
 
 type PaymentOptions = {
   actorUserId?: string | null;
@@ -41,19 +48,13 @@ export async function registerManualPayment(
       throw new Error("Factura no encontrada.");
     }
 
-    if (Number(invoice.total) <= 0) {
-      throw new Error("No se puede registrar pago sobre una factura con total cero.");
-    }
-
     const totalsBefore = calculatePaymentTotals(invoice.total, invoice.payments);
 
-    if (totalsBefore.balanceDue <= 0) {
-      throw new Error("Esta factura ya esta pagada.");
-    }
-
-    if (input.amount > totalsBefore.balanceDue) {
-      throw new Error("El pago no puede ser mayor al saldo pendiente.");
-    }
+    assertManualPaymentAllowed({
+      invoiceTotal: totalsBefore.invoiceTotal,
+      balanceDue: totalsBefore.balanceDue,
+      amount: input.amount,
+    });
 
     const projectedTotals = calculatePaymentTotals(invoice.total, [
       ...invoice.payments,
@@ -316,42 +317,3 @@ type InvoiceWithInventory = Prisma.InvoiceGetPayload<{
     };
   };
 }>;
-
-export function calculatePaymentTotals(
-  invoiceTotalValue: Prisma.Decimal | number | string,
-  payments: { amount: Prisma.Decimal | number | string }[],
-) {
-  const invoiceTotal = Number(invoiceTotalValue);
-  const paidTotal = payments.reduce((sum, payment) => sum + Number(payment.amount), 0);
-  const balanceDue = Math.max(invoiceTotal - paidTotal, 0);
-
-  return {
-    invoiceTotal,
-    paidTotal,
-    balanceDue,
-  };
-}
-
-function paymentStatusForBalance(paidTotal: number, invoiceTotal: number) {
-  if (paidTotal <= 0) {
-    return PaymentStatus.UNPAID;
-  }
-
-  if (paidTotal >= invoiceTotal) {
-    return PaymentStatus.PAID;
-  }
-
-  return PaymentStatus.PARTIALLY_PAID;
-}
-
-function invoiceStatusForPaymentStatus(status: PaymentStatus) {
-  if (status === PaymentStatus.PAID) {
-    return InvoiceStatus.PAID;
-  }
-
-  if (status === PaymentStatus.PARTIALLY_PAID) {
-    return InvoiceStatus.PARTIALLY_PAID;
-  }
-
-  return InvoiceStatus.UNPAID;
-}

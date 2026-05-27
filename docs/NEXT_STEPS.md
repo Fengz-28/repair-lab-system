@@ -135,22 +135,24 @@ Hacer solo con migraciones pequenas y justificadas.
   - `npx prisma validate`.
   - `npm run lint`.
   - `npx tsc --noEmit`.
+  - `npm run test`.
+  - Vitest con primera suite unitaria para reglas criticas.
 - No incluido todavia:
   - Deploy/CD.
   - Secrets productivos.
   - Migraciones contra DB real.
   - Tests E2E.
   - Docker build en CI.
-- Unit tests para:
-  - ticket transitions
-  - quote transitions
+- Tests pendientes:
   - invoice conversion
-  - payment validation
-  - inventory deduction
+  - inventory deduction con escenarios mas completos
   - public tracking data filtering
+  - Server Actions
+  - Route Handlers
+  - auth/rate limiting
 - Integration tests con DB test.
 - CI:
-  - agregar tests unitarios e integracion;
+  - agregar mas tests unitarios e integracion;
   - evaluar `docker compose build app` como job separado si el tiempo de CI es aceptable.
 - No depender de `next build` en Windows hasta resolver Turbopack/permisos.
 

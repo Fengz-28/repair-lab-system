@@ -19,31 +19,16 @@ import type {
   TicketAttachmentPlaceholderInput,
   UpdateTechnicalNotesInput,
 } from "./ticket.lifecycle.schema";
-
-export const ticketStatusTransitions: Record<TicketStatus, TicketStatus[]> = {
-  RECEIVED: [TicketStatus.INITIAL_REVIEW],
-  INITIAL_REVIEW: [TicketStatus.DIAGNOSIS],
-  DIAGNOSIS: [TicketStatus.WAITING_APPROVAL],
-  WAITING_APPROVAL: [TicketStatus.APPROVED, TicketStatus.CANCELLED],
-  APPROVED: [TicketStatus.REPAIR_IN_PROGRESS],
-  REPAIR_IN_PROGRESS: [TicketStatus.READY_FOR_PICKUP],
-  READY_FOR_PICKUP: [TicketStatus.DELIVERED],
-  DELIVERED: [],
-  CANCELLED: [],
-};
-
-export const finalTicketStatuses = new Set<TicketStatus>([
-  TicketStatus.DELIVERED,
-  TicketStatus.CANCELLED,
-]);
-
-export function getAllowedNextStatuses(status: TicketStatus) {
-  return ticketStatusTransitions[status] ?? [];
-}
-
-export function canTransitionTicketStatus(from: TicketStatus, to: TicketStatus) {
-  return getAllowedNextStatuses(from).includes(to);
-}
+export {
+  canTransitionTicketStatus,
+  finalTicketStatuses,
+  getAllowedNextStatuses,
+  ticketStatusTransitions,
+} from "./ticket.rules";
+import {
+  assertCanTransitionTicketStatus,
+  finalTicketStatuses,
+} from "./ticket.rules";
 
 export async function changeTicketStatus(
   input: ChangeTicketStatusInput,
@@ -100,9 +85,7 @@ export async function changeTicketStatus(
       throw new Error("Ticket not found.");
     }
 
-    if (!canTransitionTicketStatus(ticket.status, input.nextStatus)) {
-      throw new Error(`Invalid ticket transition: ${ticket.status} -> ${input.nextStatus}.`);
-    }
+    assertCanTransitionTicketStatus(ticket.status, input.nextStatus);
 
     assertTicketOperationalRequirements(ticket, input.nextStatus);
 

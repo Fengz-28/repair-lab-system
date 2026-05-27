@@ -3,6 +3,11 @@ import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
+import {
+  retryDelayMilliseconds,
+  unsupportedEventResult,
+} from "../src/server/integrations/outbox/outbox.rules.mjs";
+
 const databaseUrl = process.env.DATABASE_URL;
 
 if (!databaseUrl) {
@@ -202,10 +207,7 @@ async function processIntegrationEvent(event) {
     };
   }
 
-  return {
-    status: "cancelled",
-    reason: `Unsupported integration event type: ${event.type}`,
-  };
+  return unsupportedEventResult(event.type);
 }
 
 async function processEmailOutcomeEvent(event) {
@@ -284,11 +286,6 @@ async function markFailed(event, message) {
       lastError: truncate(message),
     },
   });
-}
-
-function retryDelayMilliseconds(attempts) {
-  const seconds = Math.min(60 * 2 ** Math.max(attempts - 1, 0), 3600);
-  return seconds * 1000;
 }
 
 function summarizeError(error) {

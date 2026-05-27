@@ -4,7 +4,6 @@ import {
   InvoiceType,
   PaymentStatus,
   Prisma,
-  TicketStatus,
 } from "@prisma/client";
 
 import {
@@ -16,6 +15,10 @@ import { writeAuditLog } from "@/server/audit/audit.service";
 import { prisma } from "@/server/db/prisma";
 
 import { canTransitionQuoteStatus } from "./quote.lifecycle";
+import {
+  assertQuoteCanMoveToStatusFromSnapshot,
+  ticketStatusForQuoteStatus,
+} from "./quote.rules";
 import type { AddQuoteItemInput, ChangeQuoteStatusInput, CreateQuoteInput } from "./quote.schema";
 
 type QuoteOptions = {
@@ -439,17 +442,11 @@ async function assertQuoteCanMoveToStatus(
     throw new Error("Quote not found.");
   }
 
-  if (quote.items.length === 0) {
-    if (nextStatus === InvoiceStatus.SENT) {
-      throw new Error("No se puede enviar una cotizacion sin lineas.");
-    }
-
-    throw new Error("No se puede aprobar una cotizacion sin lineas.");
-  }
-
-  if (nextStatus === InvoiceStatus.APPROVED && Number(quote.total) <= 0) {
-    throw new Error("No se puede aprobar una cotizacion con total cero.");
-  }
+  assertQuoteCanMoveToStatusFromSnapshot({
+    itemCount: quote.items.length,
+    total: Number(quote.total),
+    nextStatus,
+  });
 }
 
 function quoteTimelineLabel(status: InvoiceStatus) {
@@ -575,31 +572,6 @@ async function syncTicketStatusFromQuoteApproval(
     toStatus: targetStatus,
     reason,
   };
-}
-
-function ticketStatusForQuoteStatus(
-  quoteStatus: InvoiceStatus,
-  currentTicketStatus: TicketStatus,
-) {
-  if (quoteStatus === InvoiceStatus.SENT && currentTicketStatus === TicketStatus.DIAGNOSIS) {
-    return TicketStatus.WAITING_APPROVAL;
-  }
-
-  if (
-    quoteStatus === InvoiceStatus.APPROVED &&
-    currentTicketStatus === TicketStatus.WAITING_APPROVAL
-  ) {
-    return TicketStatus.APPROVED;
-  }
-
-  if (
-    (quoteStatus === InvoiceStatus.REJECTED || quoteStatus === InvoiceStatus.EXPIRED) &&
-    currentTicketStatus === TicketStatus.WAITING_APPROVAL
-  ) {
-    return TicketStatus.DIAGNOSIS;
-  }
-
-  return null;
 }
 
 function ticketQuoteSyncReason(status: InvoiceStatus) {

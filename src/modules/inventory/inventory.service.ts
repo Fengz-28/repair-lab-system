@@ -1,8 +1,7 @@
-import { InventoryMovementType } from "@prisma/client";
-
 import { writeAuditLog } from "@/server/audit/audit.service";
 import { prisma } from "@/server/db/prisma";
 
+import { calculateInventoryQuantity } from "./inventory.rules";
 import type { AdjustInventoryInput } from "./inventory.schema";
 
 type InventoryOptions = {
@@ -25,14 +24,11 @@ export async function adjustInventory(
       throw new Error("Inventory item not found.");
     }
 
-    const nextQuantity =
-      input.type === InventoryMovementType.OUT
-        ? inventoryItem.quantityOnHand - input.quantity
-        : inventoryItem.quantityOnHand + input.quantity;
-
-    if (nextQuantity < 0) {
-      throw new Error("No hay stock suficiente para registrar esta salida.");
-    }
+    const nextQuantity = calculateInventoryQuantity({
+      currentQuantity: inventoryItem.quantityOnHand,
+      movementType: input.type,
+      quantity: input.quantity,
+    });
 
     const updatedInventoryItem = await tx.inventoryItem.update({
       where: { id: inventoryItem.id },

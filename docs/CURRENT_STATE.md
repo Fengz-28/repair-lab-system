@@ -4,7 +4,7 @@ Actualizado: 2026-05-25, America/Costa_Rica.
 
 ## Estado general del proyecto
 
-RepairLab tiene una base funcional amplia y modular. Ya no es solo una maqueta: existe flujo operativo interno, persistencia real en PostgreSQL, validacion Zod en acciones principales, autenticacion admin basica, eventos, auditoria, PDFs, portal publico y worker outbox local inicial.
+RepairLab tiene una base funcional amplia y modular. Ya no es solo una maqueta: existe flujo operativo interno, persistencia real en PostgreSQL, validacion Zod en acciones principales, autenticacion admin basica, eventos, auditoria, PDFs, portal publico, worker outbox local inicial y primera capa de tests unitarios.
 
 El proyecto sigue siendo pre-produccion. Hay varios puntos pensados correctamente pero aun incompletos: storage cloud, integraciones externas, automatizacion productiva de workers, backups productivos externos, CD/deploy, observabilidad y hardening de seguridad avanzado.
 
@@ -326,7 +326,7 @@ Implementado:
 - Workflow `.github/workflows/ci.yml`.
 - Se ejecuta en `push` a `master` y `pull_request` hacia `master`.
 - Usa `ubuntu-latest` y Node.js `24`.
-- Corre `npm ci`, `npx prisma generate`, `npx prisma validate`, `npm run lint` y `npx tsc --noEmit`.
+- Corre `npm ci`, `npx prisma generate`, `npx prisma validate`, `npm run lint`, `npx tsc --noEmit` y `npm run test`.
 - Usa `DATABASE_URL` dummy local para Prisma.
 
 No implementado:
@@ -337,3 +337,29 @@ No implementado:
 - Tests E2E.
 - Migraciones contra DB real.
 - Docker build en CI.
+
+## Tests unitarios iniciales - 2026-05-27
+
+Implementado:
+
+- Vitest.
+- `npm run test`.
+- `npm run test:watch`.
+- Tests unitarios sin DB real.
+- Cobertura inicial de reglas puras:
+  - transiciones de tickets;
+  - lifecycle de cotizaciones;
+  - validacion de quote vacia o con total cero;
+  - sincronizacion quote -> ticket;
+  - calculos y estados de pagos;
+  - validacion de pagos invalidos;
+  - movimientos de inventario IN/OUT/ADJUSTMENT;
+  - backoff y resultado de evento no soportado del outbox worker.
+
+No implementado:
+
+- Tests E2E.
+- Playwright/Cypress.
+- Tests con DB real.
+- Coverage report.
+- Tests de Server Actions o Route Handlers.

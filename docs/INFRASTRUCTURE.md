@@ -336,6 +336,7 @@ npx prisma generate
 npx prisma validate
 npm run lint
 npx tsc --noEmit
+npm run test
 ```
 
 Variables dummy:
@@ -347,12 +348,12 @@ NEXT_TELEMETRY_DISABLED=1
 
 Alcance:
 
-- Valida instalacion, Prisma Client, schema Prisma, lint y TypeScript.
+- Valida instalacion, Prisma Client, schema Prisma, lint, TypeScript y tests unitarios Vitest.
 - No usa secretos productivos.
 - No hace deploy.
 - No ejecuta `prisma migrate deploy`.
 - No toca DB productiva.
-- No levanta PostgreSQL real.
+- No levanta PostgreSQL real para tests.
 - No corre `next build`.
 - No valida `docker compose build app`; queda como fase posterior si se quiere ampliar el tiempo/costo del CI.
 
@@ -446,7 +447,7 @@ install
   -> build en ambiente Linux/CI
 ```
 
-El CI inicial implementa `install`, `prisma generate`, `prisma validate`, `lint` y `tsc --noEmit`. Tests, Docker build y deploy quedan fuera por ahora.
+El CI inicial implementa `install`, `prisma generate`, `prisma validate`, `lint`, `tsc --noEmit` y `npm run test`. Tests de integracion, Docker build y deploy quedan fuera por ahora.
 
 ## Verificacion local de infraestructura - 2026-05-25
 

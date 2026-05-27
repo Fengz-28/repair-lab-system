@@ -11,7 +11,9 @@
     "backup:db": "node scripts/backup-db.mjs",
     "backup:storage": "node scripts/backup-storage.mjs",
     "backup": "node scripts/backup.mjs",
-    "worker:events": "node scripts/process-integration-events.mjs"
+    "worker:events": "node scripts/process-integration-events.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
@@ -32,6 +34,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.7"
   }
 }
