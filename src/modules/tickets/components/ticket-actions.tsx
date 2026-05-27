@@ -42,7 +42,7 @@ export function TicketGuidedActions({
   }));
 
   return (
-    <section className="space-y-3 rounded border border-zinc-200 p-4 dark:border-zinc-800">
+    <section className="space-y-3 rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-sm shadow-black/25">
       <div>
         <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">
           Acciones recomendadas
@@ -89,7 +89,7 @@ export function TicketStatusForm({
   const isFinal = allowedNextStatuses.length === 0;
 
   return (
-    <form action={formAction} className="space-y-3 rounded border border-zinc-200 p-4 dark:border-zinc-800">
+    <form action={formAction} className="space-y-3 rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-sm shadow-black/25">
       <input type="hidden" name="ticketId" value={ticketId} />
       <div>
         <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Cambiar estado</h2>
@@ -107,7 +107,7 @@ export function TicketStatusForm({
             Siguiente estado
             <select
               name="nextStatus"
-              className="min-h-10 w-full rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+              className={fieldClassName}
             >
               {allowedNextStatuses.map((status) => (
                 <option key={status.value} value={status.value}>
@@ -121,7 +121,7 @@ export function TicketStatusForm({
             <textarea
               name="internalComment"
               rows={3}
-              className="min-h-24 w-full rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+              className={fieldClassName}
             />
           </label>
           <ActionMessage ok={state.ok} message={state.message} />
@@ -139,14 +139,14 @@ export function InternalCommentForm({ ticketId }: { ticketId: string }) {
   );
 
   return (
-    <form action={formAction} className="space-y-3 rounded border border-zinc-200 p-4 dark:border-zinc-800">
+    <form action={formAction} className="space-y-3 rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-sm shadow-black/25">
       <input type="hidden" name="ticketId" value={ticketId} />
       <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Comentario interno</h2>
       <textarea
         name="body"
         rows={4}
         required
-        className="min-h-24 w-full rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+        className={fieldClassName}
       />
       <ActionMessage ok={state.ok} message={state.message} />
       <SubmitButton label="Agregar comentario" pendingLabel="Agregando..." />
@@ -171,7 +171,7 @@ export function TechnicalNotesForm({
   );
 
   return (
-    <form action={formAction} className="space-y-3 rounded border border-zinc-200 p-4 dark:border-zinc-800">
+    <form action={formAction} className="space-y-3 rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-sm shadow-black/25">
       <input type="hidden" name="ticketId" value={ticketId} />
       <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Notas tecnicas</h2>
       <TextArea
@@ -205,7 +205,7 @@ export function AttachmentPlaceholderForm({ ticketId }: { ticketId: string }) {
   );
 
   return (
-    <form action={formAction} className="space-y-3 rounded border border-zinc-200 p-4 dark:border-zinc-800">
+    <form action={formAction} className="space-y-3 rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-sm shadow-black/25">
       <input type="hidden" name="ticketId" value={ticketId} />
       <div>
         <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Archivo privado</h2>
@@ -243,7 +243,7 @@ export function GenerateInvoiceForm({
       <input type="hidden" name="quoteId" value={quoteId} />
       <button
         type="submit"
-        className="min-h-10 w-full rounded bg-zinc-950 px-4 py-2 text-sm font-medium text-white dark:bg-zinc-100 dark:text-zinc-950 sm:w-auto"
+        className={primaryButtonClassName}
       >
         Generar factura
       </button>
@@ -271,7 +271,7 @@ function TextArea({
         name={name}
         rows={4}
         defaultValue={defaultValue}
-        className="min-h-24 w-full rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+        className={fieldClassName}
       />
     </label>
   );
@@ -296,7 +296,7 @@ function OperationalActionForm({
   );
 
   return (
-    <form action={formAction} className="space-y-2 rounded border border-zinc-100 p-3 dark:border-zinc-800">
+    <form action={formAction} className="space-y-2 rounded-2xl border border-white/10 bg-zinc-950 p-3">
       <input type="hidden" name="ticketId" value={ticketId} />
       <input type="hidden" name="nextStatus" value={nextStatus} />
       <input type="hidden" name="internalComment" value={comment} />
@@ -306,7 +306,7 @@ function OperationalActionForm({
       <button
         type="submit"
         disabled={Boolean(blockedReason)}
-        className="min-h-10 w-full rounded bg-zinc-950 px-4 py-2 text-left text-sm font-medium text-white disabled:cursor-not-allowed disabled:bg-zinc-300 disabled:text-zinc-600 dark:bg-zinc-100 dark:text-zinc-950 dark:disabled:bg-zinc-800 dark:disabled:text-zinc-400"
+        className={`${primaryButtonClassName} text-left disabled:border disabled:border-white/5 disabled:bg-zinc-900 disabled:text-zinc-500 disabled:shadow-none`}
       >
         {label}
       </button>
@@ -394,12 +394,18 @@ function SubmitButton({
     <button
       type="submit"
       disabled={pending}
-      className="min-h-10 w-full rounded bg-zinc-950 px-4 py-2 text-sm font-medium text-white disabled:bg-zinc-400 dark:bg-zinc-100 dark:text-zinc-950 dark:disabled:bg-zinc-700 dark:disabled:text-zinc-300 sm:w-auto"
+      className={`${primaryButtonClassName} disabled:cursor-not-allowed disabled:border disabled:border-white/5 disabled:bg-zinc-900 disabled:text-zinc-500 disabled:shadow-none sm:w-auto`}
     >
       {pending ? pendingLabel : label}
     </button>
   );
 }
+
+const fieldClassName =
+  "min-h-10 w-full rounded-2xl border border-white/10 bg-zinc-950 px-3 py-2 text-sm text-white placeholder:text-zinc-500 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/20";
+
+const primaryButtonClassName =
+  "min-h-10 w-full rounded-full bg-emerald-500 px-4 py-2 text-sm font-black text-black shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-400";
 
 function ActionMessage({ ok, message }: { ok: boolean; message: string }) {
   if (!message) {

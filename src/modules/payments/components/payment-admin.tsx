@@ -96,7 +96,7 @@ function FinancialSummary({
 
 function SummaryBox({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/70">
+    <div className="rounded-2xl border border-white/10 bg-zinc-950 p-4">
       <p className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">{label}</p>
       <p className="mt-2 break-words text-xl font-black text-zinc-950 dark:text-zinc-50">{value}</p>
     </div>
@@ -120,7 +120,7 @@ function RegisterPaymentForm({
   );
 
   return (
-    <form action={formAction} className="space-y-5 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm shadow-zinc-950/5 dark:border-zinc-800 dark:bg-zinc-950 lg:sticky lg:top-28">
+    <form action={formAction} className="space-y-5 rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/25 lg:sticky lg:top-28">
       <input type="hidden" name="ticketId" value={ticketId} />
       <input type="hidden" name="invoiceId" value={invoiceId} />
       <div>
@@ -133,7 +133,7 @@ function RegisterPaymentForm({
         </p>
       </div>
       {disabled ? (
-        <p className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-semibold text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">
+        <p className="rounded-2xl border border-emerald-400/30 bg-emerald-500/15 p-4 text-sm font-semibold text-emerald-100">
           Esta factura ya esta pagada.
         </p>
       ) : (
@@ -205,7 +205,7 @@ function PaymentHistory({
         <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Historial de pagos</h2>
       </div>
       {payments.length === 0 ? (
-        <p className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 text-sm text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-400">No hay pagos registrados.</p>
+        <p className="rounded-2xl border border-white/10 bg-zinc-950 p-4 text-sm text-zinc-400">No hay pagos registrados.</p>
       ) : (
         <RepairInventoryTable>
           <table className="w-full min-w-[720px] border-collapse text-left text-sm">
@@ -239,7 +239,7 @@ function PaymentHistory({
 function PaymentStatusBadge({ status }: { status: PaymentStatus }) {
   const classes: Record<PaymentStatus, string> = {
     UNPAID: "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100",
-    PARTIALLY_PAID: "border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-100",
+    PARTIALLY_PAID: "border-cyan-400/30 bg-cyan-500/15 text-cyan-100",
     PAID: "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100",
     REFUNDED: "border-zinc-200 bg-zinc-50 text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200",
     VOID: "border-zinc-200 bg-zinc-50 text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200",
@@ -259,7 +259,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="min-h-11 w-full rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-black text-white shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-600 disabled:bg-zinc-400 sm:w-auto"
+      className="min-h-11 w-full rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-black text-black shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:border disabled:border-white/5 disabled:bg-zinc-900 disabled:text-zinc-500 disabled:shadow-none sm:w-auto"
     >
       {pending ? "Registrando..." : "Registrar pago"}
     </button>
@@ -308,4 +308,4 @@ function paymentMethodLabel(method: PaymentMethod) {
 }
 
 const fieldClassName =
-  "min-h-11 rounded-2xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-950 placeholder:text-zinc-500 shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:ring-emerald-900";
+  "min-h-11 rounded-2xl border border-white/10 bg-zinc-950 px-3 py-2 text-sm text-white placeholder:text-zinc-500 shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/20";

@@ -38,7 +38,7 @@ export default async function AdminHomePage() {
   ]);
 
   return (
-    <main className="min-h-screen bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50">
+    <main className="min-h-screen bg-black text-zinc-50">
       <AdminNav />
 
       <RepairPageHero

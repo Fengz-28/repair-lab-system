@@ -30,7 +30,7 @@ export default async function AdminTicketsPage({
   const { tickets, filters, lowStockCount } = await getTicketListData(params);
 
   return (
-    <main className="min-h-screen bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50">
+    <main className="min-h-screen bg-black text-zinc-50">
       <AdminNav />
       <RepairPageHero
         eyebrow="Admin / Tickets"
@@ -46,7 +46,7 @@ export default async function AdminTicketsPage({
 
       <RepairContainer className="space-y-6 py-8 sm:space-y-8 sm:py-10">
         {lowStockCount > 0 ? (
-          <section className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 shadow-sm dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100">
+          <section className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-300/25 bg-amber-500/10 p-4 text-sm text-amber-100 shadow-sm shadow-black/20">
             <p>
               <span className="font-bold">Bajo stock:</span> tienes {lowStockCount} items en o por debajo del minimo.
             </p>
@@ -80,7 +80,7 @@ function TicketFilters({ filters }: { filters: TicketListData["filters"] }) {
             name="search"
             defaultValue={filters.search}
             placeholder="Ticket, cliente, telefono, equipo o problema"
-            className="min-h-11 rounded-full border border-zinc-300 bg-white px-4 py-2 text-sm placeholder:text-zinc-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+            className="min-h-11 rounded-full border border-white/10 bg-zinc-950 px-4 py-2 text-sm text-white placeholder:text-zinc-500 transition focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
           />
         </label>
         <SelectField
@@ -123,12 +123,12 @@ function TicketFilters({ filters }: { filters: TicketListData["filters"] }) {
         <div className="flex flex-col gap-2 sm:flex-row lg:items-end">
           <button
             type="submit"
-            className="min-h-11 rounded-full bg-emerald-500 px-5 py-2 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-600"
+            className="min-h-11 rounded-full border border-emerald-300/40 bg-emerald-500 px-5 py-2 text-sm font-black text-black shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-400 hover:shadow-cyan-400/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
           >
             Aplicar
           </button>
           <Link
-            className="min-h-11 rounded-full border border-zinc-300 px-5 py-2 text-center text-sm font-bold text-zinc-800 transition hover:border-emerald-300 hover:text-emerald-700 dark:border-zinc-700 dark:text-zinc-100"
+            className="min-h-11 rounded-full border border-white/15 bg-zinc-800 px-5 py-2 text-center text-sm font-bold text-zinc-100 transition hover:border-cyan-300/35 hover:bg-zinc-700 hover:text-white"
             href="/admin/tickets"
           >
             Limpiar
@@ -156,7 +156,7 @@ function SelectField({
       <select
         name={name}
         defaultValue={defaultValue}
-        className="min-h-11 rounded-full border border-zinc-300 bg-white px-4 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+        className="min-h-11 rounded-full border border-white/10 bg-zinc-950 px-4 py-2 text-sm text-white transition focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
       >
         {options.map(([value, optionLabel]) => (
           <option key={value} value={value}>
@@ -211,7 +211,7 @@ function TicketTable({ tickets }: { tickets: TicketListItem[] }) {
   return (
     <RepairTable>
         <table className="min-w-[980px] w-full border-collapse text-left text-sm">
-          <thead className="bg-zinc-50 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">
+          <thead className="bg-zinc-950/95 text-zinc-300">
             <tr>
               <TableHeader>Ticket</TableHeader>
               <TableHeader>Cliente</TableHeader>
@@ -224,7 +224,7 @@ function TicketTable({ tickets }: { tickets: TicketListItem[] }) {
           </thead>
           <tbody>
             {tickets.map((ticket) => (
-              <tr key={ticket.id} className="border-b border-zinc-100 last:border-0 dark:border-zinc-800">
+              <tr key={ticket.id} className="border-b border-white/10 transition hover:bg-cyan-500/5 last:border-0">
                 <td className="px-3 py-3 font-medium text-zinc-950 dark:text-zinc-50">{ticket.ticketNumber}</td>
                 <td className="px-3 py-3">
                   <p className="text-zinc-800 dark:text-zinc-200">{ticket.customerName}</p>
@@ -244,7 +244,7 @@ function TicketTable({ tickets }: { tickets: TicketListItem[] }) {
 }
 
 function TableHeader({ children }: { children: React.ReactNode }) {
-  return <th className="border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">{children}</th>;
+  return <th className="border-b border-white/10 px-3 py-2">{children}</th>;
 }
 
 function InfoBlock({ label, value }: { label: string; value: string }) {
@@ -265,7 +265,7 @@ function FinancialSummary({
 }) {
   if (!ticket.invoice || !ticket.financials) {
     return (
-      <div className={compact ? "text-xs text-zinc-500 dark:text-zinc-400" : "rounded border border-zinc-100 p-3 text-sm dark:border-zinc-800"}>
+      <div className={compact ? "text-xs text-zinc-500 dark:text-zinc-400" : "rounded-2xl border border-white/10 bg-zinc-950/70 p-3 text-sm"}>
         <p>Sin factura</p>
         {ticket.hasPendingQuote ? <p className="text-violet-600 dark:text-violet-300">Cotizacion pendiente</p> : null}
       </div>
@@ -273,7 +273,7 @@ function FinancialSummary({
   }
 
   return (
-    <div className={compact ? "space-y-1 text-xs" : "grid gap-2 rounded border border-zinc-100 p-3 text-sm dark:border-zinc-800 sm:grid-cols-3"}>
+    <div className={compact ? "space-y-1 text-xs" : "grid gap-2 rounded-2xl border border-white/10 bg-zinc-950/70 p-3 text-sm sm:grid-cols-3"}>
       <Metric label="Facturado" value={formatMoney(ticket.financials.invoiceTotal)} />
       <Metric label="Pagado" value={formatMoney(ticket.financials.paidTotal)} />
       <Metric
@@ -344,8 +344,8 @@ function ActionLink({
     <Link
       className={
         primary
-        ? "min-h-10 rounded-full bg-emerald-500 px-3 py-2 text-xs font-bold text-white shadow-sm shadow-emerald-500/20 transition hover:bg-emerald-600"
-        : "min-h-10 rounded-full border border-zinc-300 bg-white px-3 py-2 text-xs font-bold text-zinc-800 transition hover:border-emerald-300 hover:text-emerald-700 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
+        ? "min-h-10 rounded-full border border-emerald-300/40 bg-emerald-500 px-3 py-2 text-xs font-black text-black shadow-sm shadow-emerald-500/25 transition hover:bg-emerald-400"
+        : "min-h-10 rounded-full border border-white/15 bg-zinc-800 px-3 py-2 text-xs font-bold text-zinc-100 transition hover:border-cyan-300/35 hover:bg-zinc-700 hover:text-white"
       }
       href={href}
     >

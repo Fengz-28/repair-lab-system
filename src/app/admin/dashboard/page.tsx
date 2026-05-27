@@ -26,7 +26,7 @@ export default async function AdminDashboardPage() {
   const dashboard = await getDashboardData();
 
   return (
-    <main className="min-h-screen bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50">
+    <main className="min-h-screen bg-black text-zinc-50">
       <AdminNav />
       <RepairPageHero
         eyebrow="Admin / Dashboard"
@@ -128,7 +128,7 @@ function MetricPanel({
       <h2 className="text-base font-black text-zinc-950 dark:text-zinc-50">{title}</h2>
       <dl className="mt-3 grid gap-2 text-sm">
         {items.map(([label, value]) => (
-          <div key={label} className="flex flex-wrap justify-between gap-2 border-b border-zinc-100 pb-2 last:border-0 dark:border-zinc-800">
+          <div key={label} className="flex flex-wrap justify-between gap-2 border-b border-white/10 pb-2 last:border-0">
             <dt className="min-w-0 text-zinc-500 dark:text-zinc-400">{label}</dt>
             <dd className="break-words font-medium text-zinc-950 dark:text-zinc-50">{value}</dd>
           </div>
@@ -156,7 +156,7 @@ function PaymentsPanel({ dashboard }: { dashboard: DashboardData }) {
           <EmptyText>No hay pagos registrados.</EmptyText>
         ) : (
           dashboard.payments.byMethod.map((method) => (
-            <div key={method.method} className="flex flex-wrap justify-between gap-2 rounded border border-zinc-100 p-2 text-sm dark:border-zinc-800">
+          <div key={method.method} className="flex flex-wrap justify-between gap-2 rounded-2xl border border-white/10 bg-zinc-950/80 p-3 text-sm transition hover:border-cyan-300/30 hover:bg-zinc-900/80">
               <span>{paymentMethodLabel(method.method)}</span>
               <span className="break-words font-medium">{formatMoney(method.total)} ({method.count})</span>
             </div>
@@ -337,7 +337,7 @@ function ListPanel({
 
 function ListItem({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-zinc-100 bg-zinc-50 p-3 text-sm dark:border-zinc-800 dark:bg-zinc-900/70">
+    <div className="group flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-zinc-950/80 p-3 text-sm shadow-sm shadow-black/20 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-300/30 hover:bg-zinc-900/80 hover:shadow-lg hover:shadow-cyan-950/15">
       {children}
     </div>
   );
@@ -345,7 +345,7 @@ function ListItem({ children }: { children: React.ReactNode }) {
 
 function MetricRow({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="flex flex-wrap justify-between gap-2 border-b border-zinc-100 pb-2 last:border-0 dark:border-zinc-800">
+    <div className="flex flex-wrap justify-between gap-2 border-b border-white/10 pb-2 last:border-0">
       <dt className="text-zinc-500 dark:text-zinc-400">{label}</dt>
       <dd className="break-words font-medium text-zinc-950 dark:text-zinc-50">{value}</dd>
     </div>
@@ -354,7 +354,8 @@ function MetricRow({ label, value }: { label: string; value: string | number }) 
 
 function Badge({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rounded border border-zinc-200 bg-zinc-50 px-2 py-1 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200">
+    <span className="inline-flex items-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-500/10 px-2.5 py-1 text-xs font-bold text-cyan-100 shadow-sm shadow-black/20">
+      <span className="size-1.5 rounded-full bg-cyan-300 repair-status-dot" />
       {children}
     </span>
   );

@@ -25,7 +25,7 @@ export function IntakeForm() {
   );
 
   return (
-    <form action={formAction} className="space-y-6 rounded border border-zinc-200 p-4 dark:border-zinc-800 sm:space-y-8 sm:p-6">
+    <form action={formAction} className="space-y-6 rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-sm shadow-black/25 sm:space-y-8 sm:p-6">
       <FormSection title="Cliente">
         <TextInput label="Nombre" name="customer.firstName" required />
         <TextInput label="Apellido" name="customer.lastName" />
@@ -108,7 +108,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="min-h-11 w-full rounded bg-zinc-950 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:bg-zinc-400 sm:w-auto"
+      className="min-h-11 w-full rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-black text-black shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:border disabled:border-white/5 disabled:bg-zinc-900 disabled:text-zinc-500 disabled:shadow-none sm:w-auto"
     >
       {pending ? "Registrando..." : "Registrar recepcion"}
     </button>
@@ -151,7 +151,7 @@ function TextInput({
         name={name}
         type={type}
         required={required}
-        className="min-h-11 w-full rounded border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+        className={fieldClassName}
       />
     </div>
   );
@@ -176,7 +176,7 @@ function TextareaInput({
         name={name}
         required={required}
         rows={3}
-        className="min-h-24 w-full rounded border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+        className={fieldClassName}
       />
     </div>
   );
@@ -202,7 +202,7 @@ function SelectInput<T extends string>({
         id={name}
         name={name}
         defaultValue={defaultValue}
-        className="min-h-11 w-full rounded border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+        className={fieldClassName}
       >
         {options.map((option) => (
           <option key={option} value={option}>
@@ -213,3 +213,6 @@ function SelectInput<T extends string>({
     </div>
   );
 }
+
+const fieldClassName =
+  "min-h-11 w-full rounded-2xl border border-white/10 bg-zinc-950 px-3 py-2 text-sm text-white placeholder:text-zinc-500 shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/20";

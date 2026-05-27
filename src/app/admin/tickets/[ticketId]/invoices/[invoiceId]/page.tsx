@@ -55,7 +55,7 @@ export default async function TicketInvoicePage({
   const pdfHref = `/admin/tickets/${ticketId}/invoices/${invoice.id}/pdf`;
 
   return (
-    <main className="min-h-screen bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-100">
+    <main className="min-h-screen bg-black text-zinc-100">
       <AdminNav />
       <InvoiceHero
         ticketId={ticketId}
@@ -175,7 +175,7 @@ function StatusBadge({ label, value }: { label: string; value: string }) {
 function PaymentStatusBadge({ status }: { status: PaymentStatus }) {
   const classes: Record<PaymentStatus, string> = {
     UNPAID: "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100",
-    PARTIALLY_PAID: "border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-100",
+    PARTIALLY_PAID: "border-cyan-400/30 bg-cyan-500/15 text-cyan-100",
     PAID: "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100",
     REFUNDED: "border-zinc-200 bg-zinc-50 text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200",
     VOID: "border-zinc-200 bg-zinc-50 text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200",

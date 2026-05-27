@@ -52,15 +52,15 @@ export default async function AdminCustomersPage({
                 name="search"
                 defaultValue={search}
                 placeholder="Cliente, telefono, email, equipo o ticket"
-                className="mt-2 min-h-12 w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-950 placeholder:text-zinc-500 shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:ring-emerald-900"
+                className="mt-2 min-h-12 w-full rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm text-white placeholder:text-zinc-500 shadow-sm shadow-black/20 outline-none transition focus:border-cyan-300 focus:ring-2 focus:ring-cyan-500/20"
               />
             </div>
             <div className="grid gap-2 sm:flex sm:items-end lg:pt-7">
-              <button className="min-h-12 rounded-full bg-emerald-500 px-5 py-3 text-sm font-black text-white shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-600">
+              <button className="min-h-12 rounded-full border border-emerald-300/40 bg-emerald-500 px-5 py-3 text-sm font-black text-black shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-400 hover:shadow-cyan-400/20">
                 Buscar
               </button>
               <Link
-                className="inline-flex min-h-12 items-center justify-center rounded-full border border-zinc-200 bg-white px-5 py-3 text-sm font-black text-zinc-900 transition hover:border-emerald-300 hover:text-emerald-700 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
+                className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 bg-zinc-800 px-5 py-3 text-sm font-black text-zinc-100 transition hover:border-cyan-300/35 hover:bg-zinc-700 hover:text-white"
                 href="/admin/customers"
               >
                 Limpiar

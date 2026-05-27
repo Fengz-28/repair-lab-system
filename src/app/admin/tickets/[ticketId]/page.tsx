@@ -152,7 +152,7 @@ export default async function TicketDetailPage({
   }));
 
   return (
-    <main className="min-h-screen bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50">
+    <main className="min-h-screen bg-black text-zinc-50">
       <AdminNav />
       <TicketHero
         ticketNumber={ticket.ticketNumber}
@@ -212,7 +212,7 @@ export default async function TicketDetailPage({
                 {quotes.length > 0 ? (
                   <ul className="space-y-2">
                     {quotes.map((quote) => (
-                      <li key={quote.id} className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-zinc-100 bg-zinc-50 p-3 text-sm dark:border-zinc-800 dark:bg-zinc-900/70">
+                      <li key={quote.id} className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-zinc-950/75 p-3 text-sm shadow-sm shadow-black/20 transition hover:border-cyan-300/30 hover:bg-zinc-900/80">
                         <div className="min-w-0">
                           <p className="font-black text-zinc-950 dark:text-zinc-50">{quote.invoiceNumber}</p>
                           <p className="text-zinc-500 dark:text-zinc-400">
@@ -243,7 +243,7 @@ export default async function TicketDetailPage({
                   <RepairButton href={`/admin/tickets/${ticket.id}/invoices/${generatedInvoice.id}`} tone="secondary" size="sm">
                     Ver factura
                   </RepairButton>
-                  <a className="min-h-10 rounded-full border border-zinc-300 px-4 py-2 text-xs font-bold text-zinc-800 transition hover:border-emerald-300 hover:text-emerald-700 dark:border-zinc-700 dark:text-zinc-100" href={`/admin/tickets/${ticket.id}/invoices/${generatedInvoice.id}/pdf`}>
+                  <a className="min-h-10 rounded-full border border-white/15 bg-zinc-800 px-4 py-2 text-xs font-bold text-zinc-100 transition hover:border-cyan-300/35 hover:bg-zinc-700 hover:text-white" href={`/admin/tickets/${ticket.id}/invoices/${generatedInvoice.id}/pdf`}>
                     PDF factura
                   </a>
                 </div>
@@ -276,7 +276,7 @@ export default async function TicketDetailPage({
                 return (
                   <li
                     key={message.id}
-                    className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-zinc-100 bg-zinc-50 p-3 text-sm dark:border-zinc-800 dark:bg-zinc-900/70"
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-zinc-950/75 p-3 text-sm shadow-sm shadow-black/20 transition hover:border-cyan-300/30 hover:bg-zinc-900/80"
                   >
                     <div className="min-w-0">
                       <Link className="break-words font-medium text-zinc-950 underline dark:text-zinc-50" href={`/admin/messages/${message.id}`}>
@@ -287,13 +287,13 @@ export default async function TicketDetailPage({
                       </p>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded border border-zinc-200 bg-zinc-50 px-2 py-1 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200">
+                      <span className="rounded-full border border-white/10 bg-zinc-900 px-2.5 py-1 text-xs font-bold text-zinc-200">
                         {templateLabel(metadata.template)}
                       </span>
-                      <span className="rounded border border-zinc-200 bg-zinc-50 px-2 py-1 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200">
+                      <span className="rounded-full border border-white/10 bg-zinc-900 px-2.5 py-1 text-xs font-bold text-zinc-200">
                         {providerLabel(message.provider)}
                       </span>
-                      <span className="rounded border border-blue-200 bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-100">
+                      <span className="rounded border border-cyan-400/30 bg-cyan-500/15 px-2 py-1 text-xs font-medium text-cyan-100">
                         {messageStatusLabel(message.status, message.provider)}
                       </span>
                     </div>
@@ -309,7 +309,7 @@ export default async function TicketDetailPage({
             <ActivityFeed title="Historial de estado" eyebrow="Estados" empty={ticket.statusHistory.length === 0}>
               <ul className="space-y-2 text-sm">
                 {ticket.statusHistory.map((entry) => (
-                  <li key={entry.id} className="rounded-2xl border border-zinc-100 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-900/70">
+                  <li key={entry.id} className="rounded-2xl border border-white/10 bg-zinc-950/75 p-3 shadow-sm shadow-black/20 transition hover:border-cyan-300/30 hover:bg-zinc-900/80">
                 <p>
                   {entry.fromStatus ? ticketStatusLabel(entry.fromStatus) : "Inicio"} {"->"} {ticketStatusLabel(entry.toStatus)}
                 </p>
@@ -325,7 +325,7 @@ export default async function TicketDetailPage({
             <ActivityFeed title="Archivos privados" eyebrow="Adjuntos" empty={ticket.files.length === 0}>
               <ul className="space-y-2 text-sm">
                 {ticket.files.map((file) => (
-                  <li key={file.id} className="rounded-2xl border border-zinc-100 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-900/70">
+                  <li key={file.id} className="rounded-2xl border border-white/10 bg-zinc-950/75 p-3 shadow-sm shadow-black/20 transition hover:border-cyan-300/30 hover:bg-zinc-900/80">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div className="min-w-0">
                         <p className="break-words font-medium">{file.originalName}</p>
@@ -334,7 +334,7 @@ export default async function TicketDetailPage({
                         </p>
                       </div>
                       <a
-                        className="rounded-full border border-emerald-300 px-3 py-1 text-xs font-bold text-emerald-700 transition hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-200 dark:hover:bg-emerald-950"
+                        className="rounded-full border border-emerald-300/40 bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-100 transition hover:bg-emerald-500/20"
                         href={`/admin/files/${file.id}`}
                         target="_blank"
                         rel="noreferrer"
@@ -380,7 +380,7 @@ export default async function TicketDetailPage({
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">
                   Comparte este enlace con el cliente para consultar el estado.
                 </p>
-                <a className="block break-all rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-bold text-emerald-900 underline dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100" href={`/track/${ticket.publicAccessToken}`} target="_blank" rel="noreferrer">
+                <a className="block break-all rounded-2xl border border-emerald-300/25 bg-emerald-500/10 px-3 py-2 text-sm font-bold text-emerald-100 underline transition hover:border-emerald-300/45 hover:bg-emerald-500/15" href={`/track/${ticket.publicAccessToken}`} target="_blank" rel="noreferrer">
                   /track/{ticket.publicAccessToken}
                 </a>
               </div>
@@ -389,12 +389,12 @@ export default async function TicketDetailPage({
             <TicketSidebarCard title="Descargas" eyebrow="PDFs">
               <div className="grid gap-2">
                 {quotes[0] ? (
-                  <a className="min-h-10 rounded-full border border-zinc-300 px-4 py-2 text-center text-xs font-bold text-zinc-800 transition hover:border-emerald-300 hover:text-emerald-700 dark:border-zinc-700 dark:text-zinc-100" href={`/admin/tickets/${ticket.id}/quotes/${quotes[0].id}/pdf`}>
+                  <a className="min-h-10 rounded-full border border-white/15 bg-zinc-800 px-4 py-2 text-center text-xs font-bold text-zinc-100 transition hover:border-cyan-300/35 hover:bg-zinc-700 hover:text-white" href={`/admin/tickets/${ticket.id}/quotes/${quotes[0].id}/pdf`}>
                     PDF cotizacion
                   </a>
                 ) : null}
                 {generatedInvoice ? (
-                  <a className="min-h-10 rounded-full border border-zinc-300 px-4 py-2 text-center text-xs font-bold text-zinc-800 transition hover:border-emerald-300 hover:text-emerald-700 dark:border-zinc-700 dark:text-zinc-100" href={`/admin/tickets/${ticket.id}/invoices/${generatedInvoice.id}/pdf`}>
+                  <a className="min-h-10 rounded-full border border-white/15 bg-zinc-800 px-4 py-2 text-center text-xs font-bold text-zinc-100 transition hover:border-cyan-300/35 hover:bg-zinc-700 hover:text-white" href={`/admin/tickets/${ticket.id}/invoices/${generatedInvoice.id}/pdf`}>
                     PDF factura
                   </a>
                 ) : null}
@@ -436,16 +436,19 @@ function StatusBadge({
   tone: "ticket" | "quote" | "invoice";
 }) {
   const classes = {
-    ticket:
-      "border-violet-200 bg-violet-50 text-violet-800 dark:border-violet-900 dark:bg-violet-950 dark:text-violet-100",
-    quote:
-      "border-sky-200 bg-sky-50 text-sky-800 dark:border-sky-900 dark:bg-sky-950 dark:text-sky-100",
-    invoice:
-      "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100",
+    ticket: "border-violet-400/35 bg-violet-500/15 text-violet-100",
+    quote: "border-cyan-400/35 bg-cyan-500/15 text-cyan-100",
+    invoice: "border-emerald-400/35 bg-emerald-500/15 text-emerald-100",
+  }[tone];
+  const dotClasses = {
+    ticket: "bg-violet-300",
+    quote: "bg-cyan-300",
+    invoice: "bg-emerald-300",
   }[tone];
 
   return (
-    <span className={`inline-flex items-center gap-2 rounded border px-3 py-1 text-xs font-medium ${classes}`}>
+    <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-bold shadow-sm shadow-black/20 ${classes}`}>
+      <span className={`size-1.5 rounded-full repair-status-dot ${dotClasses}`} />
       <span className="uppercase">{label}</span>
       <span>{value}</span>
     </span>

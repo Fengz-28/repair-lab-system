@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #050816;
+  --background: #030303;
   --foreground: #f8fafc;
-  --surface: #0b1120;
-  --surface-2: #111827;
-  --surface-3: #172033;
-  --border-soft: rgba(255, 255, 255, 0.1);
-  --border-accent: rgba(16, 185, 129, 0.14);
+  --surface: #09090b;
+  --surface-2: #121214;
+  --surface-3: #18181b;
+  --border-soft: rgba(255, 255, 255, 0.12);
+  --border-muted: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(16, 185, 129, 0.22);
 }
 
 @theme inline {
@@ -26,26 +27,60 @@ body {
 input,
 textarea,
 select {
-  background: #0b1120;
+  background: #09090b;
   color: #f8fafc;
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--border-soft);
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: #94a3b8;
+  color: #71717a;
 }
 
 html,
 body {
   min-height: 100%;
+  color-scheme: dark;
 }
 
 body {
   background:
-    radial-gradient(circle at 20% 0%, rgba(16, 185, 129, 0.12), transparent 28%),
-    radial-gradient(circle at 80% 10%, rgba(34, 211, 238, 0.1), transparent 26%),
-    linear-gradient(180deg, #050816 0%, #07111f 48%, #050816 100%);
+    radial-gradient(circle at 18% 0%, rgba(34, 211, 238, 0.08), transparent 26%),
+    radial-gradient(circle at 82% 4%, rgba(16, 185, 129, 0.07), transparent 24%),
+    linear-gradient(180deg, #020204 0%, #050505 46%, #020204 100%);
+}
+
+@keyframes repair-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes repair-status-pulse {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.18);
+  }
+}
+
+.repair-animate-in {
+  animation: repair-fade-up 360ms ease-out both;
+}
+
+.repair-status-dot {
+  animation: repair-status-pulse 2.8s ease-in-out infinite;
 }
 
 ::selection {
@@ -58,25 +93,33 @@ body {
 .bg-white\/95,
 .bg-zinc-50,
 .bg-zinc-100 {
-  background-color: rgba(17, 24, 39, 0.9) !important;
+  background-color: rgba(18, 18, 20, 0.92) !important;
 }
 
 .bg-zinc-900,
 .bg-zinc-950,
 .bg-black {
-  background-color: #050816 !important;
+  background-color: #030303 !important;
+}
+
+.dark .dark\:bg-zinc-900,
+.dark .dark\:bg-zinc-900\/70,
+.dark .dark\:bg-zinc-950,
+.dark .dark\:bg-zinc-950\/70,
+.dark .dark\:bg-zinc-950\/90,
+.dark .dark\:bg-zinc-950\/95 {
+  background-color: #09090b !important;
 }
 
 .bg-emerald-50,
 .bg-emerald-50\/80,
 .bg-cyan-50,
-.bg-blue-50,
 .bg-sky-50,
 .bg-violet-50,
 .bg-amber-50,
 .bg-red-50,
 .bg-green-50 {
-  background-color: rgba(17, 32, 51, 0.82) !important;
+  background-color: rgba(18, 18, 20, 0.88) !important;
 }
 
 .border-zinc-100,
@@ -90,7 +133,6 @@ body {
 .border-emerald-200,
 .border-emerald-300,
 .border-cyan-200,
-.border-blue-200,
 .border-sky-200,
 .border-violet-200,
 .border-amber-200,
@@ -100,8 +142,7 @@ body {
 }
 
 .text-zinc-950,
-.text-zinc-900,
-.text-black {
+.text-zinc-900 {
   color: #ffffff !important;
 }
 
@@ -122,7 +163,6 @@ body {
 }
 
 .text-cyan-800,
-.text-blue-800,
 .text-sky-800 {
   color: #67e8f9 !important;
 }
@@ -148,5 +188,44 @@ body {
 
 table thead,
 .bg-zinc-900\/70 {
-  background-color: rgba(23, 32, 51, 0.92) !important;
+  background-color: rgba(24, 24, 27, 0.92) !important;
+}
+
+.bg-zinc-900\/70,
+.bg-zinc-950\/90,
+.bg-zinc-950\/95 {
+  background-color: rgba(9, 9, 11, 0.92) !important;
+}
+
+button.bg-zinc-950,
+button.bg-black,
+a.bg-zinc-950,
+a.bg-black {
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  background-color: #27272a !important;
+  color: #f4f4f5 !important;
+}
+
+button.bg-zinc-950:hover,
+button.bg-black:hover,
+a.bg-zinc-950:hover,
+a.bg-black:hover {
+  background-color: #3f3f46 !important;
+}
+
+.disabled\:bg-zinc-400:disabled,
+.disabled\:bg-zinc-300:disabled,
+.disabled\:bg-zinc-700:disabled,
+.dark\:disabled\:bg-zinc-700:disabled,
+.dark\:disabled\:bg-zinc-800:disabled {
+  background-color: #3f3f46 !important;
+}
+
+.disabled\:text-zinc-100:disabled,
+.disabled\:text-zinc-300:disabled,
+.disabled\:text-zinc-500:disabled,
+.disabled\:text-zinc-600:disabled,
+.dark\:disabled\:text-zinc-300:disabled,
+.dark\:disabled\:text-zinc-400:disabled {
+  color: #71717a !important;
 }

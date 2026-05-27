@@ -47,10 +47,10 @@ export function RepairNavbar({
   } | null;
 }) {
   return (
-    <div className="sticky top-0 z-30 border-b border-zinc-200/80 bg-white/95 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/95">
+    <div className="sticky top-0 z-30 border-b border-white/10 bg-black/90 shadow-sm shadow-black/30 backdrop-blur-xl">
       <RepairContainer className="flex flex-col gap-4 py-4 lg:flex-row lg:items-center lg:justify-between">
         <Link className="group flex items-center gap-3" href="/admin">
-          <span className="grid size-12 place-items-center rounded-2xl bg-emerald-500 text-lg font-black text-white shadow-lg shadow-emerald-500/20 transition group-hover:scale-105">
+            <span className="grid size-12 place-items-center rounded-2xl bg-emerald-500 text-lg font-black text-black shadow-lg shadow-emerald-500/25 transition group-hover:scale-105 group-hover:shadow-cyan-400/20">
             R
           </span>
           <span>
@@ -67,7 +67,7 @@ export function RepairNavbar({
           {links.map((link) => (
             <Link
               key={link.href}
-              className="min-h-11 shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold text-zinc-700 transition hover:bg-emerald-50 hover:text-emerald-700 dark:text-zinc-200 dark:hover:bg-emerald-950 dark:hover:text-emerald-200"
+              className="min-h-11 shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold text-zinc-200 transition hover:bg-emerald-500/10 hover:text-emerald-200"
               href={link.href}
             >
               {link.label}
@@ -77,7 +77,7 @@ export function RepairNavbar({
 
         {user ? (
           <div className="flex flex-wrap items-center gap-3">
-            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-2 dark:border-zinc-800 dark:bg-zinc-900">
+            <div className="rounded-2xl border border-white/10 bg-zinc-900/80 px-4 py-2">
               <p className="max-w-48 truncate text-sm font-semibold text-zinc-950 dark:text-zinc-50">
                 {user.name}
               </p>
@@ -97,7 +97,7 @@ export function RepairNavbar({
 
 export function RepairDropdownMenu({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-b-3xl border border-zinc-200 bg-white p-5 shadow-2xl shadow-zinc-950/10 dark:border-zinc-800 dark:bg-zinc-950">
+    <div className="rounded-b-3xl border border-white/10 bg-zinc-950 p-5 shadow-2xl shadow-black/40">
       <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600">{title}</p>
       <div className="grid gap-2">{children}</div>
     </div>
@@ -116,8 +116,8 @@ export function RepairPageHero({
   actions?: React.ReactNode;
 }) {
   return (
-    <section className="relative overflow-hidden bg-zinc-950 text-white">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.22),transparent_28%),radial-gradient(circle_at_80%_0%,rgba(6,182,212,0.18),transparent_30%),linear-gradient(135deg,rgba(15,23,42,0.2),rgba(0,0,0,0.8))]" />
+    <section className="relative overflow-hidden bg-black text-white">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.18),transparent_28%),radial-gradient(circle_at_80%_0%,rgba(6,182,212,0.10),transparent_30%),linear-gradient(135deg,rgba(24,24,27,0.2),rgba(0,0,0,0.88))]" />
       <div className="absolute inset-0 opacity-30 [background-image:linear-gradient(120deg,transparent_0,transparent_48%,rgba(255,255,255,0.08)_49%,transparent_50%)] [background-size:42px_42px]" />
       <RepairContainer className="relative py-12 sm:py-16">
         {eyebrow ? (
@@ -166,8 +166,9 @@ export function RepairCard({
 }) {
   return (
     <div
-      className={`rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm shadow-zinc-950/5 transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-950/10 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-emerald-800 ${className}`}
+      className={`repair-animate-in relative overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(24,24,27,0.96),rgba(3,7,18,0.9))] p-5 shadow-sm shadow-black/30 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-950/20 ${className}`}
     >
+      <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/35 to-transparent" />
       {children}
     </div>
   );
@@ -181,7 +182,8 @@ export function RepairPanel({
   className?: string;
 }) {
   return (
-    <div className={`rounded-2xl border border-zinc-200 bg-white/90 p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-950/90 ${className}`}>
+    <div className={`repair-animate-in relative overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(18,18,20,0.96),rgba(3,3,3,0.92))] p-5 shadow-sm shadow-black/30 backdrop-blur ${className}`}>
+      <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-emerald-300/25 to-transparent" />
       {children}
     </div>
   );
@@ -201,14 +203,14 @@ export function RepairButton({
   size?: "sm" | "md";
 }) {
   const toneClass = {
-    primary: "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 hover:bg-emerald-600",
+    primary: "border border-emerald-300/40 bg-emerald-500 text-black shadow-lg shadow-emerald-500/25 hover:bg-emerald-400 hover:shadow-cyan-400/20",
     secondary:
-      "border border-zinc-200 bg-white text-zinc-900 hover:border-emerald-300 hover:text-emerald-700 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100",
+      "border border-white/15 bg-zinc-800 text-zinc-50 shadow-sm shadow-black/20 hover:border-cyan-300/35 hover:bg-zinc-700 hover:text-white",
     ghost:
-      "border border-zinc-200 bg-zinc-50 text-zinc-800 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100",
+      "border border-white/15 bg-zinc-900/90 text-zinc-100 shadow-sm shadow-black/20 hover:border-white/25 hover:bg-zinc-800 hover:text-white",
   }[tone];
   const sizeClass = size === "sm" ? "min-h-10 px-4 py-2 text-xs" : "min-h-11 px-5 py-2.5 text-sm";
-  const className = `inline-flex items-center justify-center rounded-full font-bold transition focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 dark:focus:ring-offset-zinc-950 ${toneClass} ${sizeClass}`;
+  const className = `inline-flex items-center justify-center rounded-full font-bold transition duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:cursor-not-allowed disabled:border-white/5 disabled:bg-zinc-900 disabled:text-zinc-500 ${toneClass} ${sizeClass}`;
 
   if (as === "button") {
     return (
@@ -233,20 +235,33 @@ export function RepairBadge({
   tone?: "neutral" | "emerald" | "cyan" | "warning" | "danger" | "violet";
 }) {
   const classes = {
-    neutral: "border-zinc-200 bg-zinc-50 text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200",
-    emerald: "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100",
-    cyan: "border-cyan-200 bg-cyan-50 text-cyan-800 dark:border-cyan-900 dark:bg-cyan-950 dark:text-cyan-100",
-    warning: "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100",
-    danger: "border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-100",
-    violet: "border-violet-200 bg-violet-50 text-violet-800 dark:border-violet-900 dark:bg-violet-950 dark:text-violet-100",
+    neutral: "border-white/10 bg-zinc-900 text-zinc-200",
+    emerald: "border-emerald-400/30 bg-emerald-500/15 text-emerald-100",
+    cyan: "border-cyan-400/30 bg-cyan-500/12 text-cyan-100",
+    warning: "border-amber-400/35 bg-amber-500/15 text-amber-100",
+    danger: "border-red-400/35 bg-red-500/15 text-red-100",
+    violet: "border-violet-400/35 bg-violet-500/15 text-violet-100",
+  }[tone];
+  const dotClasses = {
+    neutral: "bg-zinc-400",
+    emerald: "bg-emerald-300",
+    cyan: "bg-cyan-300",
+    warning: "bg-amber-300",
+    danger: "bg-red-300",
+    violet: "bg-violet-300",
   }[tone];
 
-  return <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-bold ${classes}`}>{children}</span>;
+  return (
+    <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-bold shadow-sm shadow-black/20 ${classes}`}>
+      <span className={`size-1.5 rounded-full ${dotClasses} ${tone === "neutral" ? "" : "repair-status-dot"}`} />
+      {children}
+    </span>
+  );
 }
 
 export function RepairTable({ children }: { children: React.ReactNode }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
+    <div className="overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(18,18,20,0.96),rgba(3,3,3,0.92))] shadow-sm shadow-black/30">
       <div className="overflow-x-auto">{children}</div>
     </div>
   );
@@ -267,6 +282,12 @@ export function RepairStatCard({
     warning: "from-amber-500/18",
     neutral: "from-zinc-500/12",
   }[tone];
+  const bar = {
+    emerald: "from-emerald-400 to-cyan-300",
+    cyan: "from-cyan-300 to-sky-400",
+    warning: "from-amber-300 to-emerald-300",
+    neutral: "from-zinc-500 to-zinc-300",
+  }[tone];
 
   return (
     <RepairCard className={`relative overflow-hidden bg-gradient-to-br ${glow} to-transparent`}>
@@ -274,6 +295,9 @@ export function RepairStatCard({
       <p className="mt-3 break-words text-3xl font-black tracking-tight text-zinc-950 dark:text-zinc-50">
         {value}
       </p>
+      <div className="mt-5 h-1 overflow-hidden rounded-full bg-white/5">
+        <div className={`h-full w-2/3 rounded-full bg-gradient-to-r ${bar} transition-[width] duration-700`} />
+      </div>
     </RepairCard>
   );
 }
@@ -289,7 +313,7 @@ export function RepairEmptyState({
 }) {
   return (
     <RepairPanel className="py-10 text-center">
-      <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-200">
+      <div className="mx-auto grid size-14 place-items-center rounded-2xl border border-emerald-400/20 bg-emerald-500/15 text-emerald-200">
         RL
       </div>
       <h2 className="mt-4 text-lg font-black text-zinc-950 dark:text-zinc-50">{title}</h2>
@@ -300,7 +324,7 @@ export function RepairEmptyState({
 }
 
 export function RepairSearchBar({ children }: { children: React.ReactNode }) {
-  return <RepairPanel className="bg-white shadow-lg shadow-zinc-950/5 dark:bg-zinc-950">{children}</RepairPanel>;
+  return <RepairPanel className="shadow-lg shadow-black/20">{children}</RepairPanel>;
 }
 
 export function RepairActionBar({ children }: { children: React.ReactNode }) {

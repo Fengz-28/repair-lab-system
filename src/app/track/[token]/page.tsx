@@ -35,7 +35,7 @@ export default async function PublicTrackingPage({
   }
 
   return (
-    <main className="min-h-screen bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-100">
+    <main className="min-h-screen bg-black text-zinc-100">
       <ClientTrackingHero
         ticketNumber={data.ticket.ticketNumber}
         statusLabel={data.ticket.statusLabel}
@@ -86,7 +86,7 @@ function RateLimitedPage({ retryAfterSeconds }: { retryAfterSeconds: number }) {
 
 function InvalidTokenPage() {
   return (
-    <main className="min-h-screen bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-100">
+    <main className="min-h-screen bg-black text-zinc-100">
       <ClientTrackingHero />
       <RepairContainer className="-mt-8 relative z-10 pb-12">
         <RepairEmptyState

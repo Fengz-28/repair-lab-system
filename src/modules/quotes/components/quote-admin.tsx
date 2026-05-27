@@ -75,7 +75,7 @@ function GuidedQuoteFlow({
   quote?: Quote;
 }) {
   return (
-    <section className="space-y-5 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm shadow-zinc-950/5 dark:border-zinc-800 dark:bg-zinc-950 sm:p-6">
+    <section className="space-y-5 rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/25 sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0 space-y-2">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
@@ -104,7 +104,7 @@ function GuidedQuoteFlow({
           />
         </div>
       </div>
-      <div className="rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm text-cyan-900 dark:border-cyan-900 dark:bg-cyan-950/60 dark:text-cyan-100">
+      <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-4 text-sm text-emerald-100">
         <p className="font-black">Siguiente paso recomendado</p>
         <p>{getRecommendedStep(quote)}</p>
       </div>
@@ -116,7 +116,7 @@ function CreateQuoteForm({ ticketId }: { ticketId: string }) {
   const [state, formAction] = useActionState(createQuoteAction, initialQuoteActionState);
 
   return (
-    <form id="crear-cotizacion" action={formAction} className="space-y-5 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm shadow-zinc-950/5 dark:border-zinc-800 dark:bg-zinc-950 sm:p-6">
+    <form id="crear-cotizacion" action={formAction} className="space-y-5 rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/25 sm:p-6">
       <input type="hidden" name="ticketId" value={ticketId} />
       <div>
         <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
@@ -183,7 +183,7 @@ function QuoteList({
   return (
     <section className="space-y-4">
       {quotes.map((quote) => (
-        <article key={quote.id} className="space-y-5 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm shadow-zinc-950/5 transition hover:border-emerald-300 hover:shadow-2xl hover:shadow-emerald-950/10 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-emerald-800 sm:p-6">
+        <article key={quote.id} className="space-y-5 rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/25 transition hover:border-emerald-400/40 hover:bg-zinc-900/80 hover:shadow-2xl hover:shadow-emerald-950/10 sm:p-6">
           <div className="flex flex-wrap justify-between gap-3">
             <div className="min-w-0">
               <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">Cotizacion</p>
@@ -216,7 +216,7 @@ function QuoteList({
               catalogItems={catalogItems}
             />
           ) : (
-            <p className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 text-sm font-semibold text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
+            <p className="rounded-2xl border border-white/10 bg-zinc-950 p-4 text-sm font-semibold text-zinc-300">
               Esta cotizacion ya no se puede editar porque fue enviada, aprobada, rechazada o expirada.
             </p>
           )}
@@ -280,7 +280,7 @@ function AddQuoteItemForm({
   const [state, formAction] = useActionState(addQuoteItemAction, initialQuoteActionState);
 
   return (
-    <form action={formAction} className="grid gap-4 rounded-2xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/70">
+    <form action={formAction} className="grid gap-4 rounded-2xl border border-white/10 bg-zinc-950 p-4">
       <input type="hidden" name="ticketId" value={ticketId} />
       <input type="hidden" name="quoteId" value={quoteId} />
       <div>
@@ -378,7 +378,7 @@ function QuoteStatusForm({ ticketId, quote }: { ticketId: string; quote: Quote }
 
   if (quote.allowedNextStatuses.length === 0) {
     return (
-      <p className="rounded border border-zinc-200 bg-zinc-50 p-3 text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
+      <p className="rounded border border-white/10 bg-zinc-950 p-3 text-sm text-zinc-300">
         Esta cotizacion ya esta en un estado final.
       </p>
     );
@@ -430,7 +430,7 @@ function SubmitButton({
     <button
       type="submit"
       disabled={pending}
-      className="min-h-11 w-full rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-black text-white shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-600 disabled:bg-zinc-400 sm:w-fit"
+      className="min-h-11 w-full rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-black text-black shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:border disabled:border-white/5 disabled:bg-zinc-900 disabled:text-zinc-500 disabled:shadow-none sm:w-fit"
     >
       {pending ? pendingLabel : label}
     </button>
@@ -439,15 +439,15 @@ function SubmitButton({
 
 function StatusBadge({ status }: { status: InvoiceStatus }) {
   const classes: Record<InvoiceStatus, string> = {
-    DRAFT: "border-zinc-300 bg-zinc-50 text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200",
-    SENT: "border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-100",
+    DRAFT: "border-white/10 bg-zinc-900 text-zinc-200",
+    SENT: "border-cyan-400/30 bg-cyan-500/15 text-cyan-100",
     APPROVED: "border-green-200 bg-green-50 text-green-800 dark:border-green-900 dark:bg-green-950 dark:text-green-100",
     REJECTED: "border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-100",
     EXPIRED: "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100",
-    CANCELLED: "border-zinc-300 bg-zinc-50 text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200",
+    CANCELLED: "border-white/10 bg-zinc-900 text-zinc-200",
     PAID: "border-green-200 bg-green-50 text-green-800 dark:border-green-900 dark:bg-green-950 dark:text-green-100",
-    PARTIALLY_PAID: "border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-100",
-    UNPAID: "border-zinc-300 bg-zinc-50 text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200",
+    PARTIALLY_PAID: "border-cyan-400/30 bg-cyan-500/15 text-cyan-100",
+    UNPAID: "border-white/10 bg-zinc-900 text-zinc-200",
   };
 
   return (
@@ -468,8 +468,8 @@ function StatusPill({
 }) {
   const classes =
     tone === "ticket"
-      ? "border-violet-200 bg-violet-50 text-violet-800 dark:border-violet-900 dark:bg-violet-950 dark:text-violet-100"
-      : "border-sky-200 bg-sky-50 text-sky-800 dark:border-sky-900 dark:bg-sky-950 dark:text-sky-100";
+      ? "border-violet-400/35 bg-violet-500/15 text-violet-100"
+      : "border-cyan-400/30 bg-cyan-500/15 text-cyan-100";
 
   return (
     <div className={`rounded-2xl border px-4 py-3 ${classes}`}>
@@ -582,4 +582,4 @@ function ActionMessage({ ok, message }: { ok: boolean; message: string }) {
 }
 
 const fieldClassName =
-  "min-h-11 rounded-2xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-950 placeholder:text-zinc-500 shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:ring-emerald-900";
+  "min-h-11 rounded-2xl border border-white/10 bg-zinc-950 px-3 py-2 text-sm text-white placeholder:text-zinc-500 shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/20";

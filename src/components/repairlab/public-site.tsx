@@ -26,7 +26,7 @@ export function PublicTopbar() {
 
 export function PublicNavbar() {
   return (
-    <div className="sticky top-0 z-30 border-b border-zinc-200/80 bg-white/95 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/95">
+    <div className="sticky top-0 z-30 border-b border-white/10 bg-zinc-950/95 shadow-sm shadow-black/30 backdrop-blur">
       <RepairContainer className="flex flex-col gap-4 py-4 lg:flex-row lg:items-center lg:justify-between">
         <Link className="group flex items-center gap-3" href="/">
           <span className="grid size-12 place-items-center rounded-2xl bg-emerald-500 text-lg font-black text-white shadow-lg shadow-emerald-500/20 transition group-hover:scale-105">
@@ -46,13 +46,13 @@ export function PublicNavbar() {
           {publicLinks.map((link) => (
             <Link
               key={link.href}
-              className="min-h-11 shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold text-zinc-700 transition hover:bg-emerald-50 hover:text-emerald-700 dark:text-zinc-200 dark:hover:bg-emerald-950 dark:hover:text-emerald-200"
+              className="min-h-11 shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold text-zinc-200 transition hover:bg-emerald-500/10 hover:text-emerald-200"
               href={link.href}
             >
               {link.label}
             </Link>
           ))}
-          <Link className="min-h-11 shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold text-zinc-700 transition hover:bg-cyan-50 hover:text-cyan-700 dark:text-zinc-200 dark:hover:bg-cyan-950 dark:hover:text-cyan-200" href="/track/demo">
+          <Link className="min-h-11 shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold text-zinc-200 transition hover:bg-cyan-500/10 hover:text-cyan-200" href="/track/demo">
             Portal cliente
           </Link>
         </nav>
@@ -101,8 +101,8 @@ export function PublicHero({
   badge?: string;
 }) {
   return (
-    <section className="relative overflow-hidden bg-zinc-950 text-white">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.26),transparent_30%),radial-gradient(circle_at_85%_0%,rgba(6,182,212,0.18),transparent_30%),linear-gradient(135deg,rgba(15,23,42,0.1),rgba(0,0,0,0.88))]" />
+    <section className="relative overflow-hidden bg-black text-white">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.20),transparent_30%),radial-gradient(circle_at_85%_0%,rgba(6,182,212,0.10),transparent_30%),linear-gradient(135deg,rgba(24,24,27,0.16),rgba(0,0,0,0.9))]" />
       <div className="absolute inset-0 opacity-25 [background-image:linear-gradient(120deg,transparent_0,transparent_47%,rgba(255,255,255,0.08)_48%,transparent_50%)] [background-size:46px_46px]" />
       <RepairContainer className="relative grid gap-10 py-14 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
         <div>

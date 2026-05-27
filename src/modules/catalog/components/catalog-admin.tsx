@@ -66,7 +66,7 @@ function CreateCatalogItemForm() {
     <form
       id="crear-item"
       action={formAction}
-      className="space-y-6 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm shadow-zinc-950/5 dark:border-zinc-800 dark:bg-zinc-950 sm:p-6"
+      className="space-y-6 rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/25 sm:p-6"
     >
       <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
         <div>
@@ -337,7 +337,7 @@ function InventoryMovements({
       </p>
       <div className="grid gap-2">
         {movements.map((movement) => (
-          <div key={movement.id} className="rounded-2xl border border-zinc-200 bg-white p-3 text-sm dark:border-zinc-800 dark:bg-zinc-950">
+          <div key={movement.id} className="rounded-2xl border border-white/10 bg-zinc-950 p-3 text-sm">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="font-black text-zinc-950 dark:text-zinc-50">
                 {inventoryMovementLabel(movement.type)} {movement.quantity}
@@ -433,7 +433,7 @@ function CheckField({
 
 function StockMetric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-950">
+    <div className="rounded-2xl border border-white/10 bg-zinc-950 p-3">
       <p className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">{label}</p>
       <p className="mt-1 break-words text-sm font-black text-zinc-950 dark:text-zinc-50">{value}</p>
     </div>
@@ -530,14 +530,14 @@ function SubmitButton({
   const { pending } = useFormStatus();
   const toneClass =
     tone === "secondary"
-      ? "border border-zinc-200 bg-white text-zinc-900 hover:border-emerald-300 hover:text-emerald-700 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
-      : "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 hover:bg-emerald-600";
+      ? "border border-white/10 bg-zinc-800 text-zinc-100 hover:bg-zinc-700"
+      : "bg-emerald-500 text-black shadow-lg shadow-emerald-500/20 hover:bg-emerald-400";
 
   return (
     <button
       type="submit"
       disabled={pending}
-      className={`min-h-11 rounded-full px-5 py-2.5 text-sm font-black transition disabled:cursor-not-allowed disabled:bg-zinc-400 disabled:text-zinc-100 ${toneClass}`}
+      className={`min-h-11 rounded-full px-5 py-2.5 text-sm font-black transition disabled:cursor-not-allowed disabled:border disabled:border-white/5 disabled:bg-zinc-900 disabled:text-zinc-500 disabled:shadow-none ${toneClass}`}
     >
       {pending ? pendingLabel : label}
     </button>
@@ -564,7 +564,7 @@ function ActionMessage({ ok, message }: { ok: boolean; message: string }) {
 }
 
 const fieldClassName =
-  "min-h-12 rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-950 placeholder:text-zinc-500 shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:ring-emerald-900";
+  "min-h-12 rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm text-white placeholder:text-zinc-500 shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/20";
 
 const smallFieldClassName =
-  "min-h-11 rounded-2xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-950 placeholder:text-zinc-500 shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:ring-emerald-900";
+  "min-h-11 rounded-2xl border border-white/10 bg-zinc-950 px-3 py-2 text-sm text-white placeholder:text-zinc-500 shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/20";
