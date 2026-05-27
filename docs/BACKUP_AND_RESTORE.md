@@ -121,6 +121,38 @@ storage/private -> storage/private.before-restore
 4. Confirmar que queda `storage/private`.
 5. Levantar la app y probar `/admin/files/[fileAssetId]`.
 
+## Restore test controlado
+
+Ultima prueba documentada: 2026-05-27, America/Costa_Rica.
+
+Backup probado:
+
+```txt
+backups/postgres/repairlab-postgres-2026-05-27T06-58-03-743Z.sql.gz
+```
+
+Resultado:
+
+- Restore PostgreSQL completado correctamente en base temporal `repairlab_restore_test`.
+- La base principal `repairlab` no se uso como destino de restore.
+- Se verifico que el dump comprimido era valido con `gzip -t` dentro del contenedor.
+- Se restauraron tablas, indices, extension `vector` y datos.
+- Se verifico conexion Prisma usando una `DATABASE_URL` temporal hacia `repairlab_restore_test`.
+- Se eliminaron la base temporal y archivos temporales del contenedor al terminar.
+
+Comandos generales usados:
+
+```txt
+docker exec repair_lab_postgres psql -U repairlab -d postgres -c "CREATE DATABASE repairlab_restore_test OWNER repairlab;"
+docker cp backups/postgres/<backup>.sql.gz repair_lab_postgres:/tmp/repairlab_restore_test.sql.gz
+docker exec repair_lab_postgres gzip -t /tmp/repairlab_restore_test.sql.gz
+docker exec repair_lab_postgres sh -c "gzip -dc /tmp/repairlab_restore_test.sql.gz > /tmp/repairlab_restore_test.sql"
+docker exec repair_lab_postgres psql -U repairlab -d repairlab_restore_test -f /tmp/repairlab_restore_test.sql
+docker exec repair_lab_postgres psql -U repairlab -d postgres -c "DROP DATABASE IF EXISTS repairlab_restore_test WITH (FORCE);"
+```
+
+Advertencia: esta prueba debe hacerse siempre contra una base temporal. No restaurar un backup encima de `repairlab` sin detener la app, sacar una copia previa y aceptar explicitamente la perdida/reemplazo de datos actuales.
+
 ## Produccion
 
 Para produccion real se requiere:
@@ -131,4 +163,3 @@ Para produccion real se requiere:
 - Pruebas periodicas de restore.
 - Alertas si falla backup.
 - Backup conjunto DB + storage de la misma ventana temporal.
-
