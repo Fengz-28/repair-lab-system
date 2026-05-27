@@ -363,3 +363,25 @@ No implementado:
 - Tests con DB real.
 - Coverage report.
 - Tests de Server Actions o Route Handlers.
+
+## Manual E2E checklist - 2026-05-27
+
+Existe `docs/MANUAL_E2E_CHECKLIST.md` para validar manualmente el flujo completo antes de demos o uso controlado:
+
+- Docker app + postgres.
+- Healthcheck.
+- Login.
+- Intake.
+- Archivos privados.
+- Ticket lifecycle.
+- Quote.
+- Invoice.
+- Payment.
+- Inventory.
+- Portal cliente.
+- PDFs.
+- Worker/outbox.
+- Backups desde host.
+- CI.
+
+La checklist es manual; no reemplaza E2E automatizado.

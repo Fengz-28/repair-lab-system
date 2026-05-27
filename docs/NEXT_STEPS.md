@@ -143,6 +143,8 @@ Hacer solo con migraciones pequenas y justificadas.
   - Migraciones contra DB real.
   - Tests E2E.
   - Docker build en CI.
+- Documentacion operativa:
+  - `docs/MANUAL_E2E_CHECKLIST.md` existe para validar el flujo completo manualmente antes de demos o uso controlado.
 - Tests pendientes:
   - invoice conversion
   - inventory deduction con escenarios mas completos
