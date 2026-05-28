@@ -56,8 +56,8 @@ function FinancialTile({
 }) {
   const toneClass = {
     neutral: "border-white/10 bg-zinc-950/75",
-    emerald: "border-emerald-200 bg-emerald-50 dark:border-emerald-900 dark:bg-emerald-950/50",
-    warning: "border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950/50",
+    emerald: "border-emerald-300/20 bg-emerald-500/10",
+    warning: "border-amber-300/25 bg-amber-500/10",
   }[tone];
 
   return (

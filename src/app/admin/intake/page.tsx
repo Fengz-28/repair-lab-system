@@ -61,7 +61,7 @@ export default async function AdminIntakePage() {
                 </tr>
               ) : (
                 recentTickets.map((ticket) => (
-                  <tr key={ticket.id} className="border-b border-zinc-100 last:border-0 dark:border-zinc-800">
+                  <tr key={ticket.id} className="repair-table-row">
                     <td className="px-3 py-2 font-medium">
                       <Link className="underline dark:text-zinc-100" href={`/admin/tickets/${ticket.id}`}>
                         {ticket.ticketNumber}

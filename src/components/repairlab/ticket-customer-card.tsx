@@ -14,7 +14,7 @@ export function TicketCustomerCard({
   return (
     <RepairPanel>
       <div className="flex items-start gap-4">
-        <div className="grid size-14 shrink-0 place-items-center rounded-2xl bg-emerald-50 text-lg font-black text-emerald-600 dark:bg-emerald-950 dark:text-emerald-200">
+        <div className="grid size-14 shrink-0 place-items-center rounded-2xl border border-emerald-300/20 bg-emerald-500/10 text-lg font-black text-emerald-100">
           {name.slice(0, 1).toUpperCase()}
         </div>
         <div className="min-w-0">

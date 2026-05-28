@@ -11,6 +11,7 @@ import {
   convertQuoteToInvoiceAction,
   updateTechnicalNotesAction,
 } from "@/app/admin/tickets/[ticketId]/actions";
+import { RepairFormFeedback, RepairInlineAlert } from "@/components/repairlab";
 import { initialTicketActionState } from "@/modules/tickets/ticket.action-state";
 
 type StatusOption = {
@@ -52,9 +53,9 @@ export function TicketGuidedActions({
         </p>
       </div>
       {actions.length === 0 ? (
-        <p className="rounded-2xl border border-white/10 bg-zinc-950/75 p-3 text-sm text-zinc-300">
-          Este ticket no tiene mas acciones operativas.
-        </p>
+        <RepairInlineAlert tone="info" compact>
+          <p>Este ticket no tiene mas acciones operativas por ahora.</p>
+        </RepairInlineAlert>
       ) : (
         <div className="grid gap-2">
           {actions.map((action) => (
@@ -98,9 +99,9 @@ export function TicketStatusForm({
         </p>
       </div>
       {isFinal ? (
-        <p className="rounded-2xl border border-white/10 bg-zinc-950/75 p-3 text-sm text-zinc-300">
-          Este ticket esta en estado final.
-        </p>
+        <RepairInlineAlert tone="success" compact>
+          <p>Este ticket esta en estado final. No requiere cambios adicionales de estado.</p>
+        </RepairInlineAlert>
       ) : (
         <>
           <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
@@ -408,18 +409,5 @@ const primaryButtonClassName =
   "min-h-10 w-full rounded-full bg-emerald-500 px-4 py-2 text-sm font-black text-black shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-400";
 
 function ActionMessage({ ok, message }: { ok: boolean; message: string }) {
-  if (!message) {
-    return null;
-  }
-
-  return (
-    <p
-      className={`rounded border p-2 text-sm ${
-        ok ? "border-green-200 bg-green-50 text-green-800" : "border-red-200 bg-red-50 text-red-800"
-      }`}
-      role="status"
-    >
-      {message}
-    </p>
-  );
+  return <RepairFormFeedback ok={ok} message={message} />;
 }

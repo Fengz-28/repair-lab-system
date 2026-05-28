@@ -8,7 +8,7 @@ import {
   templateLabel,
 } from "@/modules/messages/message-labels";
 
-import { RepairBadge } from "./index";
+import { RepairBadge, RepairInlineAlert } from "./index";
 
 export type MessageLogCardData = {
   id: string;
@@ -63,9 +63,11 @@ export function MessageLogCard({ message }: { message: MessageLogCardData }) {
       </div>
 
       {message.error || message.reason ? (
-        <p className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100">
-          {message.error ?? message.reason}
-        </p>
+        <div className="mt-4">
+          <RepairInlineAlert tone="warning" title="Revisar envio" compact>
+            <p>{message.error ?? message.reason}</p>
+          </RepairInlineAlert>
+        </div>
       ) : null}
     </article>
   );

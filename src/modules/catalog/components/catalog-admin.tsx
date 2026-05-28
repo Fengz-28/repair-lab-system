@@ -12,7 +12,7 @@ import {
 import { InventoryEmptyState } from "@/components/repairlab/inventory-empty-state";
 import { InventoryItemCard } from "@/components/repairlab/inventory-item-card";
 import { RepairInventoryTable } from "@/components/repairlab/inventory-table";
-import { RepairBadge, RepairPanel } from "@/components/repairlab";
+import { RepairBadge, RepairFormFeedback, RepairGrid, RepairPanel } from "@/components/repairlab";
 import { initialCatalogActionState } from "@/modules/catalog/catalog.action-state";
 
 type CatalogAdminItem = {
@@ -145,7 +145,7 @@ function CatalogList({ items }: { items: CatalogAdminItem[] }) {
         <InventoryEmptyState hasItems={false} />
       ) : (
         <>
-          <div className="grid gap-5 xl:grid-cols-2">
+          <RepairGrid className="gap-5 xl:grid-cols-2">
             {items.map((item) => (
               <InventoryItemCard
                 key={item.id}
@@ -167,7 +167,7 @@ function CatalogList({ items }: { items: CatalogAdminItem[] }) {
                 </div>
               </InventoryItemCard>
             ))}
-          </div>
+          </RepairGrid>
 
           <RepairInventoryTable>
             <table className="w-full min-w-[980px] border-collapse text-left text-sm">
@@ -180,9 +180,9 @@ function CatalogList({ items }: { items: CatalogAdminItem[] }) {
                   <TableHeader>Estado</TableHeader>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+              <tbody className="divide-y divide-white/10">
                 {items.map((item) => (
-                  <tr key={item.id} className="align-top transition hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20">
+                  <tr key={item.id} className="repair-table-row align-top">
                     <td className="px-4 py-4">{itemTypeLabel(item.type)}</td>
                     <td className="px-4 py-4">
                       <p className="break-words font-black text-zinc-950 dark:text-zinc-50">{item.name}</p>
@@ -545,22 +545,7 @@ function SubmitButton({
 }
 
 function ActionMessage({ ok, message }: { ok: boolean; message: string }) {
-  if (!message) {
-    return null;
-  }
-
-  return (
-    <p
-      className={`rounded-2xl border p-3 text-sm font-semibold ${
-        ok
-          ? "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100"
-          : "border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-100"
-      }`}
-      role="status"
-    >
-      {message}
-    </p>
-  );
+  return <RepairFormFeedback ok={ok} message={message} />;
 }
 
 const fieldClassName =

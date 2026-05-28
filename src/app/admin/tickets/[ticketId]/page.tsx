@@ -16,7 +16,9 @@ import {
   RepairBadge,
   RepairButton,
   RepairContainer,
-  RepairPanel,
+  RepairFloatingPanel,
+  RepairGrid,
+  RepairPageShell,
 } from "@/components/repairlab";
 import {
   messageStatusLabel,
@@ -152,7 +154,7 @@ export default async function TicketDetailPage({
   }));
 
   return (
-    <main className="min-h-screen bg-black text-zinc-50">
+    <RepairPageShell>
       <AdminNav />
       <TicketHero
         ticketNumber={ticket.ticketNumber}
@@ -166,18 +168,18 @@ export default async function TicketDetailPage({
       </TicketHero>
 
       <RepairContainer className="py-8 sm:py-10">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,8fr)_minmax(320px,4fr)]">
+        <RepairGrid className="gap-6 lg:grid-cols-[minmax(0,8fr)_minmax(320px,4fr)]">
           <section className="space-y-6">
-            <RepairPanel className="border-emerald-200 bg-emerald-50/80 text-emerald-950 dark:border-emerald-900 dark:bg-emerald-950/60 dark:text-emerald-100">
+            <RepairFloatingPanel className="border-emerald-300/20 bg-emerald-500/10 text-emerald-100 shadow-emerald-950/10">
               <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">
                 Siguiente paso recomendado
               </p>
               <p className="mt-2 text-sm leading-6">{getRecommendedTicketStep(ticket.status, Boolean(approvedQuote))}</p>
-            </RepairPanel>
+            </RepairFloatingPanel>
 
             <RepairTicketTimeline items={visualTimelineItems} />
 
-            <div className="grid gap-6 xl:grid-cols-2">
+            <RepairGrid className="gap-6 xl:grid-cols-2">
               <TicketCustomerCard
                 name={customerName}
                 phone={ticket.customer.phone ?? "No registrado"}
@@ -190,7 +192,7 @@ export default async function TicketDetailPage({
                 issue={ticket.reportedIssue}
                 condition={ticket.intake?.physicalCondition ?? "Sin intake asociado"}
               />
-            </div>
+            </RepairGrid>
 
             <FinancialSummaryCard
               title="Cotizaciones"
@@ -420,9 +422,9 @@ export default async function TicketDetailPage({
               </div>
             </TicketSidebarCard>
           </TicketSidebar>
-        </div>
+        </RepairGrid>
       </RepairContainer>
-    </main>
+    </RepairPageShell>
   );
 }
 

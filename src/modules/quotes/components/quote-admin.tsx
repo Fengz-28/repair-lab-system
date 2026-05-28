@@ -9,7 +9,7 @@ import {
   changeQuoteStatusAction,
   createQuoteAction,
 } from "@/app/admin/tickets/[ticketId]/quotes/actions";
-import { RepairButton, RepairEmptyState } from "@/components/repairlab";
+import { RepairButton, RepairEmptyState, RepairFormFeedback } from "@/components/repairlab";
 import { RepairInventoryTable } from "@/components/repairlab/inventory-table";
 import { initialQuoteActionState } from "@/modules/quotes/quote.action-state";
 
@@ -175,7 +175,10 @@ function QuoteList({
     return (
       <RepairEmptyState
         title="No hay cotizaciones para este ticket."
-        description="Crea una cotizacion en borrador para empezar a definir precios."
+        description="Crea una cotizacion en borrador y luego agrega lineas de servicio, repuestos o productos para presentar una propuesta clara al cliente."
+        eyebrow="Cotizaciones"
+        icon="QT"
+        action={<RepairButton href="#crear-cotizacion">Crear cotizacion</RepairButton>}
       />
     );
   }
@@ -248,7 +251,7 @@ function QuoteItemsTable({ items }: { items: QuoteItem[] }) {
             </tr>
           ) : (
             items.map((item) => (
-              <tr key={item.id} className="border-b border-zinc-100 last:border-0 transition hover:bg-emerald-50/50 dark:border-zinc-800 dark:hover:bg-emerald-950/20">
+              <tr key={item.id} className="repair-table-row">
                 <td className="px-3 py-2">{quoteItemTypeLabel(item.itemType)}</td>
                 <td className="px-3 py-2">
                   <p className="break-words">{item.description}</p>
@@ -386,7 +389,7 @@ function QuoteStatusForm({ ticketId, quote }: { ticketId: string; quote: Quote }
 
   if (availableStatuses.length === 0) {
     return (
-      <p className="max-w-xs rounded border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100">
+      <p className="max-w-xs rounded-2xl border border-amber-300/25 bg-amber-500/10 p-3 text-sm text-amber-100">
         Agrega lineas con total mayor a cero antes de enviar o aprobar esta cotizacion.
       </p>
     );
@@ -441,11 +444,11 @@ function StatusBadge({ status }: { status: InvoiceStatus }) {
   const classes: Record<InvoiceStatus, string> = {
     DRAFT: "border-white/10 bg-zinc-900 text-zinc-200",
     SENT: "border-cyan-400/30 bg-cyan-500/15 text-cyan-100",
-    APPROVED: "border-green-200 bg-green-50 text-green-800 dark:border-green-900 dark:bg-green-950 dark:text-green-100",
-    REJECTED: "border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-100",
-    EXPIRED: "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100",
+    APPROVED: "border-emerald-400/30 bg-emerald-500/15 text-emerald-100",
+    REJECTED: "border-red-400/35 bg-red-500/15 text-red-100",
+    EXPIRED: "border-amber-400/35 bg-amber-500/15 text-amber-100",
     CANCELLED: "border-white/10 bg-zinc-900 text-zinc-200",
-    PAID: "border-green-200 bg-green-50 text-green-800 dark:border-green-900 dark:bg-green-950 dark:text-green-100",
+    PAID: "border-emerald-400/30 bg-emerald-500/15 text-emerald-100",
     PARTIALLY_PAID: "border-cyan-400/30 bg-cyan-500/15 text-cyan-100",
     UNPAID: "border-white/10 bg-zinc-900 text-zinc-200",
   };
@@ -565,20 +568,7 @@ function quoteItemTypeLabel(type: string) {
 }
 
 function ActionMessage({ ok, message }: { ok: boolean; message: string }) {
-  if (!message) {
-    return null;
-  }
-
-  return (
-    <p
-      className={`rounded border p-2 text-xs ${
-        ok ? "border-emerald-200 bg-emerald-50 text-emerald-800" : "border-red-200 bg-red-50 text-red-800"
-      }`}
-      role="status"
-    >
-      {message}
-    </p>
-  );
+  return <RepairFormFeedback ok={ok} message={message} />;
 }
 
 const fieldClassName =

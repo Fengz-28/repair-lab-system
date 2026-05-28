@@ -3,6 +3,8 @@
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 
+import { RepairFormFeedback } from "@/components/repairlab";
+
 import { loginAction, type LoginActionState } from "./actions";
 
 const initialState: LoginActionState = {
@@ -35,11 +37,7 @@ export function LoginForm() {
           className="min-h-12 rounded-xl border border-white/10 bg-zinc-950 px-4 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 outline-none transition focus:border-emerald-400 focus:bg-zinc-950 focus:ring-2 focus:ring-emerald-500/25"
         />
       </label>
-      {state.message ? (
-        <p className="rounded border border-red-900 bg-red-950 p-3 text-sm text-red-100" role="status">
-          {state.message}
-        </p>
-      ) : null}
+      <RepairFormFeedback ok={state.ok} message={state.message} />
       <SubmitButton />
     </form>
   );

@@ -2,7 +2,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { AdminNav } from "@/components/admin-nav";
-import { RepairBadge, RepairContainer, RepairPageHero, RepairPanel } from "@/components/repairlab";
+import {
+  RepairBadge,
+  RepairContainer,
+  RepairFloatingPanel,
+  RepairGrid,
+  RepairPageHero,
+  RepairPageShell,
+  RepairPanel,
+} from "@/components/repairlab";
 import {
   channelLabel,
   messageStatusLabel,
@@ -28,7 +36,7 @@ export default async function AdminMessageDetailPage({
   }
 
   return (
-    <main className="min-h-screen bg-black text-zinc-100">
+    <RepairPageShell>
       <AdminNav />
       <RepairPageHero
         eyebrow="Admin / Mensaje"
@@ -42,7 +50,7 @@ export default async function AdminMessageDetailPage({
       />
 
       <RepairContainer className="space-y-6 py-8">
-        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <RepairGrid className="sm:grid-cols-2 lg:grid-cols-3">
           <Info label="Destinatario" value={message.recipient ?? "Sin destinatario"} />
           <Info label="Estado" value={messageStatusLabel(message.status, message.provider)} />
           <Info label="Proveedor" value={providerLabel(message.provider)} />
@@ -56,27 +64,27 @@ export default async function AdminMessageDetailPage({
             value={message.ticket?.ticketNumber ?? "No asociado"}
             href={message.ticket ? `/admin/tickets/${message.ticket.id}` : undefined}
           />
-        </section>
+        </RepairGrid>
 
         {message.metadata.error || message.metadata.reason ? (
-          <RepairPanel className="border-amber-200 bg-amber-50/80 dark:border-amber-900 dark:bg-amber-950/35">
+          <RepairFloatingPanel className="border-amber-300/20 bg-amber-500/10 shadow-amber-950/10">
             <h2 className="font-black text-zinc-950 dark:text-zinc-50">Estado del envio</h2>
-            <p className="mt-2 break-words text-sm font-semibold text-amber-800 dark:text-amber-100">
+            <p className="mt-2 break-words text-sm font-semibold text-amber-100">
               {message.metadata.error ?? message.metadata.reason}
             </p>
-          </RepairPanel>
+          </RepairFloatingPanel>
         ) : null}
 
         {message.metadata.portalUrl ? (
-          <RepairPanel className="border-emerald-200 bg-emerald-50/80 dark:border-emerald-900 dark:bg-emerald-950/35">
+          <RepairFloatingPanel className="border-emerald-300/20 bg-emerald-500/10 shadow-emerald-950/10">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h2 className="font-black text-zinc-950 dark:text-zinc-50">Portal cliente</h2>
               <RepairBadge tone="emerald">Disponible</RepairBadge>
             </div>
-            <a className="mt-3 block break-all text-sm font-semibold text-emerald-800 underline dark:text-emerald-100" href={message.metadata.portalUrl} target="_blank" rel="noreferrer">
+            <a className="mt-3 block break-all text-sm font-semibold text-emerald-100 underline" href={message.metadata.portalUrl} target="_blank" rel="noreferrer">
               {message.metadata.portalUrl}
             </a>
-          </RepairPanel>
+          </RepairFloatingPanel>
         ) : null}
 
         <ContentPanel title="Texto" content={message.body ?? "Sin contenido de texto."} />
@@ -87,7 +95,7 @@ export default async function AdminMessageDetailPage({
           compact
         />
       </RepairContainer>
-    </main>
+    </RepairPageShell>
   );
 }
 

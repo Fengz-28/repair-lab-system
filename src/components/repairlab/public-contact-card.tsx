@@ -4,7 +4,7 @@ export function PublicContactCard({ ticketNumber }: { ticketNumber: string }) {
   return (
     <section
       id="contacto"
-      className="rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-5 shadow-sm shadow-zinc-950/5 dark:border-emerald-900 dark:from-emerald-950/50 dark:to-zinc-950 sm:p-6"
+      className="rounded-3xl border border-emerald-300/20 bg-gradient-to-br from-emerald-500/10 to-zinc-950 p-5 shadow-sm shadow-black/30 sm:p-6"
     >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="max-w-2xl">

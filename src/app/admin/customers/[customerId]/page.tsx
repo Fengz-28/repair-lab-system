@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { AdminNav } from "@/components/admin-nav";
-import { RepairContainer } from "@/components/repairlab";
+import { RepairContainer, RepairGrid, RepairPageShell } from "@/components/repairlab";
 import { CustomerActivityFeed } from "@/components/repairlab/customer-activity-feed";
 import { CustomerDevicesCard } from "@/components/repairlab/customer-devices-card";
 import { CustomerHero } from "@/components/repairlab/customer-hero";
@@ -26,7 +26,7 @@ export default async function AdminCustomerDetailPage({
   }
 
   return (
-    <main className="min-h-screen bg-black text-zinc-100">
+    <RepairPageShell>
       <AdminNav />
       <CustomerHero
         name={data.customer.name}
@@ -41,12 +41,12 @@ export default async function AdminCustomerDetailPage({
       />
 
       <RepairContainer className="-mt-8 relative z-10 pb-12">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-          <div className="grid min-w-0 gap-6">
+        <RepairGrid className="gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+          <RepairGrid className="min-w-0 gap-6">
             <CustomerTicketHistory tickets={data.tickets} />
             <CustomerDevicesCard devices={data.devices} />
             <CustomerActivityFeed activity={data.activity} />
-          </div>
+          </RepairGrid>
           <CustomerSidebar
             contact={data.customer.contact}
             phone={data.customer.phone}
@@ -59,8 +59,8 @@ export default async function AdminCustomerDetailPage({
             totalPaid={data.customer.totalPaid}
             balanceDue={data.customer.balanceDue}
           />
-        </div>
+        </RepairGrid>
       </RepairContainer>
-    </main>
+    </RepairPageShell>
   );
 }

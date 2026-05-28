@@ -16,7 +16,7 @@ export function LowStockAlertPanel({
   }
 
   return (
-    <RepairPanel className="border-amber-200 bg-amber-50/80 dark:border-amber-900 dark:bg-amber-950/35">
+    <RepairPanel className="border-amber-300/20 bg-amber-500/10">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.18em] text-amber-700 dark:text-amber-200">

@@ -5,7 +5,7 @@ import { useFormStatus } from "react-dom";
 import type { PaymentMethod, PaymentStatus } from "@prisma/client";
 
 import { registerManualPaymentAction } from "@/app/admin/tickets/[ticketId]/invoices/[invoiceId]/actions";
-import { RepairPanel } from "@/components/repairlab";
+import { RepairEmptyState, RepairFormFeedback, RepairPanel } from "@/components/repairlab";
 import { RepairInventoryTable } from "@/components/repairlab/inventory-table";
 import { initialTicketActionState } from "@/modules/tickets/ticket.action-state";
 
@@ -205,7 +205,13 @@ function PaymentHistory({
         <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Historial de pagos</h2>
       </div>
       {payments.length === 0 ? (
-        <p className="rounded-2xl border border-white/10 bg-zinc-950 p-4 text-sm text-zinc-400">No hay pagos registrados.</p>
+        <RepairEmptyState
+          title="No hay pagos registrados."
+          description="Cuando registres un pago manual, aparecera aqui con fecha, metodo, referencia y notas internas."
+          eyebrow="Historial vacio"
+          icon="PG"
+          compact
+        />
       ) : (
         <RepairInventoryTable>
           <table className="w-full min-w-[720px] border-collapse text-left text-sm">
@@ -220,7 +226,7 @@ function PaymentHistory({
             </thead>
             <tbody>
               {payments.map((payment) => (
-                <tr key={payment.id} className="border-b border-zinc-100 transition last:border-0 hover:bg-emerald-50/50 dark:border-zinc-800 dark:hover:bg-emerald-950/20">
+                <tr key={payment.id} className="repair-table-row">
                   <td className="px-3 py-2">{payment.createdAt}</td>
                   <td className="px-3 py-2">{currency} {payment.amount}</td>
                   <td className="px-3 py-2">{paymentMethodLabel(payment.method)}</td>
@@ -238,9 +244,9 @@ function PaymentHistory({
 
 function PaymentStatusBadge({ status }: { status: PaymentStatus }) {
   const classes: Record<PaymentStatus, string> = {
-    UNPAID: "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100",
+    UNPAID: "border-amber-400/35 bg-amber-500/15 text-amber-100",
     PARTIALLY_PAID: "border-cyan-400/30 bg-cyan-500/15 text-cyan-100",
-    PAID: "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100",
+    PAID: "border-emerald-400/30 bg-emerald-500/15 text-emerald-100",
     REFUNDED: "border-white/10 bg-zinc-900 text-zinc-200",
     VOID: "border-white/10 bg-zinc-900 text-zinc-200",
   };
@@ -267,20 +273,7 @@ function SubmitButton() {
 }
 
 function ActionMessage({ ok, message }: { ok: boolean; message: string }) {
-  if (!message) {
-    return null;
-  }
-
-  return (
-    <p
-      className={`rounded border p-2 text-sm ${
-        ok ? "border-emerald-200 bg-emerald-50 text-emerald-800" : "border-red-200 bg-red-50 text-red-800"
-      }`}
-      role="status"
-    >
-      {message}
-    </p>
-  );
+  return <RepairFormFeedback ok={ok} message={message} />;
 }
 
 function paymentStatusLabel(status: PaymentStatus) {

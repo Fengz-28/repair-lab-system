@@ -28,7 +28,7 @@ export function CustomerDevicesCard({
           {devices.map((device) => (
             <article key={device.id} className="rounded-2xl border border-white/10 bg-zinc-950/75 p-4">
               <div className="flex items-start gap-3">
-                <div className="grid size-11 shrink-0 place-items-center rounded-2xl bg-emerald-50 text-sm font-black text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200">
+                <div className="grid size-11 shrink-0 place-items-center rounded-2xl border border-emerald-300/20 bg-emerald-500/10 text-sm font-black text-emerald-100">
                   EQ
                 </div>
                 <div className="min-w-0">

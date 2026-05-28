@@ -115,7 +115,7 @@ function HomeCard({
   return (
     <Link href={href}>
       <RepairCard className="min-h-36">
-        <div className="grid size-12 place-items-center rounded-2xl bg-emerald-50 text-sm font-black text-emerald-600 dark:bg-emerald-950 dark:text-emerald-200">
+        <div className="grid size-12 place-items-center rounded-2xl border border-emerald-300/20 bg-emerald-500/10 text-sm font-black text-emerald-100">
           RL
         </div>
         <h2 className="mt-4 text-base font-black text-zinc-950 dark:text-zinc-50">{title}</h2>

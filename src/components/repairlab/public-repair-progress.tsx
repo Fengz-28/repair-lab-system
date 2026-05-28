@@ -25,7 +25,7 @@ export function PublicRepairProgress({ status }: { status: TicketStatus }) {
           <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Progreso del servicio</h2>
         </div>
         {isCancelled ? (
-          <span className="inline-flex w-fit rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-bold text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-100">
+          <span className="inline-flex w-fit rounded-full border border-red-400/35 bg-red-500/15 px-3 py-1 text-xs font-bold text-red-100">
             Ticket cancelado
           </span>
         ) : null}
@@ -36,9 +36,9 @@ export function PublicRepairProgress({ status }: { status: TicketStatus }) {
           const isDone = !isCancelled && currentIndex >= 0 && index < currentIndex;
           const isCurrent = !isCancelled && index === currentIndex;
           const stateClass = isDone
-            ? "border-emerald-300 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100"
+            ? "border-emerald-400/30 bg-emerald-500/15 text-emerald-100"
             : isCurrent
-              ? "border-cyan-300 bg-cyan-50 text-cyan-800 ring-2 ring-cyan-200 dark:border-cyan-900 dark:bg-cyan-950 dark:text-cyan-100 dark:ring-cyan-900/70"
+              ? "border-cyan-400/35 bg-cyan-500/15 text-cyan-100 ring-2 ring-cyan-500/25"
               : "border-white/10 bg-zinc-950/75 text-zinc-400";
 
           return (

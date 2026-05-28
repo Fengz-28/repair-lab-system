@@ -108,9 +108,10 @@ export function RepairPageHero({
   actions?: React.ReactNode;
 }) {
   return (
-    <section className="relative overflow-hidden bg-black text-white">
+    <section className="relative overflow-hidden border-b border-white/10 bg-black text-white shadow-2xl shadow-black/30">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.18),transparent_28%),radial-gradient(circle_at_80%_0%,rgba(6,182,212,0.10),transparent_30%),linear-gradient(135deg,rgba(24,24,27,0.2),rgba(0,0,0,0.88))]" />
       <div className="absolute inset-0 opacity-30 [background-image:linear-gradient(120deg,transparent_0,transparent_48%,rgba(255,255,255,0.08)_49%,transparent_50%)] [background-size:42px_42px]" />
+      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-cyan-300/30 to-transparent" />
       <RepairContainer className="relative py-12 sm:py-16">
         {eyebrow ? (
           <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-300">{eyebrow}</p>
@@ -139,6 +140,22 @@ export function RepairContainer({
   return <div className={`mx-auto w-full max-w-7xl px-4 sm:px-6 ${className}`}>{children}</div>;
 }
 
+export function RepairPageShell({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <main className={`relative min-h-screen overflow-hidden bg-black text-zinc-50 ${className}`}>
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_8%,rgba(6,182,212,0.08),transparent_28%),radial-gradient(circle_at_86%_2%,rgba(16,185,129,0.07),transparent_24%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-96 bg-gradient-to-b from-zinc-900/30 to-transparent" />
+      <div className="relative">{children}</div>
+    </main>
+  );
+}
+
 export function RepairSection({
   children,
   className = "",
@@ -147,6 +164,44 @@ export function RepairSection({
   className?: string;
 }) {
   return <section className={`space-y-5 ${className}`}>{children}</section>;
+}
+
+export function RepairSurface({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <section className={`repair-panel-reveal rounded-[2rem] border border-white/10 bg-zinc-950/45 p-4 shadow-2xl shadow-black/20 sm:p-5 ${className}`}>
+      {children}
+    </section>
+  );
+}
+
+export function RepairGrid({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return <section className={`grid gap-4 ${className}`}>{children}</section>;
+}
+
+export function RepairFloatingPanel({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={`repair-panel-reveal rounded-[2rem] border border-cyan-300/15 bg-zinc-950/70 p-5 shadow-2xl shadow-cyan-950/10 backdrop-blur ${className}`}>
+      {children}
+    </div>
+  );
 }
 
 export function RepairCard({
@@ -317,25 +372,114 @@ export function RepairEmptyState({
   title,
   description,
   action,
+  secondaryAction,
+  icon,
+  eyebrow = "Sin datos",
+  compact = false,
 }: {
   title: string;
   description?: string;
   action?: React.ReactNode;
+  secondaryAction?: React.ReactNode;
+  icon?: React.ReactNode;
+  eyebrow?: string;
+  compact?: boolean;
 }) {
-  return (
-    <RepairPanel className="py-10 text-center">
-      <div className="mx-auto grid size-14 place-items-center rounded-2xl border border-emerald-400/20 bg-emerald-500/15 text-emerald-200">
-        RL
+  const content = (
+    <>
+      <div className="mx-auto grid size-14 place-items-center rounded-3xl border border-cyan-300/20 bg-cyan-500/10 text-sm font-black text-cyan-100 shadow-lg shadow-cyan-950/20 sm:size-16">
+        {icon ?? "RL"}
       </div>
-      <h2 className="mt-4 text-lg font-black text-zinc-950 dark:text-zinc-50">{title}</h2>
-      {description ? <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">{description}</p> : null}
-      {action ? <div className="mt-5">{action}</div> : null}
+      <p className="mt-5 text-xs font-black uppercase tracking-[0.18em] text-emerald-300">{eyebrow}</p>
+      <h2 className="mt-2 text-xl font-black text-zinc-50">{title}</h2>
+      {description ? (
+        <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-zinc-400">{description}</p>
+      ) : null}
+      {action || secondaryAction ? (
+        <div className="mt-6 grid gap-2 sm:inline-flex sm:flex-wrap sm:justify-center">
+          {action}
+          {secondaryAction}
+        </div>
+      ) : null}
+    </>
+  );
+
+  if (compact) {
+    return (
+      <div className="rounded-2xl border border-white/10 bg-zinc-950/70 p-6 text-center shadow-sm shadow-black/20">
+        {content}
+      </div>
+    );
+  }
+
+  return (
+    <RepairPanel className="py-10 text-center sm:py-12">
+      {content}
     </RepairPanel>
   );
 }
 
 export function RepairSearchBar({ children }: { children: React.ReactNode }) {
   return <RepairPanel className="shadow-lg shadow-black/20">{children}</RepairPanel>;
+}
+
+export function RepairInlineAlert({
+  title,
+  children,
+  tone = "info",
+  compact = false,
+}: {
+  title?: string;
+  children: React.ReactNode;
+  tone?: "success" | "warning" | "error" | "info";
+  compact?: boolean;
+}) {
+  const classes = {
+    success: "border-emerald-300/25 bg-emerald-500/10 text-emerald-100",
+    warning: "border-amber-300/25 bg-amber-500/10 text-amber-100",
+    error: "border-red-300/25 bg-red-500/10 text-red-100",
+    info: "border-cyan-300/25 bg-cyan-500/10 text-cyan-100",
+  }[tone];
+  const dot = {
+    success: "bg-emerald-300",
+    warning: "bg-amber-300",
+    error: "bg-red-300",
+    info: "bg-cyan-300",
+  }[tone];
+
+  return (
+    <div className={`rounded-2xl border ${classes} ${compact ? "p-3 text-sm" : "p-4 text-sm leading-6"} shadow-sm shadow-black/20`} role="status">
+      <div className="flex gap-3">
+        <span className={`mt-2 size-2 shrink-0 rounded-full ${dot}`} />
+        <div className="min-w-0">
+          {title ? <p className="font-black">{title}</p> : null}
+          <div className={title ? "mt-1" : ""}>{children}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function RepairFormFeedback({
+  ok,
+  message,
+}: {
+  ok: boolean;
+  message: string;
+}) {
+  if (!message) {
+    return null;
+  }
+
+  return (
+    <RepairInlineAlert
+      tone={ok ? "success" : "error"}
+      title={ok ? "Listo" : "No se pudo completar"}
+      compact
+    >
+      <p className="break-words">{message}</p>
+    </RepairInlineAlert>
+  );
 }
 
 export function RepairActionBar({ children }: { children: React.ReactNode }) {

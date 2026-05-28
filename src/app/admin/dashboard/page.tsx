@@ -5,7 +5,9 @@ import { AdminNav, DemoChecklist } from "@/components/admin-nav";
 import {
   RepairButton,
   RepairContainer,
+  RepairGrid,
   RepairPageHero,
+  RepairPageShell,
   RepairPanel,
   RepairStatCard,
 } from "@/components/repairlab";
@@ -26,7 +28,7 @@ export default async function AdminDashboardPage() {
   const dashboard = await getDashboardData();
 
   return (
-    <main className="min-h-screen bg-black text-zinc-50">
+    <RepairPageShell>
       <AdminNav />
       <RepairPageHero
         eyebrow="Admin / Dashboard"
@@ -41,16 +43,16 @@ export default async function AdminDashboardPage() {
       />
 
       <RepairContainer className="space-y-8 py-8 sm:py-10">
-        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <RepairGrid className="md:grid-cols-2 xl:grid-cols-4">
           <RepairStatCard label="Tickets abiertos" value={dashboard.tickets.open} />
           <RepairStatCard label="Esperando aprobacion" value={dashboard.tickets.waitingApproval} tone="cyan" />
           <RepairStatCard label="Ingresos registrados" value={formatMoney(dashboard.payments.receivedTotal)} tone="emerald" />
           <RepairStatCard label="Saldo pendiente" value={formatMoney(dashboard.invoices.balanceDue)} tone="warning" />
-        </section>
+        </RepairGrid>
 
         <DemoChecklist />
 
-        <section className="grid gap-6 xl:grid-cols-2">
+        <RepairGrid className="gap-6 xl:grid-cols-2">
           <MetricPanel
             title="Tickets"
             items={[
@@ -99,20 +101,20 @@ export default async function AdminDashboardPage() {
               ["Valor estimado", formatMoney(dashboard.inventory.estimatedValue)],
             ]}
           />
-        </section>
+        </RepairGrid>
 
-        <section className="grid gap-6 xl:grid-cols-2">
+        <RepairGrid className="gap-6 xl:grid-cols-2">
           <PaymentsPanel dashboard={dashboard} />
           <TicketsAttentionPanel tickets={dashboard.lists.ticketsNeedingAttention} />
           <PendingQuotesPanel quotes={dashboard.lists.pendingQuotes} />
           <PendingInvoicesPanel invoices={dashboard.lists.pendingInvoices} />
           <InventoryAlertsPanel items={dashboard.lists.inventoryAlerts} />
           <RecentMovementsPanel movements={dashboard.lists.recentMovements} />
-        </section>
+        </RepairGrid>
 
         <RecentEventsPanel events={dashboard.lists.recentEvents} />
       </RepairContainer>
-    </main>
+    </RepairPageShell>
   );
 }
 

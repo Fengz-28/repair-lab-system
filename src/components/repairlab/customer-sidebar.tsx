@@ -1,6 +1,6 @@
 import { formatMoney } from "@/modules/customers/customer-labels";
 
-import { RepairBadge, RepairButton, RepairPanel } from "./index";
+import { RepairBadge, RepairButton, RepairFloatingPanel } from "./index";
 
 export function CustomerSidebar({
   contact,
@@ -27,7 +27,7 @@ export function CustomerSidebar({
 }) {
   return (
     <aside className="space-y-5 lg:sticky lg:top-28">
-      <RepairPanel>
+      <RepairFloatingPanel>
         <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
           Contacto rapido
         </p>
@@ -37,9 +37,9 @@ export function CustomerSidebar({
           <Info label="WhatsApp" value={whatsappPhone ?? "No registrado"} />
           <Info label="Email" value={email ?? "No registrado"} />
         </div>
-      </RepairPanel>
+      </RepairFloatingPanel>
 
-      <RepairPanel>
+      <RepairFloatingPanel className={balanceDue > 0 ? "border-amber-300/20 shadow-amber-950/10" : undefined}>
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
@@ -59,9 +59,9 @@ export function CustomerSidebar({
           <MiniMetric label="Pagado" value={formatMoney(totalPaid)} />
           <MiniMetric label="Saldo pendiente" value={formatMoney(balanceDue)} highlight={balanceDue > 0} />
         </div>
-      </RepairPanel>
+      </RepairFloatingPanel>
 
-      <RepairPanel>
+      <RepairFloatingPanel>
         <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
           Acciones
         </p>
@@ -76,7 +76,7 @@ export function CustomerSidebar({
             Volver al CRM
           </RepairButton>
         </div>
-      </RepairPanel>
+      </RepairFloatingPanel>
     </aside>
   );
 }

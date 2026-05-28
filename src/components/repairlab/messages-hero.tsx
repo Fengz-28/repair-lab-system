@@ -1,6 +1,6 @@
 import type { MessageStatus } from "@prisma/client";
 
-import { RepairBadge, RepairButton, RepairContainer } from "./index";
+import { RepairBadge, RepairButton, RepairContainer, RepairFloatingPanel } from "./index";
 
 type MessageHeroItem = {
   status: MessageStatus;
@@ -36,7 +36,7 @@ export function MessagesHero({ messages }: { messages: MessageHeroItem[] }) {
               <RepairBadge tone={failed > 0 ? "danger" : "emerald"}>{failed} fallidos</RepairBadge>
             </div>
           </div>
-          <div className="w-full rounded-3xl border border-white/10 bg-zinc-900/45 p-5 shadow-2xl shadow-black/20 backdrop-blur lg:max-w-md">
+          <RepairFloatingPanel className="w-full bg-zinc-900/45 lg:max-w-md">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-200">Pulso de notificaciones</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <HeroMetric label="Ultimos 7 dias" value={String(recent)} />
@@ -45,7 +45,7 @@ export function MessagesHero({ messages }: { messages: MessageHeroItem[] }) {
             <div className="mt-5">
               <RepairButton href="/admin/tickets" tone="primary">Ver tickets</RepairButton>
             </div>
-          </div>
+          </RepairFloatingPanel>
         </div>
       </RepairContainer>
     </section>

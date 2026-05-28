@@ -30,11 +30,11 @@ export function CustomerActivityFeed({
           {activity.map((event, index) => (
             <li key={event.id} className="relative grid grid-cols-[42px_1fr] gap-3">
               <div className="relative flex justify-center">
-                <span className="grid size-10 place-items-center rounded-full border border-emerald-200 bg-emerald-50 text-xs font-black text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">
+                <span className="grid size-10 place-items-center rounded-full border border-emerald-300/25 bg-emerald-500/10 text-xs font-black text-emerald-100">
                   {index + 1}
                 </span>
                 {index < activity.length - 1 ? (
-                  <span className="absolute top-10 h-[calc(100%+1rem)] w-px bg-zinc-200 dark:bg-zinc-800" />
+                  <span className="absolute top-10 h-[calc(100%+1rem)] w-px bg-white/10" />
                 ) : null}
               </div>
               <div className="min-w-0 rounded-2xl border border-white/10 bg-zinc-950/75 p-4">

@@ -1,5 +1,5 @@
 import { PublicHero, PublicSectionHeader, PublicShell } from "@/components/repairlab/public-site";
-import { RepairBadge, RepairButton, RepairContainer, RepairPanel } from "@/components/repairlab";
+import { RepairBadge, RepairButton, RepairContainer, RepairInlineAlert, RepairPanel } from "@/components/repairlab";
 
 export default function ContactPage() {
   return (
@@ -44,9 +44,9 @@ export default function ContactPage() {
                 placeholder="Describe brevemente la falla"
               />
             </label>
-            <p className="rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm font-semibold text-cyan-800 dark:border-cyan-900 dark:bg-cyan-950 dark:text-cyan-100">
-              Formulario no funcional en esta etapa. No se envian datos todavia.
-            </p>
+            <RepairInlineAlert tone="info" title="Formulario visual">
+              <p>Este formulario no envia datos todavia. Usa los canales del taller mientras se habilita la integracion segura.</p>
+            </RepairInlineAlert>
             <button
               type="button"
               disabled
@@ -66,7 +66,7 @@ export default function ContactPage() {
                 <Info label="Horario" value="Lun - Vie: 09:00 - 17:00" />
               </div>
             </RepairPanel>
-            <RepairPanel className="border-emerald-200 bg-emerald-50/80 dark:border-emerald-900 dark:bg-emerald-950/35">
+            <RepairPanel className="border-emerald-300/20 bg-emerald-500/10">
               <h3 className="text-xl font-black text-zinc-950 dark:text-zinc-50">WhatsApp</h3>
               <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
                 La integracion automatica de WhatsApp se implementara proximamente. Por ahora el contacto es manual.

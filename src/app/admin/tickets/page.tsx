@@ -8,8 +8,10 @@ import {
   RepairCard,
   RepairContainer,
   RepairEmptyState,
+  RepairGrid,
   RepairPageHero,
-  RepairSearchBar,
+  RepairPageShell,
+  RepairSurface,
   RepairTable,
 } from "@/components/repairlab";
 import { getTicketListData, type TicketListSearchParams } from "@/modules/tickets/ticket-list.service";
@@ -30,7 +32,7 @@ export default async function AdminTicketsPage({
   const { tickets, filters, lowStockCount } = await getTicketListData(params);
 
   return (
-    <main className="min-h-screen bg-black text-zinc-50">
+    <RepairPageShell>
       <AdminNav />
       <RepairPageHero
         eyebrow="Admin / Tickets"
@@ -46,7 +48,7 @@ export default async function AdminTicketsPage({
 
       <RepairContainer className="space-y-6 py-8 sm:space-y-8 sm:py-10">
         {lowStockCount > 0 ? (
-          <section className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-300/25 bg-amber-500/10 p-4 text-sm text-amber-100 shadow-sm shadow-black/20">
+          <section className="repair-panel-reveal flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-300/25 bg-amber-500/10 p-4 text-sm text-amber-100 shadow-sm shadow-black/20">
             <p>
               <span className="font-bold">Bajo stock:</span> tienes {lowStockCount} items en o por debajo del minimo.
             </p>
@@ -56,7 +58,9 @@ export default async function AdminTicketsPage({
           </section>
         ) : null}
 
-        <TicketFilters filters={filters} />
+        <RepairSurface>
+          <TicketFilters filters={filters} />
+        </RepairSurface>
 
         {tickets.length === 0 ? (
           <EmptyState hasFilters={Boolean(filters.search || filters.status !== "all")} />
@@ -66,13 +70,13 @@ export default async function AdminTicketsPage({
           <TicketCards tickets={tickets} />
         )}
       </RepairContainer>
-    </main>
+    </RepairPageShell>
   );
 }
 
 function TicketFilters({ filters }: { filters: TicketListData["filters"] }) {
   return (
-    <RepairSearchBar>
+    <div>
       <form className="grid gap-3 lg:grid-cols-[1fr_220px_220px_160px_auto]">
         <label className="grid gap-2 text-sm font-bold text-zinc-800 dark:text-zinc-200">
           Buscar
@@ -135,7 +139,7 @@ function TicketFilters({ filters }: { filters: TicketListData["filters"] }) {
           </Link>
         </div>
       </form>
-    </RepairSearchBar>
+    </div>
   );
 }
 
@@ -170,7 +174,7 @@ function SelectField({
 
 function TicketCards({ tickets }: { tickets: TicketListItem[] }) {
   return (
-    <section className="grid gap-4 xl:grid-cols-2">
+    <RepairGrid className="xl:grid-cols-2">
       {tickets.map((ticket) => (
         <RepairCard
           key={ticket.id}
@@ -203,7 +207,7 @@ function TicketCards({ tickets }: { tickets: TicketListItem[] }) {
           <TicketActions ticket={ticket} />
         </RepairCard>
       ))}
-    </section>
+    </RepairGrid>
   );
 }
 
@@ -377,9 +381,16 @@ function StatusBadge({ status }: { status: TicketStatus }) {
 function EmptyState({ hasFilters }: { hasFilters: boolean }) {
   return (
     <RepairEmptyState
-      title={hasFilters ? "No se encontraron tickets con esos filtros." : "No hay tickets todavia."}
-      description={hasFilters ? "Prueba limpiar la busqueda o cambiar el filtro." : "Crea una nueva recepcion para empezar."}
-      action={!hasFilters ? <RepairButton href="/admin/intake">Crear nueva recepcion</RepairButton> : null}
+      title={hasFilters ? "No encontramos tickets con esos filtros." : "No hay tickets todavia."}
+      description={
+        hasFilters
+          ? "Prueba limpiar filtros o buscar por cliente, equipo, telefono o codigo de ticket."
+          : "Empieza registrando una recepcion. El sistema creara el ticket y lo conectara con cliente, equipo y seguimiento."
+      }
+      eyebrow={hasFilters ? "Busqueda sin resultados" : "Primer ticket"}
+      icon={hasFilters ? "FT" : "TK"}
+      action={!hasFilters ? <RepairButton href="/admin/intake">Crear nueva recepcion</RepairButton> : <RepairButton href="/admin/tickets">Limpiar filtros</RepairButton>}
+      secondaryAction={!hasFilters ? <RepairButton href="/admin/dashboard" tone="secondary">Ver dashboard</RepairButton> : null}
     />
   );
 }

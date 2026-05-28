@@ -14,7 +14,7 @@ export function TicketDeviceCard({
   return (
     <RepairPanel>
       <div className="flex items-start gap-4">
-        <div className="grid size-14 shrink-0 place-items-center rounded-2xl bg-cyan-50 text-lg font-black text-cyan-700 dark:bg-cyan-950 dark:text-cyan-200">
+        <div className="grid size-14 shrink-0 place-items-center rounded-2xl border border-cyan-300/20 bg-cyan-500/10 text-lg font-black text-cyan-100">
           HW
         </div>
         <div className="min-w-0">

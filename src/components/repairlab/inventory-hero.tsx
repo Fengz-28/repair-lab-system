@@ -1,4 +1,4 @@
-import { RepairBadge, RepairButton, RepairContainer } from "./index";
+import { RepairBadge, RepairButton, RepairContainer, RepairFloatingPanel } from "./index";
 
 export type InventoryHeroStats = {
   totalItems: number;
@@ -33,7 +33,7 @@ export function InventoryHero({ stats }: { stats: InventoryHeroStats }) {
             </div>
           </div>
 
-          <div className="w-full rounded-3xl border border-white/10 bg-zinc-900/45 p-5 shadow-2xl shadow-black/20 backdrop-blur lg:max-w-md">
+          <RepairFloatingPanel className="w-full bg-zinc-900/45 lg:max-w-md">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-200">Pulso de inventario</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <HeroMetric label="Agotados" value={String(stats.outOfStockItems)} />
@@ -47,7 +47,7 @@ export function InventoryHero({ stats }: { stats: InventoryHeroStats }) {
                 Ver catalogo
               </RepairButton>
             </div>
-          </div>
+          </RepairFloatingPanel>
         </div>
       </RepairContainer>
     </section>

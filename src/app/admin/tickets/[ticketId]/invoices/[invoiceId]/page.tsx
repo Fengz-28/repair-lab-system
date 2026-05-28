@@ -108,7 +108,7 @@ export default async function TicketInvoicePage({
             </thead>
             <tbody>
               {invoice.items.map((item) => (
-                <tr key={item.id} className="border-b border-zinc-100 transition last:border-0 hover:bg-emerald-50/50 dark:border-zinc-800 dark:hover:bg-emerald-950/20">
+                <tr key={item.id} className="repair-table-row">
                   <td className="px-3 py-2">{itemTypeLabel(item.itemType)}</td>
                   <td className="px-3 py-2">
                     <p className="break-words">{item.description}</p>
@@ -165,7 +165,7 @@ function InfoItem({ label, value }: { label: string; value: string }) {
 
 function StatusBadge({ label, value }: { label: string; value: string }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">
+    <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/15 px-3 py-1 text-xs font-bold text-emerald-100">
       <span className="uppercase">{label}</span>
       <span>{value}</span>
     </span>
@@ -174,9 +174,9 @@ function StatusBadge({ label, value }: { label: string; value: string }) {
 
 function PaymentStatusBadge({ status }: { status: PaymentStatus }) {
   const classes: Record<PaymentStatus, string> = {
-    UNPAID: "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100",
+    UNPAID: "border-amber-400/35 bg-amber-500/15 text-amber-100",
     PARTIALLY_PAID: "border-cyan-400/30 bg-cyan-500/15 text-cyan-100",
-    PAID: "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100",
+    PAID: "border-emerald-400/30 bg-emerald-500/15 text-emerald-100",
     REFUNDED: "border-white/10 bg-zinc-900 text-zinc-200",
     VOID: "border-white/10 bg-zinc-900 text-zinc-200",
   };

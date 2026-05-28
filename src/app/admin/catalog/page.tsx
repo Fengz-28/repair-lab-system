@@ -2,7 +2,7 @@ import { AdminNav } from "@/components/admin-nav";
 import { InventoryHero } from "@/components/repairlab/inventory-hero";
 import { InventoryStatsGrid } from "@/components/repairlab/inventory-stats-grid";
 import { LowStockAlertPanel } from "@/components/repairlab/low-stock-alert-panel";
-import { RepairContainer } from "@/components/repairlab";
+import { RepairContainer, RepairPageShell } from "@/components/repairlab";
 import { formatMoney } from "@/modules/customers/customer-labels";
 import { CatalogAdmin } from "@/modules/catalog/components/catalog-admin";
 import { requireLocalStaff } from "@/server/auth/local-admin";
@@ -92,7 +92,7 @@ export default async function AdminCatalogPage() {
   };
 
   return (
-    <main className="min-h-screen bg-black text-zinc-100">
+    <RepairPageShell>
       <AdminNav />
       <InventoryHero stats={stats} />
 
@@ -101,6 +101,6 @@ export default async function AdminCatalogPage() {
         <LowStockAlertPanel items={lowStockItems} />
         <CatalogAdmin items={catalogItems} />
       </RepairContainer>
-    </main>
+    </RepairPageShell>
   );
 }

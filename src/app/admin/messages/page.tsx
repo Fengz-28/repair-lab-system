@@ -4,7 +4,14 @@ import { MessageStatus } from "@prisma/client";
 import { AdminNav } from "@/components/admin-nav";
 import { MessageLogCard } from "@/components/repairlab/message-log-card";
 import { MessagesHero } from "@/components/repairlab/messages-hero";
-import { RepairContainer, RepairEmptyState, RepairSearchBar } from "@/components/repairlab";
+import {
+  RepairButton,
+  RepairContainer,
+  RepairEmptyState,
+  RepairGrid,
+  RepairPageShell,
+  RepairSearchBar,
+} from "@/components/repairlab";
 import { messageStatusLabel } from "@/modules/messages/message-labels";
 import {
   getMessageListData,
@@ -24,9 +31,10 @@ export default async function AdminMessagesPage({
   await requireLocalStaff();
   const params = await searchParams;
   const { filters, messages } = await getMessageListData(params);
+  const hasActiveFilters = Boolean(filters.search || filters.status || filters.provider || filters.template || filters.recent);
 
   return (
-    <main className="min-h-screen bg-black text-zinc-100">
+    <RepairPageShell>
       <AdminNav />
       <MessagesHero messages={messages} />
 
@@ -83,18 +91,22 @@ export default async function AdminMessagesPage({
 
         {messages.length === 0 ? (
           <RepairEmptyState
-            title="No hay mensajes registrados."
-            description="Cuando se creen tickets o se envien cotizaciones, apareceran aqui."
+            title="No hay mensajes para mostrar."
+            description="Cuando se creen tickets, se envien cotizaciones o cambien estados importantes, los mensajes transaccionales quedaran registrados aqui."
+            eyebrow={hasActiveFilters ? "Filtro sin resultados" : "Centro de mensajes vacio"}
+            icon="MS"
+            action={hasActiveFilters ? <RepairButton href="/admin/messages">Limpiar filtros</RepairButton> : <RepairButton href="/admin/tickets">Ver tickets</RepairButton>}
+            secondaryAction={hasActiveFilters ? <RepairButton href="/admin/tickets" tone="secondary">Ver tickets</RepairButton> : null}
           />
         ) : (
-          <section className="grid gap-4">
+          <RepairGrid>
             {messages.map((message) => (
               <MessageLogCard key={message.id} message={message} />
             ))}
-          </section>
+          </RepairGrid>
         )}
       </RepairContainer>
-    </main>
+    </RepairPageShell>
   );
 }
 

@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 
 import { createIntakeAction } from "@/app/admin/intake/actions";
+import { RepairFormFeedback } from "@/components/repairlab";
 import { initialIntakeActionState } from "@/modules/intake/intake.action-state";
 
 const deviceTypes = [
@@ -74,15 +75,8 @@ export function IntakeForm() {
       </FormSection>
 
       {state.message ? (
-        <div
-          className={`rounded border p-3 text-sm ${
-            state.ok
-              ? "border-green-200 bg-green-50 text-green-800"
-              : "border-red-200 bg-red-50 text-red-800"
-          }`}
-          role="status"
-        >
-          <p>{state.message}</p>
+        <div className="grid gap-3">
+          <RepairFormFeedback ok={state.ok} message={state.message} />
           {state.ticketNumber ? <p>Ticket: {state.ticketNumber}</p> : null}
           {state.receiptNumber ? <p>Comprobante: {state.receiptNumber}</p> : null}
           {state.ticketId ? (

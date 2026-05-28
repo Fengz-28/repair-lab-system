@@ -48,9 +48,9 @@ export function QuotePublicCard({ quote, token }: { quote: PublicQuote; token: s
                 <TableHeader>Total</TableHeader>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+            <tbody className="divide-y divide-white/10">
               {quote.items.map((item, index) => (
-                <tr key={`${item.description}-${index}`} className="text-zinc-800 dark:text-zinc-200">
+                <tr key={`${item.description}-${index}`} className="repair-table-row text-zinc-200">
                   <td className="px-4 py-3">{itemTypeLabel(item.itemType)}</td>
                   <td className="px-4 py-3 break-words font-semibold">{item.description}</td>
                   <td className="px-4 py-3">{String(item.quantity)}</td>
@@ -64,7 +64,7 @@ export function QuotePublicCard({ quote, token }: { quote: PublicQuote; token: s
       </div>
 
       <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_320px]">
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm leading-6 text-emerald-950 dark:border-emerald-900 dark:bg-emerald-950/60 dark:text-emerald-100">
+        <div className="rounded-2xl border border-emerald-300/20 bg-emerald-500/10 p-4 text-sm leading-6 text-emerald-100">
           {quote.customerNotes ? quote.customerNotes : "Precios sujetos a disponibilidad y validacion final del taller."}
         </div>
         <Totals
