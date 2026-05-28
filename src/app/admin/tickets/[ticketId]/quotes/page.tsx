@@ -90,7 +90,7 @@ export default async function TicketQuotesPage({
         customerName={customerName}
         deviceLabel={deviceLabel}
         quoteCount={quotes.length}
-        latestTotal={latestQuote ? `${latestQuote.currency} ${latestQuote.total}` : "Sin cotizacion"}
+        latestTotal={latestQuote ? `${latestQuote.currency} ${latestQuote.total}` : "Sin cotización"}
         latestStatus={latestQuote ? quoteStatusLabel(latestQuote.status) : "Pendiente"}
       />
 

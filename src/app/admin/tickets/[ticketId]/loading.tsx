@@ -16,7 +16,7 @@ export default function TicketDetailLoading() {
       <RepairPageHero
         eyebrow="Admin / Ticket"
         title="Cargando ticket"
-        description="Preparando timeline, cliente, equipo, finanzas y acciones operativas."
+        description="Preparando línea de tiempo, cliente, equipo, finanzas y acciones operativas."
       />
       <RepairContainer className="py-8 sm:py-10">
         <RepairGrid className="gap-6 lg:grid-cols-[minmax(0,8fr)_minmax(320px,4fr)]">

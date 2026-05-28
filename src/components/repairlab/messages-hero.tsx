@@ -28,7 +28,7 @@ export function MessagesHero({ messages }: { messages: MessageHeroItem[] }) {
             <p className="text-xs font-black uppercase tracking-[0.22em] text-emerald-300">Admin / Comunicaciones</p>
             <h1 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">Mensajes</h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-zinc-300 sm:text-base">
-              Centro de actividad para emails transaccionales, previews, estados de envio y errores operativos.
+              Centro de actividad para correos transaccionales, vistas previas, estados de envío y errores operativos.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <RepairBadge tone="emerald">{messages.length} mensajes</RepairBadge>

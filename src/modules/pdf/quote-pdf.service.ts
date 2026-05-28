@@ -56,7 +56,7 @@ export async function generateQuotePdf(
     ["Nombre", `${quote.customer.firstName} ${quote.customer.lastName ?? ""}`.trim()],
     ["Contacto", quote.customer.whatsappPhone ?? quote.customer.phone ?? quote.customer.email ?? "Sin contacto"],
     ["Email", quote.customer.email ?? "No registrado"],
-    ["Telefono", quote.customer.phone ?? quote.customer.whatsappPhone ?? "No registrado"],
+    ["Teléfono", quote.customer.phone ?? quote.customer.whatsappPhone ?? "No registrado"],
   ]);
 
   drawSectionTitle(ctx, "Equipo");
@@ -87,7 +87,7 @@ export async function generateQuotePdf(
     quote.customerNotes ??
       "Precios sujetos a disponibilidad de repuestos y validacion tecnica final.",
   );
-  drawParagraph(ctx, "Esta cotizacion no representa factura fiscal ni comprobante tributario.");
+  drawParagraph(ctx, "Esta cotización no representa factura fiscal ni comprobante tributario.");
 
   return {
     filename: `${quote.invoiceNumber}.pdf`,

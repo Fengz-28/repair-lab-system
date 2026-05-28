@@ -17,7 +17,7 @@ export default async function LoginPage() {
   return (
     <main className="min-h-screen bg-black text-zinc-50">
       <RepairPageHero
-        eyebrow="Home / Login"
+        eyebrow="Inicio / Acceso"
         title="Acceso administrativo"
         description="Ingreso seguro para operar tickets, clientes, cotizaciones, facturas, pagos e inventario del taller."
       />
@@ -27,7 +27,7 @@ export default async function LoginPage() {
           <div className="rounded-2xl border border-white/10 bg-zinc-950/90 p-6 shadow-2xl shadow-black/40">
             <div className="text-center">
               <p className="text-sm font-bold uppercase tracking-[0.18em] text-emerald-600">RepairLab</p>
-              <h1 className="mt-2 text-3xl font-black">Login</h1>
+              <h1 className="mt-2 text-3xl font-black">Iniciar sesión</h1>
               <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
                 Ingresa con tu usuario interno para administrar el taller.
               </p>

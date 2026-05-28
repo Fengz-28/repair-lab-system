@@ -14,7 +14,7 @@ export default function InvoiceLoading() {
       <RepairPageHero
         eyebrow="Admin / Factura"
         title="Cargando factura"
-        description="Preparando resumen financiero, lineas, historial de pagos y acciones."
+        description="Preparando resumen financiero, líneas, historial de pagos y acciones."
       />
       <RepairContainer className="space-y-6 py-8">
         <RepairSkeletonCard />

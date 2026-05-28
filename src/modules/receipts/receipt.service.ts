@@ -36,7 +36,7 @@ export async function createReceptionReceiptPlaceholder(
       items: {
         create: {
           itemType: "SERVICE",
-          description: "Comprobante placeholder de recepcion de equipo",
+          description: "Comprobante preliminar de recepción de equipo",
           quantity: 1,
           unitPrice: 0,
           lineTotal: 0,

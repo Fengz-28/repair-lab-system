@@ -2,11 +2,11 @@ import type { TicketStatus } from "@prisma/client";
 
 const stages: { status: TicketStatus; label: string; description: string }[] = [
   { status: "RECEIVED", label: "Recibido", description: "Equipo ingresado" },
-  { status: "INITIAL_REVIEW", label: "En revision", description: "Revision inicial" },
-  { status: "DIAGNOSIS", label: "Diagnostico", description: "Analisis tecnico" },
-  { status: "WAITING_APPROVAL", label: "Esperando aprobacion", description: "Cotizacion enviada" },
+  { status: "INITIAL_REVIEW", label: "En revisión", description: "Revisión inicial" },
+  { status: "DIAGNOSIS", label: "Diagnóstico", description: "Análisis técnico" },
+  { status: "WAITING_APPROVAL", label: "Esperando aprobación", description: "Cotización enviada" },
   { status: "APPROVED", label: "Aprobado", description: "Trabajo autorizado" },
-  { status: "REPAIR_IN_PROGRESS", label: "En reparacion", description: "Trabajo en curso" },
+  { status: "REPAIR_IN_PROGRESS", label: "En reparación", description: "Trabajo en curso" },
   { status: "READY_FOR_PICKUP", label: "Listo para entrega", description: "Equipo preparado" },
   { status: "DELIVERED", label: "Entregado", description: "Caso cerrado" },
 ];
@@ -20,7 +20,7 @@ export function PublicRepairProgress({ status }: { status: TicketStatus }) {
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
-            Avance de reparacion
+            Avance de reparación
           </p>
           <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Progreso del servicio</h2>
         </div>

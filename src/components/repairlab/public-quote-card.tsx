@@ -27,7 +27,7 @@ export function QuotePublicCard({ quote, token }: { quote: PublicQuote; token: s
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
-            Cotizacion
+            Cotización
           </p>
           <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">{quote.invoiceNumber}</h2>
         </div>
@@ -42,7 +42,7 @@ export function QuotePublicCard({ quote, token }: { quote: PublicQuote; token: s
             <thead className="bg-zinc-950/95 text-zinc-300">
               <tr>
                 <TableHeader>Tipo</TableHeader>
-                <TableHeader>Descripcion</TableHeader>
+                <TableHeader>Descripción</TableHeader>
                 <TableHeader>Cantidad</TableHeader>
                 <TableHeader>Unitario</TableHeader>
                 <TableHeader>Total</TableHeader>
@@ -65,7 +65,7 @@ export function QuotePublicCard({ quote, token }: { quote: PublicQuote; token: s
 
       <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_320px]">
         <div className="rounded-2xl border border-emerald-300/20 bg-emerald-500/10 p-4 text-sm leading-6 text-emerald-100">
-          {quote.customerNotes ? quote.customerNotes : "Precios sujetos a disponibilidad y validacion final del taller."}
+          {quote.customerNotes ? quote.customerNotes : "Precios sujetos a disponibilidad y validación final del taller."}
         </div>
         <Totals
           rows={[
@@ -78,10 +78,10 @@ export function QuotePublicCard({ quote, token }: { quote: PublicQuote; token: s
 
       <div className="mt-5 grid gap-3 sm:flex sm:flex-wrap sm:items-center">
         <RepairButton href={`/track/${token}/quote.pdf`} tone="primary">
-          Descargar cotizacion PDF
+          Descargar PDF de cotización
         </RepairButton>
         <span className="rounded-full border border-white/10 bg-zinc-900 px-4 py-2 text-sm font-semibold text-zinc-300">
-          La aprobacion en linea se implementara proximamente.
+          La aprobación en línea se implementará próximamente.
         </span>
       </div>
     </section>

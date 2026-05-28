@@ -190,7 +190,7 @@ function assertTicketOperationalRequirements(
     );
 
     if (!hasApprovedQuote) {
-      throw new Error("No se puede iniciar reparacion sin una cotizacion aprobada.");
+      throw new Error("No se puede iniciar reparación sin una cotización aprobada.");
     }
   }
 
@@ -476,10 +476,10 @@ function ticketStatusLabel(status: TicketStatus) {
   const labels: Record<TicketStatus, string> = {
     RECEIVED: "Recibido",
     INITIAL_REVIEW: "Revision inicial",
-    DIAGNOSIS: "En diagnostico",
-    WAITING_APPROVAL: "Esperando aprobacion",
+    DIAGNOSIS: "En diagnóstico",
+    WAITING_APPROVAL: "Esperando aprobación",
     APPROVED: "Aprobado",
-    REPAIR_IN_PROGRESS: "En reparacion",
+    REPAIR_IN_PROGRESS: "En reparación",
     READY_FOR_PICKUP: "Listo para entrega",
     DELIVERED: "Entregado",
     CANCELLED: "Cancelado",

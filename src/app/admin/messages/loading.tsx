@@ -16,7 +16,7 @@ export default function MessagesLoading() {
       <RepairPageHero
         eyebrow="Admin / Comunicaciones"
         title="Cargando mensajes"
-        description="Preparando historial de notificaciones, filtros y estados de envio."
+        description="Preparando historial de notificaciones, filtros y estados de envío."
       />
       <RepairContainer className="space-y-6 py-8">
         <RepairPanel>

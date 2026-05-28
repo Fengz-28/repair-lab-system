@@ -16,7 +16,7 @@ export function PublicTopbar() {
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
           <span>+506 0000-0000</span>
           <span>soporte@repairlab.local</span>
-          <span className="hidden md:inline">Taller electronico / demo controlada</span>
+          <span className="hidden md:inline">Taller electrónico / demo controlada</span>
         </div>
         <span>Lun - Vie: 09:00 - 17:00</span>
       </RepairContainer>
@@ -37,7 +37,7 @@ export function PublicNavbar() {
               Repair<span className="text-emerald-500">Lab</span>
             </span>
             <span className="block text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">
-              Electronic repair
+              Reparación electrónica
             </span>
           </span>
         </Link>
@@ -59,7 +59,7 @@ export function PublicNavbar() {
 
         <div className="grid gap-2 sm:flex">
           <RepairButton href="/contact" size="sm">
-            Solicitar reparacion
+            Solicitar reparación
           </RepairButton>
           <RepairButton href="/admin" tone="secondary" size="sm">
             Admin
@@ -86,7 +86,7 @@ export function PublicHero({
   title,
   description,
   primaryHref = "/contact",
-  primaryLabel = "Solicitar reparacion",
+  primaryLabel = "Solicitar reparación",
   secondaryHref,
   secondaryLabel,
   badge,
@@ -178,18 +178,18 @@ export function PublicFooter() {
             Repair<span className="text-emerald-400">Lab</span>
           </p>
           <p className="mt-3 max-w-md text-sm leading-6 text-zinc-400">
-            Servicio tecnico para electronica, consolas, controles y componentes. Sistema de seguimiento de reparacion
+            Servicio técnico para electrónica, consolas, controles y componentes. Sistema de seguimiento de reparación
             preparado para clientes.
           </p>
         </div>
         <div className="grid gap-6 sm:grid-cols-3">
-          <FooterGroup title="Servicios" items={["Diagnostico", "Consolas", "Microsoldadura", "Mantenimiento"]} />
+          <FooterGroup title="Servicios" items={["Diagnóstico", "Consolas", "Microsoldadura", "Mantenimiento"]} />
           <FooterGroup title="Enlaces" items={["Inicio", "Servicios", "Productos", "Contacto"]} />
           <FooterGroup title="Contacto" items={["soporte@repairlab.local", "+506 0000-0000", "Lun - Vie"]} />
         </div>
       </RepairContainer>
       <div className="border-t border-zinc-800 py-5 text-center text-xs text-zinc-500">
-        RepairLab. Sistema de seguimiento de reparacion.
+        RepairLab. Sistema de seguimiento de reparación.
       </div>
     </footer>
   );
@@ -202,11 +202,11 @@ function TechVisual() {
       <div className="relative rounded-[2rem] border border-white/10 bg-zinc-900/45 p-5 shadow-2xl shadow-black/30 backdrop-blur">
         <div className="rounded-3xl border border-white/10 bg-zinc-950/80 p-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black uppercase tracking-[0.18em] text-emerald-300">Repair bench</span>
+            <span className="text-xs font-black uppercase tracking-[0.18em] text-emerald-300">Mesa técnica</span>
             <span className="rounded-full bg-emerald-400 px-3 py-1 text-xs font-black text-zinc-950">Online</span>
           </div>
           <div className="mt-5 grid gap-3">
-            {["Recepcion segura", "Diagnostico tecnico", "Cotizacion transparente", "Entrega documentada"].map((item, index) => (
+            {["Recepción segura", "Diagnóstico técnico", "Cotización transparente", "Entrega documentada"].map((item, index) => (
               <div key={item} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-zinc-900/35 p-3">
                 <span className="grid size-9 place-items-center rounded-full bg-emerald-500 text-xs font-black text-white">
                   {index + 1}

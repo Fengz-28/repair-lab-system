@@ -33,7 +33,7 @@ export default async function AdminIntakePage() {
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Admin / Recepcion</p>
         <h1 className="text-2xl font-semibold text-zinc-950 dark:text-zinc-50 sm:text-3xl">Recepcion de equipos</h1>
         <p className="max-w-3xl text-sm text-zinc-600 dark:text-zinc-300">
-          Registra aqui un equipo que ingresa al taller. El sistema crea automaticamente el ticket y su historial.
+          Registra aquí un equipo que ingresa al taller. El sistema crea automáticamente el ticket y su historial.
         </p>
       </header>
 
@@ -56,7 +56,7 @@ export default async function AdminIntakePage() {
               {recentTickets.length === 0 ? (
                 <tr>
                   <td className="px-3 py-4 text-zinc-500 dark:text-zinc-400" colSpan={5}>
-                    Aun no hay recepciones registradas.
+                    Aún no hay recepciones registradas.
                   </td>
                 </tr>
               ) : (
@@ -90,10 +90,10 @@ function ticketStatusLabel(status: TicketStatus) {
   const labels: Record<TicketStatus, string> = {
     RECEIVED: "Recibido",
     INITIAL_REVIEW: "Revision inicial",
-    DIAGNOSIS: "En diagnostico",
-    WAITING_APPROVAL: "Esperando aprobacion",
-    APPROVED: "Listo para reparacion",
-    REPAIR_IN_PROGRESS: "En reparacion",
+    DIAGNOSIS: "En diagnóstico",
+    WAITING_APPROVAL: "Esperando aprobación",
+    APPROVED: "Listo para reparación",
+    REPAIR_IN_PROGRESS: "En reparación",
     READY_FOR_PICKUP: "Listo para entrega",
     DELIVERED: "Entregado",
     CANCELLED: "Cancelado",

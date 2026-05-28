@@ -29,13 +29,13 @@ export function CustomerSidebar({
     <aside className="space-y-5 lg:sticky lg:top-28">
       <RepairFloatingPanel>
         <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
-          Contacto rapido
+          Contacto rápido
         </p>
         <div className="mt-4 space-y-3 text-sm">
           <Info label="Principal" value={contact} />
-          <Info label="Telefono" value={phone ?? "No registrado"} />
+          <Info label="Teléfono" value={phone ?? "No registrado"} />
           <Info label="WhatsApp" value={whatsappPhone ?? "No registrado"} />
-          <Info label="Email" value={email ?? "No registrado"} />
+          <Info label="Correo" value={email ?? "No registrado"} />
         </div>
       </RepairFloatingPanel>
 
@@ -48,7 +48,7 @@ export function CustomerSidebar({
             <h2 className="mt-2 text-xl font-black text-zinc-950 dark:text-zinc-50">Resumen</h2>
           </div>
           <RepairBadge tone={balanceDue > 0 ? "warning" : "emerald"}>
-            {balanceDue > 0 ? "Por cobrar" : "Al dia"}
+            {balanceDue > 0 ? "Por cobrar" : "Al día"}
           </RepairBadge>
         </div>
         <div className="mt-5 grid gap-3">
@@ -67,7 +67,7 @@ export function CustomerSidebar({
         </p>
         <div className="mt-4 grid gap-2">
           <RepairButton href="/admin/intake" size="sm">
-            Nueva recepcion
+            Nueva recepción
           </RepairButton>
           <RepairButton href="/admin/tickets" tone="secondary" size="sm">
             Ver tickets

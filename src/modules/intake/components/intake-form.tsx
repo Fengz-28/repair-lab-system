@@ -31,7 +31,7 @@ export function IntakeForm() {
         <TextInput label="Nombre" name="customer.firstName" required />
         <TextInput label="Apellido" name="customer.lastName" />
         <TextInput label="Email" name="customer.email" type="email" />
-        <TextInput label="Telefono" name="customer.phone" />
+        <TextInput label="Teléfono" name="customer.phone" />
         <TextInput label="WhatsApp" name="customer.whatsappPhone" />
         <SelectInput
           label="Contacto preferido"
@@ -104,7 +104,7 @@ function SubmitButton() {
       disabled={pending}
       className="min-h-11 w-full rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-black text-black shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:border disabled:border-white/5 disabled:bg-zinc-900 disabled:text-zinc-500 disabled:shadow-none sm:w-auto"
     >
-      {pending ? "Registrando..." : "Registrar recepcion"}
+      {pending ? "Registrando..." : "Registrar recepción"}
     </button>
   );
 }

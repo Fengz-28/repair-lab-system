@@ -102,7 +102,7 @@ export function drawTable<T>(ctx: PdfContext, columns: PdfTableColumn<T>[], rows
 
   if (rows.length === 0) {
     ensureSpace(ctx, rowHeight);
-    drawText(ctx, "Sin lineas registradas.", pageMargin + 6, ctx.y - 9, 9);
+    drawText(ctx, "Sin líneas registradas.", pageMargin + 6, ctx.y - 9, 9);
     ctx.y -= rowHeight;
     return;
   }

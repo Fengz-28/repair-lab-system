@@ -455,15 +455,15 @@ function quoteTimelineLabel(status: InvoiceStatus) {
   }
 
   if (status === InvoiceStatus.APPROVED) {
-    return "Cotizacion aprobada. El ticket quedo listo para reparacion.";
+    return "Cotización aprobada. El ticket quedó listo para reparación.";
   }
 
   if (status === InvoiceStatus.REJECTED) {
-    return "Cotizacion rechazada. El ticket volvio a diagnostico.";
+    return "Cotización rechazada. El ticket volvió a diagnóstico.";
   }
 
   if (status === InvoiceStatus.EXPIRED) {
-    return "Cotizacion expirada. El ticket volvio a diagnostico.";
+    return "Cotización expirada. El ticket volvió a diagnóstico.";
   }
 
   return "Cotizacion actualizada";
@@ -576,19 +576,19 @@ async function syncTicketStatusFromQuoteApproval(
 
 function ticketQuoteSyncReason(status: InvoiceStatus) {
   if (status === InvoiceStatus.SENT) {
-    return "Cotizacion enviada. El ticket quedo esperando aprobacion.";
+    return "Cotización enviada. El ticket quedó esperando aprobación.";
   }
 
   if (status === InvoiceStatus.APPROVED) {
-    return "Cotizacion aprobada. El ticket quedo listo para reparacion.";
+    return "Cotización aprobada. El ticket quedó listo para reparación.";
   }
 
   if (status === InvoiceStatus.REJECTED) {
-    return "Cotizacion rechazada. El ticket volvio a diagnostico.";
+    return "Cotización rechazada. El ticket volvió a diagnóstico.";
   }
 
   if (status === InvoiceStatus.EXPIRED) {
-    return "Cotizacion expirada. El ticket volvio a diagnostico.";
+    return "Cotización expirada. El ticket volvió a diagnóstico.";
   }
 
   return "Cotizacion actualizada.";

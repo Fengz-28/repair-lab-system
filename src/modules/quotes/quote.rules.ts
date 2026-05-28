@@ -11,18 +11,18 @@ export function assertQuoteCanMoveToStatusFromSnapshot(input: {
 
   if (input.itemCount === 0) {
     if (input.nextStatus === InvoiceStatus.SENT) {
-      throw new Error("No se puede enviar una cotizacion sin lineas.");
+      throw new Error("No se puede enviar una cotización sin líneas.");
     }
 
-    throw new Error("No se puede aprobar una cotizacion sin lineas.");
+    throw new Error("No se puede aprobar una cotización sin líneas.");
   }
 
   if (input.nextStatus === InvoiceStatus.SENT && input.total <= 0) {
-    throw new Error("No se puede enviar una cotizacion con total cero.");
+    throw new Error("No se puede enviar una cotización con total cero.");
   }
 
   if (input.nextStatus === InvoiceStatus.APPROVED && input.total <= 0) {
-    throw new Error("No se puede aprobar una cotizacion con total cero.");
+    throw new Error("No se puede aprobar una cotización con total cero.");
   }
 }
 

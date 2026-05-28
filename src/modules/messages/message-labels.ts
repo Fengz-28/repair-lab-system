@@ -39,10 +39,10 @@ export function messageStatusTone(status: MessageStatus, provider?: string | nul
 
 export function channelLabel(channel: CommunicationChannel) {
   const labels: Record<CommunicationChannel, string> = {
-    EMAIL: "Email",
+    EMAIL: "Correo",
     SMS: "SMS",
     WHATSAPP: "WhatsApp",
-    PHONE: "Telefono",
+    PHONE: "Teléfono",
     INTERNAL: "Interno",
     SYSTEM: "Sistema",
   };
@@ -68,8 +68,8 @@ export function templateLabel(template?: string | null) {
   const labels: Record<string, string> = {
     "intake.received": "Ticket recibido",
     "ticket.status_changed": "Cambio de estado",
-    "quote.sent": "Cotizacion lista",
-    "quote.approved": "Cotizacion aprobada",
+    "quote.sent": "Cotización lista",
+    "quote.approved": "Cotización aprobada",
     "ticket.ready_for_pickup": "Equipo listo",
     "ticket.delivered": "Ticket cerrado",
   };

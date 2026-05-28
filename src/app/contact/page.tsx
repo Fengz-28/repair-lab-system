@@ -6,8 +6,8 @@ export default function ContactPage() {
     <PublicShell>
       <PublicHero
         eyebrow="Contacto"
-        title="Solicita una revision para tu equipo."
-        description="Comparte la informacion basica de tu caso por los canales del taller. El formulario visual queda preparado para integracion segura futura."
+        title="Solicita una revisión para tu equipo."
+        description="Comparte la información básica de tu caso por los canales del taller. El formulario visual queda preparado para una integración segura futura."
         primaryHref="#formulario"
         primaryLabel="Ver formulario"
         secondaryHref="/services"
@@ -16,9 +16,9 @@ export default function ContactPage() {
 
       <RepairContainer className="space-y-12 py-16">
         <PublicSectionHeader
-          eyebrow="Comunicacion"
-          title="Atencion clara desde el primer contacto"
-          description="Por ahora este formulario es visual y no envia datos. Las integraciones reales se activaran cuando exista el contrato seguro."
+          eyebrow="Comunicación"
+          title="Atención clara desde el primer contacto"
+          description="Por ahora este formulario es visual y no envía datos. Las integraciones reales se activarán cuando exista el contrato seguro."
         />
 
         <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
@@ -28,7 +28,7 @@ export default function ContactPage() {
               <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
                 Formulario placeholder
               </p>
-              <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Solicitud de reparacion</h2>
+              <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Solicitud de reparación</h2>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Input label="Nombre" />
@@ -45,14 +45,14 @@ export default function ContactPage() {
               />
             </label>
             <RepairInlineAlert tone="info" title="Formulario visual">
-              <p>Este formulario no envia datos todavia. Usa los canales del taller mientras se habilita la integracion segura.</p>
+              <p>Este formulario no envía datos todavía. Usa los canales del taller mientras se habilita la integración segura.</p>
             </RepairInlineAlert>
             <button
               type="button"
               disabled
               className="min-h-11 rounded-full bg-zinc-300 px-5 py-2.5 text-sm font-black text-zinc-600 disabled:cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-400"
             >
-              Envio disponible proximamente
+              Envío disponible próximamente
             </button>
           </RepairPanel>
           </div>
@@ -61,15 +61,15 @@ export default function ContactPage() {
             <RepairPanel>
               <RepairBadge tone="emerald">Contacto</RepairBadge>
               <div className="mt-4 space-y-3 text-sm">
-                <Info label="Telefono" value="+506 0000-0000" />
-                <Info label="Email" value="soporte@repairlab.local" />
+                <Info label="Teléfono" value="+506 0000-0000" />
+                <Info label="Correo" value="soporte@repairlab.local" />
                 <Info label="Horario" value="Lun - Vie: 09:00 - 17:00" />
               </div>
             </RepairPanel>
             <RepairPanel className="border-emerald-300/20 bg-emerald-500/10">
               <h3 className="text-xl font-black text-zinc-950 dark:text-zinc-50">WhatsApp</h3>
               <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
-                La integracion automatica de WhatsApp se implementara proximamente. Por ahora el contacto es manual.
+                La integración automática de WhatsApp se implementará próximamente. Por ahora el contacto es manual.
               </p>
               <div className="mt-5">
                 <RepairButton href="/services" tone="secondary" size="sm">Revisar servicios</RepairButton>

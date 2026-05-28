@@ -23,9 +23,9 @@ export function TicketCustomerCard({
         </div>
       </div>
       <dl className="mt-5 grid gap-3 text-sm sm:grid-cols-2">
-        <Info label="Telefono" value={phone} />
+        <Info label="Teléfono" value={phone} />
         <Info label="WhatsApp" value={whatsapp} />
-        <Info label="Email" value={email} wide />
+        <Info label="Correo" value={email} wide />
       </dl>
     </RepairPanel>
   );

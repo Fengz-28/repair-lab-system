@@ -37,7 +37,7 @@ export async function requireLocalStaff(
   }
 
   if (options.roles && !options.roles.includes(session.role)) {
-    throw new Error("No tienes permisos para realizar esta accion.");
+    throw new Error("No tienes permisos para realizar esta acción.");
   }
 
   return session;

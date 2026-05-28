@@ -92,7 +92,7 @@ export default async function AdminMessagesPage({
         {messages.length === 0 ? (
           <RepairEmptyState
             title="No hay mensajes para mostrar."
-            description="Cuando se creen tickets, se envien cotizaciones o cambien estados importantes, los mensajes transaccionales quedaran registrados aqui."
+            description="Cuando se creen tickets, se envíen cotizaciones o cambien estados importantes, los mensajes transaccionales quedarán registrados aquí."
             eyebrow={hasActiveFilters ? "Filtro sin resultados" : "Centro de mensajes vacio"}
             icon="MS"
             action={hasActiveFilters ? <RepairButton href="/admin/messages">Limpiar filtros</RepairButton> : <RepairButton href="/admin/tickets">Ver tickets</RepairButton>}

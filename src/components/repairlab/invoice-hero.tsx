@@ -35,7 +35,7 @@ export function InvoiceHero({
             <p className="text-xs font-black uppercase tracking-[0.22em] text-emerald-300">Billing / {invoiceNumber}</p>
             <h1 className="mt-3 break-words text-4xl font-black tracking-tight sm:text-5xl">Factura interna</h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-zinc-300 sm:text-base">
-              Gestiona lineas facturadas, pagos manuales y saldo pendiente para el ticket {ticketNumber}.
+              Gestiona líneas facturadas, pagos manuales y saldo pendiente para el ticket {ticketNumber}.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <RepairBadge tone="emerald">{customerName}</RepairBadge>

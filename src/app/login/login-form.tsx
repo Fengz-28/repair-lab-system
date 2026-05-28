@@ -18,7 +18,7 @@ export function LoginForm() {
   return (
     <form action={formAction} className="space-y-4">
       <label className="grid gap-2 text-sm font-bold text-zinc-800 dark:text-zinc-200">
-        Email
+        Correo
         <input
           name="email"
           type="email"
@@ -28,7 +28,7 @@ export function LoginForm() {
         />
       </label>
       <label className="grid gap-2 text-sm font-bold text-zinc-800 dark:text-zinc-200">
-        Password
+        Contraseña
         <input
           name="password"
           type="password"

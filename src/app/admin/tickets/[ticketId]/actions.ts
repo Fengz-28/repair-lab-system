@@ -190,7 +190,7 @@ export async function convertQuoteToInvoiceAction(
   if (!parsed.success) {
     return {
       ok: false,
-      message: "No se pudo generar la factura. Revisa la cotizacion.",
+      message: "No se pudo generar la factura. Revisa la cotización.",
       errors: parsed.error.flatten().fieldErrors,
     };
   }

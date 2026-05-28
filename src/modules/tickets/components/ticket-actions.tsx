@@ -54,7 +54,7 @@ export function TicketGuidedActions({
       </div>
       {actions.length === 0 ? (
         <RepairInlineAlert tone="info" compact>
-          <p>Este ticket no tiene mas acciones operativas por ahora.</p>
+          <p>Este ticket no tiene más acciones operativas por ahora.</p>
         </RepairInlineAlert>
       ) : (
         <div className="grid gap-2">
@@ -324,7 +324,7 @@ function getOperationalBlockReason(
   },
 ) {
   if (nextStatus === "REPAIR_IN_PROGRESS" && !context.hasApprovedQuote) {
-    return "Necesitas una cotizacion aprobada antes de iniciar la reparacion.";
+    return "Necesitas una cotización aprobada antes de iniciar la reparación.";
   }
 
   if (nextStatus === "DELIVERED" && !context.hasResolution) {
@@ -337,11 +337,11 @@ function getOperationalBlockReason(
 function operationalActionLabel(status: TicketStatus) {
   const labels: Record<TicketStatus, string> = {
     RECEIVED: "Volver a recibido",
-    INITIAL_REVIEW: "Enviar a revision inicial",
-    DIAGNOSIS: "Enviar a diagnostico",
-    WAITING_APPROVAL: "Esperar aprobacion",
-    APPROVED: "Marcar listo para reparacion",
-    REPAIR_IN_PROGRESS: "Iniciar reparacion",
+    INITIAL_REVIEW: "Enviar a revisión inicial",
+    DIAGNOSIS: "Enviar a diagnóstico",
+    WAITING_APPROVAL: "Esperar aprobación",
+    APPROVED: "Marcar listo para reparación",
+    REPAIR_IN_PROGRESS: "Iniciar reparación",
     READY_FOR_PICKUP: "Marcar listo para entrega",
     DELIVERED: "Cerrar ticket",
     CANCELLED: "Cancelar ticket",
@@ -353,10 +353,10 @@ function operationalActionLabel(status: TicketStatus) {
 function operationalActionComment(status: TicketStatus) {
   const comments: Record<TicketStatus, string> = {
     RECEIVED: "Ticket marcado como recibido.",
-    INITIAL_REVIEW: "Equipo enviado a revision inicial.",
-    DIAGNOSIS: "Equipo enviado a diagnostico tecnico.",
-    WAITING_APPROVAL: "Ticket en espera de aprobacion de cotizacion.",
-    APPROVED: "Ticket listo para iniciar reparacion.",
+    INITIAL_REVIEW: "Equipo enviado a revisión inicial.",
+    DIAGNOSIS: "Equipo enviado a diagnóstico técnico.",
+    WAITING_APPROVAL: "Ticket en espera de aprobación de cotización.",
+    APPROVED: "Ticket listo para iniciar reparación.",
     REPAIR_IN_PROGRESS: "Reparacion iniciada.",
     READY_FOR_PICKUP: "Reparacion terminada. Equipo listo para entrega.",
     DELIVERED: "Equipo entregado al cliente. Ticket cerrado.",
@@ -371,9 +371,9 @@ function ticketStatusLabel(status: TicketStatus) {
     RECEIVED: "Recibido",
     INITIAL_REVIEW: "Revision inicial",
     DIAGNOSIS: "Diagnostico",
-    WAITING_APPROVAL: "Esperando aprobacion",
-    APPROVED: "Listo para reparacion",
-    REPAIR_IN_PROGRESS: "En reparacion",
+    WAITING_APPROVAL: "Esperando aprobación",
+    APPROVED: "Listo para reparación",
+    REPAIR_IN_PROGRESS: "En reparación",
     READY_FOR_PICKUP: "Listo para entrega",
     DELIVERED: "Cerrado",
     CANCELLED: "Cancelado",

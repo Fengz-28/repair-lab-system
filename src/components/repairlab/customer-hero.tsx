@@ -53,8 +53,8 @@ export function CustomerHero({
               <HeroMetric label="Pagado" value={formatMoney(totalPaid)} />
             </div>
             <div className="mt-4 grid gap-2">
-              <p className="text-sm text-zinc-300">Telefono: {phone ?? "No registrado"}</p>
-              <p className="break-words text-sm text-zinc-300">Email: {email ?? "No registrado"}</p>
+              <p className="text-sm text-zinc-300">Teléfono: {phone ?? "No registrado"}</p>
+              <p className="break-words text-sm text-zinc-300">Correo: {email ?? "No registrado"}</p>
             </div>
             <div className="mt-5">
               <RepairButton href={`/admin/tickets?search=${encodeURIComponent(name)}`} tone="primary">

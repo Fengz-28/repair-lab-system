@@ -40,9 +40,11 @@ export function RepairTopbar() {
 
 export function RepairNavbar({
   links,
+  utility,
   user,
 }: {
   links: NavLink[];
+  utility?: React.ReactNode;
   user?: {
     name: string;
     role: string;
@@ -50,16 +52,19 @@ export function RepairNavbar({
 }) {
   return (
     <div className="sticky top-0 z-30 border-b border-white/10 bg-black/90 shadow-sm shadow-black/30 backdrop-blur-xl">
-      <RepairContainer className="flex flex-col gap-4 py-4 lg:flex-row lg:items-center lg:justify-between">
-        <Link className="group flex items-center gap-3" href="/admin">
-            <span className="repair-card-motion grid size-12 place-items-center rounded-2xl bg-emerald-500 text-lg font-black text-black shadow-lg shadow-emerald-500/25 group-hover:shadow-cyan-400/20">
+      <RepairContainer className="flex flex-col gap-4 py-5 lg:flex-row lg:items-center lg:gap-7 lg:py-5">
+        <Link
+          className="group flex min-w-fit items-center gap-4 rounded-3xl px-1 py-1 repair-focus-ring"
+          href="/admin"
+        >
+          <span className="repair-card-motion grid size-12 place-items-center rounded-2xl bg-emerald-500 text-lg font-black text-black shadow-lg shadow-emerald-500/20 group-hover:shadow-cyan-400/15 sm:size-[3.25rem]">
             R
           </span>
-          <span>
-            <span className="block text-xl font-black tracking-tight text-zinc-950 dark:text-zinc-50">
+          <span className="leading-none">
+            <span className="block text-[1.35rem] font-black tracking-tight text-zinc-50">
               Repair<span className="text-emerald-500">Lab</span>
             </span>
-            <span className="block text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">
+            <span className="mt-1 block text-[0.68rem] font-black uppercase tracking-[0.24em] text-zinc-500">
               Service OS
             </span>
           </span>
@@ -68,12 +73,13 @@ export function RepairNavbar({
         <RepairNavLinks links={links} />
 
         {user ? (
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="rounded-2xl border border-white/10 bg-zinc-900/80 px-4 py-2">
-              <p className="max-w-48 truncate text-sm font-semibold text-zinc-950 dark:text-zinc-50">
+          <div className="flex min-w-fit flex-wrap items-center gap-3 lg:ml-auto lg:justify-end">
+            {utility}
+            <div className="rounded-2xl border border-white/10 bg-zinc-950/80 px-4 py-2.5 shadow-sm shadow-black/20">
+              <p className="max-w-48 truncate text-sm font-bold text-zinc-50">
                 {user.name}
               </p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">{user.role}</p>
+              <p className="text-xs font-medium text-zinc-500">{user.role}</p>
             </div>
             <form action="/logout" method="post">
               <RepairButton as="button" tone="ghost" size="sm">
@@ -522,8 +528,8 @@ export function RepairFooter() {
           </p>
         </div>
         <div className="grid gap-6 sm:grid-cols-3">
-          <FooterGroup title="Operaciones" items={["Recepcion", "Tickets", "Cotizaciones", "Facturas"]} />
-          <FooterGroup title="Gestion" items={["Clientes", "Inventario", "Mensajes", "Dashboard"]} />
+          <FooterGroup title="Operaciones" items={["Recepción", "Tickets", "Cotizaciones", "Facturas"]} />
+          <FooterGroup title="Gestión" items={["Clientes", "Inventario", "Mensajes", "Panel"]} />
           <FooterGroup title="Contacto" items={["soporte@repairlab.local", "+506 0000-0000", "Lun - Vie"]} />
         </div>
       </RepairContainer>

@@ -26,6 +26,8 @@ import {
   templateLabel,
 } from "@/modules/messages/message-labels";
 import { parseMessageMetadata } from "@/modules/messages/message-metadata";
+import { ActivityTimeline } from "@/modules/ux/components/activity-timeline";
+import type { ActivityTimelineItemData } from "@/modules/ux/components/activity-timeline";
 import {
   AttachmentPlaceholderForm,
   GenerateInvoiceForm,
@@ -152,6 +154,14 @@ export default async function TicketDetailPage({
     ...item,
     tone: timelineTone(item.type, item.title),
   }));
+  const derivedActivityItems = buildDerivedActivityItems({
+    currentStatus: ticket.status,
+    generatedInvoice: generatedInvoice ?? null,
+    invoices,
+    quotes,
+    ticketCreatedAt: ticket.createdAt,
+    ticketUpdatedAt: ticket.updatedAt,
+  });
 
   return (
     <RepairPageShell>
@@ -179,6 +189,13 @@ export default async function TicketDetailPage({
 
             <RepairTicketTimeline items={visualTimelineItems} />
 
+            <ActivityTimeline
+              title="Línea de tiempo"
+              subtitle="Hitos principales derivados de los datos actuales del ticket. No reemplaza auditoría ni eventos internos."
+              items={derivedActivityItems}
+              emptyDescription="Cuando el ticket tenga cotizaciones, factura o pagos disponibles, aparecerán aquí como hitos operativos."
+            />
+
             <RepairGrid className="gap-6 xl:grid-cols-2">
               <TicketCustomerCard
                 name={customerName}
@@ -196,7 +213,7 @@ export default async function TicketDetailPage({
 
             <FinancialSummaryCard
               title="Cotizaciones"
-              number={quotes[0]?.invoiceNumber ?? "Sin cotizacion"}
+              number={quotes[0]?.invoiceNumber ?? "Sin cotización"}
               total={quotes[0] ? `${quotes[0].currency} ${quotes[0].total.toString()}` : undefined}
               status={quotes[0] ? quoteStatusLabel(quotes[0].status) : undefined}
             >
@@ -204,8 +221,8 @@ export default async function TicketDetailPage({
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <p className="text-sm text-zinc-500 dark:text-zinc-400">
                     {quotes.length === 0
-                      ? "No hay cotizaciones. Cuando el diagnostico tenga precio, crea una cotizacion."
-                      : `${quotes.length} cotizacion(es) registradas.`}
+                      ? "No hay cotizaciones. Cuando el diagnóstico tenga precio, crea una cotización."
+                      : `${quotes.length} cotización(es) registradas.`}
                   </p>
                   <RepairButton href={`/admin/tickets/${ticket.id}/quotes`} tone="secondary" size="sm">
                     Abrir cotizaciones
@@ -222,7 +239,7 @@ export default async function TicketDetailPage({
                           </p>
                         </div>
                         <div className="flex flex-wrap items-center gap-2">
-                          <StatusBadge label="Cotizacion" value={quoteStatusLabel(quote.status)} tone="quote" />
+                          <StatusBadge label="Cotización" value={quoteStatusLabel(quote.status)} tone="quote" />
                           <a className="text-sm font-bold text-emerald-700 underline dark:text-emerald-300" href={`/admin/tickets/${ticket.id}/quotes/${quote.id}/pdf`}>
                             PDF
                           </a>
@@ -236,7 +253,7 @@ export default async function TicketDetailPage({
 
             <FinancialSummaryCard
               title="Factura interna"
-              number={generatedInvoice?.invoiceNumber ?? (approvedQuote ? `Cotizacion aprobada: ${approvedQuote.invoiceNumber}` : "Sin factura")}
+              number={generatedInvoice?.invoiceNumber ?? (approvedQuote ? `Cotización aprobada: ${approvedQuote.invoiceNumber}` : "Sin factura")}
               total={generatedInvoice ? `${generatedInvoice.currency} ${generatedInvoice.total.toString()}` : approvedQuote ? `${approvedQuote.currency} ${approvedQuote.total.toString()}` : undefined}
               status={generatedInvoice ? paymentStatusLabel(generatedInvoice.paymentStatus) : undefined}
             >
@@ -254,12 +271,12 @@ export default async function TicketDetailPage({
                   <GenerateInvoiceForm ticketId={ticket.id} quoteId={approvedQuote.id} />
                 ) : (
                   <p className="text-sm text-amber-700 dark:text-amber-200">
-                    La factura no puede generarse hasta que la cotizacion tenga lineas y total mayor a cero.
+                    La factura no puede generarse hasta que la cotización tenga líneas y total mayor a cero.
                   </p>
                 )
               ) : (
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                  La factura se podra generar cuando exista una cotizacion aprobada.
+                  La factura se podrá generar cuando exista una cotización aprobada.
                 </p>
               )}
             </FinancialSummaryCard>
@@ -351,15 +368,15 @@ export default async function TicketDetailPage({
           </section>
 
           <TicketSidebar>
-            <TicketSidebarCard title="Estado actual" eyebrow="Operacion">
+            <TicketSidebarCard title="Estado actual" eyebrow="Operación">
               <div className="space-y-3">
                 <StatusBadge label="Ticket" value={ticketStatusLabel(ticket.status)} tone="ticket" />
-                {quotes[0] ? <StatusBadge label="Cotizacion" value={quoteStatusLabel(quotes[0].status)} tone="quote" /> : null}
+                {quotes[0] ? <StatusBadge label="Cotización" value={quoteStatusLabel(quotes[0].status)} tone="quote" /> : null}
                 {generatedInvoice ? <StatusBadge label="Pago" value={paymentStatusLabel(generatedInvoice.paymentStatus)} tone="invoice" /> : null}
               </div>
             </TicketSidebarCard>
 
-            <TicketSidebarCard title="Acciones rapidas" eyebrow="Workflow">
+            <TicketSidebarCard title="Acciones rápidas" eyebrow="Flujo de trabajo">
               <div className="space-y-4">
                 <TicketGuidedActions
                   ticketId={ticket.id}
@@ -376,7 +393,7 @@ export default async function TicketDetailPage({
               </div>
             </TicketSidebarCard>
 
-            <TicketSidebarCard title="Portal del cliente" eyebrow="Publico">
+            <TicketSidebarCard title="Portal del cliente" eyebrow="Público">
               <div className="space-y-3">
                 <RepairBadge tone="emerald">Disponible</RepairBadge>
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">
@@ -392,7 +409,7 @@ export default async function TicketDetailPage({
               <div className="grid gap-2">
                 {quotes[0] ? (
                   <a className="min-h-10 rounded-full border border-white/15 bg-zinc-800 px-4 py-2 text-center text-xs font-bold text-zinc-100 transition hover:border-cyan-300/35 hover:bg-zinc-700 hover:text-white" href={`/admin/tickets/${ticket.id}/quotes/${quotes[0].id}/pdf`}>
-                    PDF cotizacion
+                    PDF de cotización
                   </a>
                 ) : null}
                 {generatedInvoice ? (
@@ -401,7 +418,7 @@ export default async function TicketDetailPage({
                   </a>
                 ) : null}
                 {!quotes[0] && !generatedInvoice ? (
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400">No hay PDFs disponibles todavia.</p>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400">No hay PDFs disponibles todavía.</p>
                 ) : null}
               </div>
             </TicketSidebarCard>
@@ -457,6 +474,115 @@ function StatusBadge({
   );
 }
 
+function buildDerivedActivityItems({
+  currentStatus,
+  generatedInvoice,
+  invoices,
+  quotes,
+  ticketCreatedAt,
+  ticketUpdatedAt,
+}: {
+  currentStatus: TicketStatus;
+  generatedInvoice: DerivedInvoice | null;
+  invoices: DerivedInvoice[];
+  quotes: DerivedInvoice[];
+  ticketCreatedAt: Date;
+  ticketUpdatedAt: Date;
+}): ActivityTimelineItemData[] {
+  const items: ActivityTimelineItemData[] = [
+    {
+      id: "ticket-created",
+      title: "Ticket creado",
+      description: "El caso fue registrado en RepairLab y quedo disponible para seguimiento interno.",
+      timestamp: ticketCreatedAt,
+      tone: "cyan",
+      meta: "Ticket",
+    },
+    {
+      id: "ticket-current-status",
+      title: `Estado actual: ${ticketStatusLabel(currentStatus)}`,
+      description: "Estado operativo vigente del ticket.",
+      timestamp: ticketUpdatedAt,
+      tone: activityToneForTicketStatus(currentStatus),
+      meta: "Estado",
+    },
+  ];
+
+  for (const quote of quotes) {
+    items.push({
+      id: `quote-${quote.id}`,
+      title: `Cotizacion ${quote.invoiceNumber}`,
+      description: `Estado: ${quoteStatusLabel(quote.status)}. Total registrado: ${quote.currency} ${quote.total.toString()}.`,
+      timestamp: quote.createdAt,
+      tone: activityToneForQuoteStatus(quote.status),
+      meta: "Cotizacion",
+    });
+  }
+
+  for (const invoice of invoices) {
+    items.push({
+      id: `invoice-${invoice.id}`,
+      title: `Factura ${invoice.invoiceNumber}`,
+      description: `Pago: ${paymentStatusLabel(invoice.paymentStatus)}. Total registrado: ${invoice.currency} ${invoice.total.toString()}.`,
+      timestamp: invoice.createdAt,
+      tone: invoice.id === generatedInvoice?.id ? "emerald" : "neutral",
+      meta: "Factura",
+    });
+  }
+
+  return items.sort((a, b) => {
+    const left = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+    const right = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+    return right - left;
+  });
+}
+
+type DerivedInvoice = {
+  id: string;
+  invoiceNumber: string;
+  status: InvoiceStatus;
+  paymentStatus: PaymentStatus;
+  total: { toString(): string };
+  currency: string;
+  createdAt: Date;
+};
+
+function activityToneForTicketStatus(status: TicketStatus): ActivityTimelineItemData["tone"] {
+  if (status === "DELIVERED") {
+    return "emerald";
+  }
+
+  if (status === "WAITING_APPROVAL") {
+    return "warning";
+  }
+
+  if (status === "CANCELLED") {
+    return "danger";
+  }
+
+  if (status === "REPAIR_IN_PROGRESS" || status === "DIAGNOSIS") {
+    return "cyan";
+  }
+
+  return "violet";
+}
+
+function activityToneForQuoteStatus(status: InvoiceStatus): ActivityTimelineItemData["tone"] {
+  if (status === "APPROVED") {
+    return "emerald";
+  }
+
+  if (status === "SENT" || status === "DRAFT") {
+    return "warning";
+  }
+
+  if (status === "REJECTED" || status === "CANCELLED" || status === "EXPIRED") {
+    return "danger";
+  }
+
+  return "cyan";
+}
+
 function ticketWorkflowStages(currentStatus: TicketStatus) {
   const stages: { status: TicketStatus; label: string }[] = [
     { status: "RECEIVED", label: "Recibido" },
@@ -504,13 +630,13 @@ function getTicketEventTitle(type: string, payload: unknown) {
   }
 
   const labels: Record<string, string> = {
-    "quote.created": "Cotizacion creada",
-    "quote.sent": "Cotizacion enviada al cliente",
-    "quote.approved": "Cotizacion aprobada",
-    "quote.rejected": "Cotizacion rechazada",
-    "quote.expired": "Cotizacion expirada",
-    "quote.item_added": "Linea agregada a cotizacion",
-    "invoice.created": "Factura generada desde cotizacion aprobada",
+    "quote.created": "Cotización creada",
+    "quote.sent": "Cotización enviada al cliente",
+    "quote.approved": "Cotización aprobada",
+    "quote.rejected": "Cotización rechazada",
+    "quote.expired": "Cotización expirada",
+    "quote.item_added": "Línea agregada a cotización",
+    "invoice.created": "Factura generada desde cotización aprobada",
     "ticket.created": "Ticket creado",
     "ticket.status_changed": "Estado de ticket actualizado",
   };
@@ -524,7 +650,7 @@ function getTicketEventDescription(payload: unknown) {
   }
 
   const parts = [
-    typeof payload.quoteNumber === "string" ? `Cotizacion ${payload.quoteNumber}` : undefined,
+    typeof payload.quoteNumber === "string" ? `Cotización ${payload.quoteNumber}` : undefined,
     typeof payload.fromStatus === "string" && typeof payload.toStatus === "string"
       ? `${statusLabel(payload.fromStatus, Boolean(payload.quoteNumber))} -> ${statusLabel(payload.toStatus, Boolean(payload.quoteNumber))}`
       : undefined,
@@ -546,31 +672,31 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function getRecommendedTicketStep(status: TicketStatus, hasApprovedQuote: boolean) {
   if (status === "RECEIVED") {
-    return "Realiza la revision inicial del equipo.";
+    return "Realiza la revisión inicial del equipo.";
   }
 
   if (status === "INITIAL_REVIEW") {
-    return "Pasa el ticket a diagnostico cuando el equipo este listo para revision tecnica.";
+    return "Pasa el ticket a diagnóstico cuando el equipo esté listo para revisión técnica.";
   }
 
   if (status === "DIAGNOSIS") {
-    return "Registra el diagnostico tecnico y crea una cotizacion si el cliente debe aprobar un costo.";
+    return "Registra el diagnóstico técnico y crea una cotización si el cliente debe aprobar un costo.";
   }
 
   if (status === "WAITING_APPROVAL") {
-    return "Espera la aprobacion o rechazo de la cotizacion enviada.";
+    return "Espera la aprobación o rechazo de la cotización enviada.";
   }
 
   if (status === "APPROVED" && hasApprovedQuote) {
-    return "La cotizacion fue aprobada. Puedes iniciar la reparacion del equipo.";
+    return "La cotización fue aprobada. Puedes iniciar la reparación del equipo.";
   }
 
   if (status === "APPROVED") {
-    return "Revisa la cotizacion aprobada antes de iniciar la reparacion.";
+    return "Revisa la cotización aprobada antes de iniciar la reparación.";
   }
 
   if (status === "REPAIR_IN_PROGRESS") {
-    return "Registra el trabajo realizado y marca la reparacion como terminada.";
+    return "Registra el trabajo realizado y marca la reparación como terminada.";
   }
 
   if (status === "READY_FOR_PICKUP") {
@@ -578,11 +704,11 @@ function getRecommendedTicketStep(status: TicketStatus, hasApprovedQuote: boolea
   }
 
   if (status === "DELIVERED") {
-    return "El ticket esta cerrado.";
+    return "El ticket está cerrado.";
   }
 
   if (status === "CANCELLED") {
-    return "El ticket esta cancelado.";
+    return "El ticket está cancelado.";
   }
 
   return "Revisa el estado actual antes de continuar.";
@@ -633,11 +759,11 @@ function isInvoiceStatus(status: string): status is InvoiceStatus {
 function ticketStatusLabel(status: TicketStatus) {
   const labels: Record<TicketStatus, string> = {
     RECEIVED: "Recibido",
-    INITIAL_REVIEW: "Revision inicial",
-    DIAGNOSIS: "Diagnostico",
-    WAITING_APPROVAL: "Esperando aprobacion",
-    APPROVED: "Listo para reparacion",
-    REPAIR_IN_PROGRESS: "En reparacion",
+    INITIAL_REVIEW: "Revisión inicial",
+    DIAGNOSIS: "Diagnóstico",
+    WAITING_APPROVAL: "Esperando aprobación",
+    APPROVED: "Listo para reparación",
+    REPAIR_IN_PROGRESS: "En reparación",
     READY_FOR_PICKUP: "Listo para entrega",
     DELIVERED: "Cerrado",
     CANCELLED: "Cancelado",

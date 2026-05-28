@@ -39,7 +39,7 @@ function ticketReceivedEmail(data: Record<string, unknown>) {
     `Equipo: ${deviceLabel}`,
     data.reportedIssue ? `Problema reportado: ${textValue(data.reportedIssue, "")}` : undefined,
     data.receivedAt ? `Fecha de ingreso: ${textValue(data.receivedAt, "")}` : undefined,
-    portalUrl ? `Puedes consultar el estado de tu reparacion aqui: ${portalUrl}` : undefined,
+    portalUrl ? `Puedes consultar el estado de tu reparación aquí: ${portalUrl}` : undefined,
     "Si tienes dudas, contacta al taller indicando tu codigo de ticket.",
   ].filter(Boolean);
 
@@ -48,17 +48,17 @@ function ticketReceivedEmail(data: Record<string, unknown>) {
 
 function quoteReadyEmail(data: Record<string, unknown>) {
   const ticketNumber = textValue(data.ticketNumber, "tu ticket");
-  const quoteNumber = textValue(data.quoteNumber, "cotizacion");
+  const quoteNumber = textValue(data.quoteNumber, "cotización");
   const totalLabel = moneyText(data.currency, data.total);
   const portalUrl = textValue(data.portalUrl, "");
   const quotePdfUrl = textValue(data.quotePdfUrl, "");
-  const subject = `Tu cotizacion ya esta disponible - ${ticketNumber}`;
+  const subject = `Tu cotización ya está disponible - ${ticketNumber}`;
   const lines = [
-    `La cotizacion ${quoteNumber} ya esta disponible para el ticket ${ticketNumber}.`,
+    `La cotización ${quoteNumber} ya está disponible para el ticket ${ticketNumber}.`,
     totalLabel ? `Total estimado: ${totalLabel}` : undefined,
     portalUrl ? `Puedes revisar el estado y los detalles aqui: ${portalUrl}` : undefined,
-    quotePdfUrl ? `PDF de cotizacion: ${quotePdfUrl}` : undefined,
-    "La aprobacion en linea se implementara proximamente. Por ahora, contacta al taller para confirmar.",
+    quotePdfUrl ? `PDF de cotización: ${quotePdfUrl}` : undefined,
+    "La aprobación en línea se implementará próximamente. Por ahora, contacta al taller para confirmar.",
   ].filter(Boolean);
 
   return renderLayout(subject, "Cotizacion disponible", lines, portalUrl);
@@ -69,8 +69,8 @@ function quoteApprovedEmail(data: Record<string, unknown>) {
   const portalUrl = textValue(data.portalUrl, "");
   const subject = `Cotizacion aprobada - ${ticketNumber}`;
   const lines = [
-    `La cotizacion del ticket ${ticketNumber} fue marcada como aprobada.`,
-    "El taller continuara con el flujo de reparacion.",
+    `La cotización del ticket ${ticketNumber} fue marcada como aprobada.`,
+    "El taller continuará con el flujo de reparación.",
     portalUrl ? `Puedes consultar el avance aqui: ${portalUrl}` : undefined,
   ].filter(Boolean);
 
@@ -112,9 +112,9 @@ function ticketStatusChangedEmail(data: Record<string, unknown>) {
   const ticketNumber = textValue(data.ticketNumber, "tu ticket");
   const portalUrl = textValue(data.portalUrl, "");
   const status = textValue(data.toStatusLabel, textValue(data.toStatus, "actualizado"));
-  const subject = `Actualizacion de reparacion - ${ticketNumber}`;
+  const subject = `Actualización de reparación - ${ticketNumber}`;
   const lines = [
-    `Tu reparacion cambio de estado: ${status}.`,
+    `Tu reparación cambió de estado: ${status}.`,
     `Ticket: ${ticketNumber}`,
     portalUrl ? `Puedes consultar el avance aqui: ${portalUrl}` : undefined,
   ].filter(Boolean);
@@ -134,7 +134,7 @@ function renderLayout(
     .map((line) => `<p style="margin:0 0 12px;color:#334155;line-height:1.5;">${escapeHtml(line)}</p>`)
     .join("");
   const cta = ctaUrl
-    ? `<a href="${escapeAttribute(ctaUrl)}" style="display:inline-block;margin-top:8px;background:#111827;color:#ffffff;text-decoration:none;padding:12px 16px;border-radius:6px;font-weight:600;">Consultar reparacion</a>`
+    ? `<a href="${escapeAttribute(ctaUrl)}" style="display:inline-block;margin-top:8px;background:#111827;color:#ffffff;text-decoration:none;padding:12px 16px;border-radius:6px;font-weight:600;">Consultar reparación</a>`
     : "";
 
   return {

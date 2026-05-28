@@ -24,15 +24,15 @@ export async function convertQuoteToInvoice(
     });
 
     if (!quote || quote.type !== InvoiceType.QUOTE) {
-      throw new Error("Cotizacion no encontrada.");
+      throw new Error("Cotización no encontrada.");
     }
 
     if (quote.status !== InvoiceStatus.APPROVED) {
-      throw new Error("Solo una cotizacion aprobada puede generar factura.");
+      throw new Error("Solo una cotización aprobada puede generar factura.");
     }
 
     if (quote.items.length === 0) {
-      throw new Error("No se puede generar factura desde una cotizacion sin lineas.");
+      throw new Error("No se puede generar factura desde una cotización sin líneas.");
     }
 
     if (Number(quote.total) <= 0) {
@@ -56,7 +56,7 @@ export async function convertQuoteToInvoice(
     });
 
     if (existingInvoice) {
-      throw new Error(`Ya existe una factura generada desde esta cotizacion: ${existingInvoice.invoiceNumber}.`);
+      throw new Error(`Ya existe una factura generada desde esta cotización: ${existingInvoice.invoiceNumber}.`);
     }
 
     const invoice = await tx.invoice.create({
@@ -102,7 +102,7 @@ export async function convertQuoteToInvoice(
             quoteNumber: quote.invoiceNumber,
             total: invoice.total.toString(),
             currency: invoice.currency,
-            timelineLabel: "Factura generada desde cotizacion aprobada.",
+            timelineLabel: "Factura generada desde cotización aprobada.",
           },
         },
       });
@@ -163,9 +163,9 @@ function buildInvoiceInternalNotes(
   sourceMarker: string,
   quoteNumber: string,
 ) {
-  const generatedNote = `Factura generada desde cotizacion ${quoteNumber}. ${sourceMarker}`;
+  const generatedNote = `Factura generada desde cotización ${quoteNumber}. ${sourceMarker}`;
 
-  return quoteInternalNotes ? `${generatedNote}\n\nNotas de cotizacion:\n${quoteInternalNotes}` : generatedNote;
+  return quoteInternalNotes ? `${generatedNote}\n\nNotas de cotización:\n${quoteInternalNotes}` : generatedNote;
 }
 
 function createInvoiceNumber() {

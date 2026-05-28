@@ -3,7 +3,7 @@ import { RepairBadge, RepairButton, RepairContainer, RepairPanel } from "@/compo
 
 const products = [
   ["Consolas reacondicionadas", "Equipos revisados internamente para futura venta controlada.", "Consultar"],
-  ["Controles", "Mandos y accesorios preparados para diagnostico o venta futura.", "Proximamente"],
+  ["Controles", "Mandos y accesorios preparados para diagnóstico o venta futura.", "Próximamente"],
   ["Accesorios", "Cables, fuentes, cargadores y piezas de uso frecuente.", "Consultar"],
   ["Repuestos", "Partes y componentes para reparaciones controladas.", "Consultar"],
   ["Equipos unicos", "Inventario especial sujeto a disponibilidad real del taller.", "Proximamente"],
@@ -14,8 +14,8 @@ export default function ProductsPage() {
     <PublicShell>
       <PublicHero
         eyebrow="Productos"
-        title="Catalogo visual preparado para futura tienda."
-        description="Una primera vitrina para productos, repuestos y equipos reacondicionados. Sin carrito ni ecommerce activo todavia."
+        title="Catálogo visual preparado para futura tienda."
+        description="Una primera vitrina para productos, repuestos y equipos reacondicionados. Sin carrito ni comercio electrónico activo todavía."
         primaryHref="/contact"
         primaryLabel="Consultar disponibilidad"
         secondaryHref="/services"
@@ -23,7 +23,7 @@ export default function ProductsPage() {
       />
       <RepairContainer className="space-y-10 py-16">
         <PublicSectionHeader
-          eyebrow="Catalogo placeholder"
+          eyebrow="Catálogo visual"
           title="Productos y repuestos"
           description="Estos items son una vitrina inicial. La venta online se implementara en una etapa futura."
         />

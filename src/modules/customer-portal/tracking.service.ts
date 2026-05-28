@@ -164,7 +164,7 @@ function publicStatusTimelineTitle(status: TicketStatus) {
     RECEIVED: "Ticket recibido",
     INITIAL_REVIEW: "Revision iniciada",
     DIAGNOSIS: "Diagnostico iniciado",
-    WAITING_APPROVAL: "Esperando aprobacion del cliente",
+    WAITING_APPROVAL: "Esperando aprobación del cliente",
     APPROVED: "Reparacion aprobada",
     REPAIR_IN_PROGRESS: "Reparacion iniciada",
     READY_FOR_PICKUP: "Equipo listo para entrega",

@@ -29,9 +29,9 @@ export function QuoteHero({
         <div className="mt-5 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
             <p className="text-xs font-black uppercase tracking-[0.22em] text-emerald-300">Ticket {ticketNumber} / Cotizaciones</p>
-            <h1 className="mt-3 break-words text-4xl font-black tracking-tight sm:text-5xl">Propuestas de reparacion</h1>
+            <h1 className="mt-3 break-words text-4xl font-black tracking-tight sm:text-5xl">Propuestas de reparación</h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-zinc-300 sm:text-base">
-              Define precios, agrega lineas de mano de obra o repuestos y controla aprobaciones sin mezclarlo con el estado tecnico del ticket.
+              Define precios, agrega líneas de mano de obra o repuestos y controla aprobaciones sin mezclarlo con el estado técnico del ticket.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <RepairBadge tone="emerald">{customerName}</RepairBadge>
@@ -40,11 +40,11 @@ export function QuoteHero({
             </div>
           </div>
           <div className="w-full rounded-3xl border border-white/10 bg-zinc-900/45 p-5 shadow-2xl shadow-black/20 backdrop-blur lg:max-w-md">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-200">Ultima cotizacion</p>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-200">Última cotización</p>
             <p className="mt-3 break-words text-3xl font-black">{latestTotal}</p>
             <p className="mt-2 text-sm text-zinc-300">Estado: {latestStatus}</p>
             <div className="mt-5">
-              <RepairButton href="#crear-cotizacion" tone="primary">Crear cotizacion</RepairButton>
+              <RepairButton href="#crear-cotizacion" tone="primary">Crear cotización</RepairButton>
             </div>
           </div>
         </div>

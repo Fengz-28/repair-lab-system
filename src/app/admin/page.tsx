@@ -44,10 +44,10 @@ export default async function AdminHomePage() {
       <RepairPageHero
         eyebrow="Admin / Inicio"
         title="Repair Lab System"
-        description="Sistema operativo para gestionar reparaciones, clientes, cotizaciones, facturas, pagos e inventario con una experiencia moderna de taller tecnico."
+        description="Sistema operativo para gestionar reparaciones, clientes, cotizaciones, facturas, pagos e inventario con una experiencia moderna de taller técnico."
         actions={
           <>
-            <RepairButton href="/admin/intake">Nueva recepcion</RepairButton>
+            <RepairButton href="/admin/intake">Nueva recepción</RepairButton>
             <RepairButton href="/admin/dashboard" tone="secondary">Ver dashboard</RepairButton>
           </>
         }
@@ -56,12 +56,12 @@ export default async function AdminHomePage() {
       <RepairContainer className="space-y-8 py-8 sm:py-10">
         <RepairSection>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-            <HomeCard href="/admin/dashboard" title="Dashboard" description="Resumen operativo del taller." />
-            <HomeCard href="/admin/intake" title="Nueva recepcion" description="Registra un equipo que ingresa al taller." />
+            <HomeCard href="/admin/dashboard" title="Panel" description="Resumen operativo del taller." />
+            <HomeCard href="/admin/intake" title="Nueva recepción" description="Registra un equipo que ingresa al taller." />
             <HomeCard href="/admin/tickets" title="Tickets" description="Seguimiento de reparaciones." />
             <HomeCard href="/admin/customers" title="Clientes" description="Historial, equipos y saldos." />
             <HomeCard href="/admin/messages" title="Mensajes" description="Audita emails y notificaciones." />
-            <HomeCard href="/admin/catalog" title="Catalogo" description="Servicios, repuestos e inventario." />
+            <HomeCard href="/admin/catalog" title="Catálogo" description="Servicios, repuestos e inventario." />
           </div>
         </RepairSection>
 
@@ -74,7 +74,7 @@ export default async function AdminHomePage() {
           <RepairPanel>
             <h2 className="text-base font-black text-zinc-950 dark:text-zinc-50">Ultimos tickets</h2>
             {recentTickets.length === 0 ? (
-              <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">No hay tickets todavia.</p>
+              <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">No hay tickets todavía.</p>
             ) : (
               <ul className="mt-4 space-y-3 text-sm">
                 {recentTickets.map((ticket) => (

@@ -113,7 +113,7 @@ export default async function TicketInvoicePage({
                   <td className="px-3 py-2">
                     <p className="break-words">{item.description}</p>
                     {item.catalogItem ? (
-                      <p className="text-zinc-500 dark:text-zinc-400">Catalogo: {item.catalogItem.name}</p>
+                      <p className="text-zinc-500 dark:text-zinc-400">Catálogo: {item.catalogItem.name}</p>
                     ) : null}
                   </td>
                   <td className="px-3 py-2">{item.quantity}</td>

@@ -13,7 +13,7 @@ export function PublicTimeline({
         <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
           Actividad publica
         </p>
-        <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Timeline de reparacion</h2>
+        <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Línea de tiempo de reparación</h2>
       </div>
 
       {items.length === 0 ? (

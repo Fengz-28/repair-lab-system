@@ -38,7 +38,7 @@ export default async function AdminCustomersPage({
         description="Customer intelligence para revisar historial tecnico, equipos, tickets, facturas, pagos y saldos pendientes desde una vista operativa."
         actions={
           <>
-            <RepairButton href="/admin/intake">Nueva recepcion</RepairButton>
+            <RepairButton href="/admin/intake">Nueva recepción</RepairButton>
             <RepairButton href="/admin/tickets" tone="secondary">
               Ver tickets
             </RepairButton>
@@ -84,15 +84,15 @@ export default async function AdminCustomersPage({
 
         {customers.length === 0 ? (
           <RepairEmptyState
-            title={search ? "No encontramos clientes." : "No hay clientes registrados todavia."}
+            title={search ? "No encontramos clientes." : "No hay clientes registrados todavía."}
             description={
               search
                 ? "Prueba con otro nombre, telefono, email, equipo o codigo de ticket."
-                : "Cada recepcion crea o reutiliza el cliente para que puedas ver historial, equipos y saldos desde el CRM."
+                : "Cada recepción crea o reutiliza el cliente para que puedas ver historial, equipos y saldos desde el CRM."
             }
-            eyebrow={search ? "Busqueda sin resultados" : "CRM vacio"}
+            eyebrow={search ? "Búsqueda sin resultados" : "CRM vacío"}
             icon={search ? "BC" : "CL"}
-            action={!search ? <RepairButton href="/admin/intake">Crear recepcion</RepairButton> : <RepairButton href="/admin/customers">Limpiar busqueda</RepairButton>}
+            action={!search ? <RepairButton href="/admin/intake">Crear recepción</RepairButton> : <RepairButton href="/admin/customers">Limpiar búsqueda</RepairButton>}
             secondaryAction={!search ? <RepairButton href="/admin/tickets" tone="secondary">Ver tickets</RepairButton> : null}
           />
         ) : (

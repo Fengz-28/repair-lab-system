@@ -56,7 +56,7 @@ export const createIntakeSchema = z.object({
   }),
   photos: z
     .array(intakePhotoSchema)
-    .max(maxUploadFilesPerIntake(), "Se supero el maximo de archivos por recepcion.")
+    .max(maxUploadFilesPerIntake(), "Se superó el máximo de archivos por recepción.")
     .default([]),
 });
 

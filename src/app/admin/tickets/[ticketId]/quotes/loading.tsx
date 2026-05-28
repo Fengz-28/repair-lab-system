@@ -14,7 +14,7 @@ export default function QuotesLoading() {
       <RepairPageHero
         eyebrow="Admin / Cotizaciones"
         title="Cargando cotizaciones"
-        description="Preparando propuestas, lineas, totales y acciones comerciales."
+        description="Preparando propuestas, líneas, totales y acciones comerciales."
       />
       <RepairContainer className="space-y-6 py-8">
         <RepairSkeletonCard />

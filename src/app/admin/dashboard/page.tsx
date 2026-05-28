@@ -36,7 +36,7 @@ export default async function AdminDashboardPage() {
         description="Vista ejecutiva para entender tickets activos, flujo comercial, pagos, saldos e inventario con lectura rapida."
         actions={
           <>
-            <RepairButton href="/admin/intake">Nueva recepcion</RepairButton>
+            <RepairButton href="/admin/intake">Nueva recepción</RepairButton>
             <RepairButton href="/admin/tickets" tone="secondary">Ver tickets</RepairButton>
           </>
         }
@@ -45,7 +45,7 @@ export default async function AdminDashboardPage() {
       <RepairContainer className="space-y-8 py-8 sm:py-10">
         <RepairGrid className="md:grid-cols-2 xl:grid-cols-4">
           <RepairStatCard label="Tickets abiertos" value={dashboard.tickets.open} />
-          <RepairStatCard label="Esperando aprobacion" value={dashboard.tickets.waitingApproval} tone="cyan" />
+          <RepairStatCard label="Esperando aprobación" value={dashboard.tickets.waitingApproval} tone="cyan" />
           <RepairStatCard label="Ingresos registrados" value={formatMoney(dashboard.payments.receivedTotal)} tone="emerald" />
           <RepairStatCard label="Saldo pendiente" value={formatMoney(dashboard.invoices.balanceDue)} tone="warning" />
         </RepairGrid>
@@ -59,10 +59,10 @@ export default async function AdminDashboardPage() {
               ["Total de tickets", dashboard.tickets.total],
               ["Tickets abiertos", dashboard.tickets.open],
               ["Tickets entregados", dashboard.tickets.delivered],
-              ["En diagnostico", dashboard.tickets.diagnosis],
-              ["Esperando aprobacion", dashboard.tickets.waitingApproval],
-              ["Listos para reparacion", dashboard.tickets.approved],
-              ["En reparacion", dashboard.tickets.inRepair],
+              ["En diagnóstico", dashboard.tickets.diagnosis],
+              ["Esperando aprobación", dashboard.tickets.waitingApproval],
+              ["Listos para reparación", dashboard.tickets.approved],
+              ["En reparación", dashboard.tickets.inRepair],
               ["Listos para entrega", dashboard.tickets.readyForPickup],
             ]}
           />
@@ -175,7 +175,7 @@ function TicketsAttentionPanel({
   tickets: DashboardData["lists"]["ticketsNeedingAttention"];
 }) {
   return (
-    <ListPanel title="Tickets que necesitan atencion" empty="No hay tickets pendientes de atencion.">
+    <ListPanel title="Tickets que necesitan atención" empty="No hay tickets pendientes de atención.">
       {tickets.map((ticket) => (
         <ListItem key={ticket.id}>
           <div className="min-w-0">

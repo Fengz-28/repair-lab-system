@@ -82,24 +82,24 @@ function GuidedQuoteFlow({
             Flujo comercial
           </p>
           <h2 className="text-2xl font-black text-zinc-950 dark:text-zinc-50">
-            Flujo de cotizacion
+            Flujo de cotización
           </h2>
           <ol className="list-decimal space-y-1 pl-5 text-sm text-zinc-700 dark:text-zinc-300">
-            <li>Crear cotizacion en borrador.</li>
-            <li>Agregar lineas con precios mientras este en borrador.</li>
+            <li>Crear cotización en borrador.</li>
+            <li>Agregar líneas con precios mientras esté en borrador.</li>
             <li>Revisar el total estimado.</li>
-            <li>Enviar la cotizacion al cliente.</li>
-            <li>Esperar aprobacion o rechazo.</li>
+            <li>Enviar la cotización al cliente.</li>
+            <li>Esperar aprobación o rechazo.</li>
           </ol>
           <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
-            El precio se coloca en las lineas de la cotizacion, no en el ticket.
+            El precio se coloca en las líneas de la cotización, no en el ticket.
           </p>
         </div>
         <div className="grid w-full gap-2 text-sm sm:w-auto">
           <StatusPill label="Ticket" value={ticketStatusLabel(ticketStatus)} tone="ticket" />
           <StatusPill
             label="Cotizacion"
-            value={quote ? quoteStatusLabel(quote.status) : "Sin cotizacion"}
+            value={quote ? quoteStatusLabel(quote.status) : "Sin cotización"}
             tone="quote"
           />
         </div>
@@ -122,9 +122,9 @@ function CreateQuoteForm({ ticketId }: { ticketId: string }) {
         <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
           Nueva propuesta
         </p>
-        <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Crear cotizacion</h2>
+        <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Crear cotización</h2>
         <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
-          Crea una cotizacion en borrador. Luego agrega mano de obra, repuestos o servicios con precio.
+          Crea una cotización en borrador. Luego agrega mano de obra, repuestos o servicios con precio.
         </p>
       </div>
       <div className="grid gap-4 sm:grid-cols-3">
@@ -157,7 +157,7 @@ function CreateQuoteForm({ ticketId }: { ticketId: string }) {
         />
       </label>
       <ActionMessage ok={state.ok} message={state.message} />
-      <SubmitButton label="Crear cotizacion" pendingLabel="Creando..." />
+      <SubmitButton label="Crear cotización" pendingLabel="Creando..." />
     </form>
   );
 }
@@ -175,10 +175,10 @@ function QuoteList({
     return (
       <RepairEmptyState
         title="No hay cotizaciones para este ticket."
-        description="Crea una cotizacion en borrador y luego agrega lineas de servicio, repuestos o productos para presentar una propuesta clara al cliente."
+        description="Crea una cotización en borrador y luego agrega líneas de servicio, repuestos o productos para presentar una propuesta clara al cliente."
         eyebrow="Cotizaciones"
         icon="QT"
-        action={<RepairButton href="#crear-cotizacion">Crear cotizacion</RepairButton>}
+        action={<RepairButton href="#crear-cotizacion">Crear cotización</RepairButton>}
       />
     );
   }
@@ -205,7 +205,7 @@ function QuoteList({
             </div>
             <div className="grid w-full gap-3 sm:w-auto">
               <RepairButton href={`/admin/tickets/${ticketId}/quotes/${quote.id}/pdf`} tone="secondary" size="sm">
-                Descargar cotizacion PDF
+                Descargar PDF de cotización
               </RepairButton>
               <QuoteStatusForm ticketId={ticketId} quote={quote} />
             </div>
@@ -220,7 +220,7 @@ function QuoteList({
             />
           ) : (
             <p className="rounded-2xl border border-white/10 bg-zinc-950 p-4 text-sm font-semibold text-zinc-300">
-              Esta cotizacion ya no se puede editar porque fue enviada, aprobada, rechazada o expirada.
+              Esta cotización ya no se puede editar porque fue enviada, aprobada, rechazada o expirada.
             </p>
           )}
         </article>
@@ -246,7 +246,7 @@ function QuoteItemsTable({ items }: { items: QuoteItem[] }) {
           {items.length === 0 ? (
             <tr>
               <td className="px-3 py-4 text-zinc-500 dark:text-zinc-400" colSpan={5}>
-                Aun no hay lineas. Agrega mano de obra, repuestos, productos o servicios para formar el precio final.
+                Aún no hay líneas. Agrega mano de obra, repuestos, productos o servicios para formar el precio final.
               </td>
             </tr>
           ) : (
@@ -256,7 +256,7 @@ function QuoteItemsTable({ items }: { items: QuoteItem[] }) {
                 <td className="px-3 py-2">
                   <p className="break-words">{item.description}</p>
                   {item.catalogItemName ? (
-                    <p className="text-zinc-500 dark:text-zinc-400">Catalogo: {item.catalogItemName}</p>
+                    <p className="text-zinc-500 dark:text-zinc-400">Catálogo: {item.catalogItemName}</p>
                   ) : null}
                 </td>
                 <td className="px-3 py-2">{item.quantity}</td>
@@ -289,12 +289,12 @@ function AddQuoteItemForm({
       <div>
         <h3 className="text-lg font-black text-zinc-950 dark:text-zinc-50">Agregar precio</h3>
         <p className="text-sm text-zinc-600 dark:text-zinc-300">
-          Agrega aqui mano de obra, repuestos, productos o servicios. Estos valores forman el precio final de la cotizacion.
+          Agrega aquí mano de obra, repuestos, productos o servicios. Estos valores forman el precio final de la cotización.
         </p>
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
-          Catalogo opcional
+          Catálogo opcional
           <select
             name="catalogItemId"
             className={fieldClassName}
@@ -382,7 +382,7 @@ function QuoteStatusForm({ ticketId, quote }: { ticketId: string; quote: Quote }
   if (quote.allowedNextStatuses.length === 0) {
     return (
       <p className="rounded border border-white/10 bg-zinc-950 p-3 text-sm text-zinc-300">
-        Esta cotizacion ya esta en un estado final.
+        Esta cotización ya está en un estado final.
       </p>
     );
   }
@@ -390,7 +390,7 @@ function QuoteStatusForm({ ticketId, quote }: { ticketId: string; quote: Quote }
   if (availableStatuses.length === 0) {
     return (
       <p className="max-w-xs rounded-2xl border border-amber-300/25 bg-amber-500/10 p-3 text-sm text-amber-100">
-        Agrega lineas con total mayor a cero antes de enviar o aprobar esta cotizacion.
+        Agrega líneas con total mayor a cero antes de enviar o aprobar esta cotización.
       </p>
     );
   }
@@ -415,7 +415,7 @@ function QuoteStatusForm({ ticketId, quote }: { ticketId: string; quote: Quote }
         className={fieldClassName}
       />
       <ActionMessage ok={state.ok} message={state.message} />
-      <SubmitButton label="Actualizar cotizacion" pendingLabel="Actualizando..." />
+      <SubmitButton label="Actualizar cotización" pendingLabel="Actualizando..." />
     </form>
   );
 }
@@ -484,7 +484,7 @@ function StatusPill({
 
 function getRecommendedStep(quote?: Quote) {
   if (!quote) {
-    return "Crea una cotizacion para empezar a definir precios.";
+    return "Crea una cotización para empezar a definir precios.";
   }
 
   if (quote.status === "DRAFT" && quote.items.length === 0) {
@@ -492,23 +492,23 @@ function getRecommendedStep(quote?: Quote) {
   }
 
   if (quote.status === "DRAFT") {
-    return "Revisa el total y envia la cotizacion al cliente.";
+    return "Revisa el total y envía la cotización al cliente.";
   }
 
   if (quote.status === "SENT") {
-    return "La cotizacion fue enviada. Ahora espera aprobacion o rechazo del cliente.";
+    return "La cotización fue enviada. Ahora espera aprobación o rechazo del cliente.";
   }
 
   if (quote.status === "APPROVED") {
-    return "La cotizacion fue aprobada. El siguiente paso futuro sera convertirla en factura o continuar reparacion.";
+    return "La cotización fue aprobada. El siguiente paso futuro será convertirla en factura o continuar reparación.";
   }
 
   if (quote.status === "REJECTED") {
-    return "La cotizacion fue rechazada. Puedes crear una nueva cotizacion o volver a diagnostico.";
+    return "La cotización fue rechazada. Puedes crear una nueva cotización o volver a diagnóstico.";
   }
 
   if (quote.status === "EXPIRED") {
-    return "La cotizacion expiro. Puedes crear una nueva cotizacion.";
+    return "La cotización expiró. Puedes crear una nueva cotización.";
   }
 
   return "Revisa el estado actual antes de continuar.";
@@ -546,7 +546,7 @@ function ticketStatusLabel(status: TicketStatus) {
     RECEIVED: "Recibido",
     INITIAL_REVIEW: "Revision inicial",
     DIAGNOSIS: "Diagnostico",
-    WAITING_APPROVAL: "Esperando aprobacion",
+    WAITING_APPROVAL: "Esperando aprobación",
     APPROVED: "Aprobado",
     REPAIR_IN_PROGRESS: "Reparacion en proceso",
     READY_FOR_PICKUP: "Listo para retirar",

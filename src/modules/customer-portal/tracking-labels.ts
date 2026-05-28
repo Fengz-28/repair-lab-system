@@ -3,11 +3,11 @@ import type { InvoiceStatus, PaymentStatus, ProductType, TicketStatus } from "@p
 export function ticketStatusLabel(status: TicketStatus) {
   const labels: Record<TicketStatus, string> = {
     RECEIVED: "Recibido",
-    INITIAL_REVIEW: "En revision",
-    DIAGNOSIS: "En diagnostico",
-    WAITING_APPROVAL: "Esperando aprobacion",
+    INITIAL_REVIEW: "En revisión",
+    DIAGNOSIS: "En diagnóstico",
+    WAITING_APPROVAL: "Esperando aprobación",
     APPROVED: "Aprobado",
-    REPAIR_IN_PROGRESS: "En reparacion",
+    REPAIR_IN_PROGRESS: "En reparación",
     READY_FOR_PICKUP: "Listo para entrega",
     DELIVERED: "Entregado",
     CANCELLED: "Cancelado",

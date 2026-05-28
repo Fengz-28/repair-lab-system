@@ -14,7 +14,7 @@ export default function MessageDetailLoading() {
       <RepairPageHero
         eyebrow="Admin / Mensaje"
         title="Cargando mensaje"
-        description="Preparando metadata, estado, ticket asociado y contenido seguro."
+        description="Preparando metadatos, estado, ticket asociado y contenido seguro."
       />
       <RepairContainer className="space-y-6 py-8">
         <RepairGrid className="sm:grid-cols-2 lg:grid-cols-3">

@@ -29,7 +29,7 @@ export async function createQuoteAction(
   if (!parsed.success) {
     return {
       ok: false,
-      message: "Revisa los datos de la cotizacion.",
+      message: "Revisa los datos de la cotización.",
       errors: parsed.error.flatten().fieldErrors,
     };
   }
@@ -47,7 +47,7 @@ export async function createQuoteAction(
   } catch (error) {
     return {
       ok: false,
-      message: error instanceof Error ? error.message : "No se pudo crear la cotizacion.",
+      message: error instanceof Error ? error.message : "No se pudo crear la cotización.",
     };
   }
 }
@@ -73,7 +73,7 @@ export async function addQuoteItemAction(
   if (!parsed.success) {
     return {
       ok: false,
-      message: "Revisa la linea de cotizacion.",
+      message: "Revisa la línea de cotización.",
       errors: parsed.error.flatten().fieldErrors,
     };
   }
@@ -114,7 +114,7 @@ export async function changeQuoteStatusAction(
   if (!parsed.success) {
     return {
       ok: false,
-      message: "No se pudo cambiar el estado de la cotizacion.",
+      message: "No se pudo cambiar el estado de la cotización.",
       errors: parsed.error.flatten().fieldErrors,
     };
   }
@@ -128,7 +128,7 @@ export async function changeQuoteStatusAction(
 
     return {
       ok: true,
-      message: "Estado de cotizacion actualizado.",
+      message: "Estado de cotización actualizado.",
     };
   } catch (error) {
     return {

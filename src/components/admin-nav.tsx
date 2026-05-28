@@ -1,24 +1,34 @@
 import { RepairPanel, RepairNavbar, RepairTopbar } from "@/components/repairlab";
+import { CommandPalette } from "@/modules/ux/components/command-palette";
+import { NotificationsCenter } from "@/modules/ux/components/notifications-center";
+import { getAdminNotificationItems } from "@/modules/ux/notifications/notification-center.service";
 import { getCurrentStaffSession } from "@/server/auth/local-admin";
 
 const adminLinks = [
   { href: "/admin", label: "Inicio" },
-  { href: "/admin/dashboard", label: "Dashboard" },
-  { href: "/admin/intake", label: "Nueva recepcion" },
+  { href: "/admin/dashboard", label: "Panel" },
+  { href: "/admin/intake", label: "Nueva recepción" },
   { href: "/admin/tickets", label: "Tickets" },
   { href: "/admin/customers", label: "Clientes" },
   { href: "/admin/messages", label: "Mensajes" },
-  { href: "/admin/catalog", label: "Catalogo" },
+  { href: "/admin/catalog", label: "Catálogo" },
 ];
 
 export async function AdminNav() {
   const session = await getCurrentStaffSession();
+  const notifications = session ? await getAdminNotificationItems() : [];
 
   return (
     <div className="relative left-1/2 w-screen -translate-x-1/2">
       <RepairTopbar />
       <RepairNavbar
         links={adminLinks}
+        utility={
+          <>
+            <NotificationsCenter items={notifications} />
+            <CommandPalette />
+          </>
+        }
         user={
           session
             ? {
@@ -35,8 +45,8 @@ export async function AdminNav() {
 function roleLabel(role: string) {
   const labels: Record<string, string> = {
     ADMIN: "Admin",
-    TECHNICIAN: "Tecnico",
-    RECEPTIONIST: "Recepcion",
+    TECHNICIAN: "Técnico",
+    RECEPTIONIST: "Recepción",
   };
 
   return labels[role] ?? role;
@@ -44,12 +54,12 @@ function roleLabel(role: string) {
 
 export function DemoChecklist() {
   const steps = [
-    "Crear una recepcion.",
+    "Crear una recepción.",
     "Abrir el ticket.",
-    "Pasar a diagnostico.",
-    "Crear cotizacion.",
-    "Agregar linea.",
-    "Enviar y aprobar cotizacion.",
+    "Pasar a diagnóstico.",
+    "Crear cotización.",
+    "Agregar línea.",
+    "Enviar y aprobar cotización.",
     "Generar factura.",
     "Registrar pago.",
     "Revisar inventario/dashboard.",

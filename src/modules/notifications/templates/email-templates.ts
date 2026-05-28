@@ -54,7 +54,7 @@ function renderIntakeReceived(data: TicketTemplateData): RenderedEmailTemplate {
     `Ticket: ${data.ticketNumber}`,
     data.receiptNumber ? `Comprobante: ${data.receiptNumber}` : undefined,
     data.reportedIssue ? `Problema reportado: ${data.reportedIssue}` : undefined,
-    "Este mensaje es un placeholder interno; todavia no se envia por SMTP real.",
+    "Este mensaje es una vista previa interna; todavía no se envía por SMTP real.",
   ]
     .filter(Boolean)
     .join("\n");
@@ -73,7 +73,7 @@ function renderTicketStatusChanged(data: TicketTemplateData): RenderedEmailTempl
     `Tu ticket ${data.ticketNumber} cambio de estado.`,
     data.fromStatus ? `Estado anterior: ${data.fromStatus}` : undefined,
     data.toStatus ? `Estado actual: ${data.toStatus}` : undefined,
-    "Este mensaje es un placeholder interno; todavia no se envia por SMTP real.",
+    "Este mensaje es una vista previa interna; todavía no se envía por SMTP real.",
   ]
     .filter(Boolean)
     .join("\n");
@@ -89,10 +89,10 @@ function renderQuoteSent(data: QuoteTemplateData): RenderedEmailTemplate {
   const subject = `Cotizacion ${data.quoteNumber} - Ticket ${data.ticketNumber}`;
   const text = [
     `Hola ${data.customerName},`,
-    `Hay una cotizacion preparada para el ticket ${data.ticketNumber}.`,
-    `Cotizacion: ${data.quoteNumber}`,
+    `Hay una cotización preparada para el ticket ${data.ticketNumber}.`,
+    `Cotización: ${data.quoteNumber}`,
     `Total: ${data.currency} ${data.total}`,
-    "Este mensaje es un placeholder interno; todavia no se envia por SMTP real.",
+    "Este mensaje es una vista previa interna; todavía no se envía por SMTP real.",
   ].join("\n");
 
   return {
@@ -108,7 +108,7 @@ function renderReadyForPickup(data: TicketTemplateData): RenderedEmailTemplate {
     `Hola ${data.customerName},`,
     `Tu equipo ${data.deviceLabel} esta listo para retirar.`,
     `Ticket: ${data.ticketNumber}`,
-    "Este mensaje es un placeholder interno; todavia no se envia por SMTP real.",
+    "Este mensaje es una vista previa interna; todavía no se envía por SMTP real.",
   ].join("\n");
 
   return {
@@ -124,7 +124,7 @@ function renderTicketDelivered(data: TicketTemplateData): RenderedEmailTemplate 
     `Hola ${data.customerName},`,
     `Registramos la entrega del equipo ${data.deviceLabel}.`,
     `Ticket: ${data.ticketNumber}`,
-    "Este mensaje es un placeholder interno; todavia no se envia por SMTP real.",
+    "Este mensaje es una vista previa interna; todavía no se envía por SMTP real.",
   ].join("\n");
 
   return {

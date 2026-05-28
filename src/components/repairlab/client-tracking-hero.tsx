@@ -22,7 +22,7 @@ export function ClientTrackingHero({
               RepairLab / Portal cliente
             </p>
             <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl">
-              Estado de reparacion
+              Estado de reparación
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-zinc-300 sm:text-base">
               Consulta el avance de tu equipo, revisa documentos disponibles y usa tu codigo de ticket para
@@ -41,7 +41,7 @@ export function ClientTrackingHero({
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-200">Equipo en taller</p>
             <p className="mt-3 break-words text-2xl font-black">{deviceLabel ?? "Seguimiento seguro"}</p>
             <p className="mt-2 text-sm leading-6 text-zinc-300">
-              La informacion mostrada aqui es publica para este enlace y no incluye notas internas del taller.
+              La información mostrada aquí es pública para este enlace y no incluye notas internas del taller.
             </p>
             <div className="mt-5">
               <RepairButton href="#contacto" tone="primary">

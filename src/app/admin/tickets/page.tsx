@@ -36,12 +36,12 @@ export default async function AdminTicketsPage({
       <AdminNav />
       <RepairPageHero
         eyebrow="Admin / Tickets"
-        title="Tickets de reparacion"
-        description="Centro operativo para buscar, priorizar y abrir reparaciones con acceso rapido a cotizaciones, facturas y PDFs."
+        title="Tickets de reparación"
+        description="Centro operativo para buscar, priorizar y abrir reparaciones con acceso rápido a cotizaciones, facturas y PDFs."
         actions={
           <>
-            <RepairButton href="/admin/intake">Nueva recepcion</RepairButton>
-            <RepairButton href="/admin/dashboard" tone="secondary">Dashboard</RepairButton>
+            <RepairButton href="/admin/intake">Nueva recepción</RepairButton>
+            <RepairButton href="/admin/dashboard" tone="secondary">Panel</RepairButton>
           </>
         }
       />
@@ -95,12 +95,12 @@ function TicketFilters({ filters }: { filters: TicketListData["filters"] }) {
             ["all", "Todos"],
             ["open", "Abiertos"],
             ["closed", "Cerrados/entregados"],
-            ["diagnosis", "En diagnostico"],
-            ["waiting_approval", "Esperando aprobacion"],
-            ["ready_for_repair", "Listos para reparacion"],
+            ["diagnosis", "En diagnóstico"],
+            ["waiting_approval", "Esperando aprobación"],
+            ["ready_for_repair", "Listos para reparación"],
             ["invoice_pending", "Con factura pendiente"],
             ["invoice_paid", "Con factura pagada"],
-            ["REPAIR_IN_PROGRESS", "En reparacion"],
+            ["REPAIR_IN_PROGRESS", "En reparación"],
             ["READY_FOR_PICKUP", "Listos para entrega"],
           ]}
         />
@@ -323,7 +323,7 @@ function TicketActions({
       <ActionLink href={`/admin/tickets/${ticket.id}`} label="Abrir ticket" primary />
       <ActionLink href={`/admin/tickets/${ticket.id}/quotes`} label={`Cotizaciones (${ticket.quotes.length})`} />
       {latestQuote ? (
-        <ActionLink href={`/admin/tickets/${ticket.id}/quotes/${latestQuote.id}/pdf`} label="PDF cotizacion" />
+        <ActionLink href={`/admin/tickets/${ticket.id}/quotes/${latestQuote.id}/pdf`} label="PDF de cotización" />
       ) : null}
       {invoice ? (
         <>
@@ -381,15 +381,15 @@ function StatusBadge({ status }: { status: TicketStatus }) {
 function EmptyState({ hasFilters }: { hasFilters: boolean }) {
   return (
     <RepairEmptyState
-      title={hasFilters ? "No encontramos tickets con esos filtros." : "No hay tickets todavia."}
+      title={hasFilters ? "No encontramos tickets con esos filtros." : "No hay tickets todavía."}
       description={
         hasFilters
           ? "Prueba limpiar filtros o buscar por cliente, equipo, telefono o codigo de ticket."
-          : "Empieza registrando una recepcion. El sistema creara el ticket y lo conectara con cliente, equipo y seguimiento."
+          : "Empieza registrando una recepción. El sistema creará el ticket y lo conectará con cliente, equipo y seguimiento."
       }
-      eyebrow={hasFilters ? "Busqueda sin resultados" : "Primer ticket"}
+      eyebrow={hasFilters ? "Búsqueda sin resultados" : "Primer ticket"}
       icon={hasFilters ? "FT" : "TK"}
-      action={!hasFilters ? <RepairButton href="/admin/intake">Crear nueva recepcion</RepairButton> : <RepairButton href="/admin/tickets">Limpiar filtros</RepairButton>}
+      action={!hasFilters ? <RepairButton href="/admin/intake">Crear nueva recepción</RepairButton> : <RepairButton href="/admin/tickets">Limpiar filtros</RepairButton>}
       secondaryAction={!hasFilters ? <RepairButton href="/admin/dashboard" tone="secondary">Ver dashboard</RepairButton> : null}
     />
   );
@@ -399,10 +399,10 @@ function ticketStatusLabel(status: TicketStatus) {
   const labels: Record<TicketStatus, string> = {
     RECEIVED: "Recibido",
     INITIAL_REVIEW: "Revision inicial",
-    DIAGNOSIS: "En diagnostico",
-    WAITING_APPROVAL: "Esperando aprobacion",
-    APPROVED: "Aprobado / listo para reparacion",
-    REPAIR_IN_PROGRESS: "En reparacion",
+    DIAGNOSIS: "En diagnóstico",
+    WAITING_APPROVAL: "Esperando aprobación",
+    APPROVED: "Aprobado / listo para reparación",
+    REPAIR_IN_PROGRESS: "En reparación",
     READY_FOR_PICKUP: "Listo para entrega",
     DELIVERED: "Entregado",
     CANCELLED: "Cancelado",

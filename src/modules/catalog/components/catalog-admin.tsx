@@ -75,10 +75,10 @@ function CreateCatalogItemForm() {
           </p>
           <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Crear item comercial</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-600 dark:text-zinc-300">
-            Servicios, productos y repuestos para cotizaciones, facturas, web publica futura e inventario real cuando aplique.
+            Servicios, productos y repuestos para cotizaciones, facturas, web pública futura e inventario real cuando aplique.
           </p>
         </div>
-        <RepairBadge tone="cyan">Catalogo flexible</RepairBadge>
+        <RepairBadge tone="cyan">Catálogo flexible</RepairBadge>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -133,7 +133,7 @@ function CatalogList({ items }: { items: CatalogAdminItem[] }) {
           <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
             Stock management
           </p>
-          <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Catalogo interno</h2>
+          <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Catálogo interno</h2>
           <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
             Cards operativas para administrar stock y tabla compacta para escaneo rapido.
           </p>

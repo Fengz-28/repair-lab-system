@@ -54,7 +54,7 @@ export async function generateInvoicePdf(invoiceId: string) {
     ["Nombre", `${invoice.customer.firstName} ${invoice.customer.lastName ?? ""}`.trim()],
     ["Contacto", invoice.customer.whatsappPhone ?? invoice.customer.phone ?? invoice.customer.email ?? "Sin contacto"],
     ["Email", invoice.customer.email ?? "No registrado"],
-    ["Telefono", invoice.customer.phone ?? invoice.customer.whatsappPhone ?? "No registrado"],
+    ["Teléfono", invoice.customer.phone ?? invoice.customer.whatsappPhone ?? "No registrado"],
   ]);
 
   drawSectionTitle(ctx, "Ticket y equipo");
@@ -90,7 +90,7 @@ export async function generateInvoicePdf(invoiceId: string) {
   ], invoice.payments);
 
   drawSectionTitle(ctx, "Nota");
-  drawParagraph(ctx, "Documento administrativo interno. No corresponde a factura fiscal electronica.");
+  drawParagraph(ctx, "Documento administrativo interno. No corresponde a factura fiscal electrónica.");
 
   return {
     filename: `${invoice.invoiceNumber}.pdf`,

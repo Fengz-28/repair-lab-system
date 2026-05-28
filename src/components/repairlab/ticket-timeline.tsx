@@ -16,7 +16,7 @@ export function RepairTicketTimeline({ items }: { items: RepairTimelineItem[] })
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600">Workflow</p>
-          <h2 className="mt-1 text-lg font-black text-zinc-950 dark:text-zinc-50">Timeline del ticket</h2>
+          <h2 className="mt-1 text-lg font-black text-zinc-950 dark:text-zinc-50">Línea de tiempo del ticket</h2>
         </div>
         <span className="rounded-full border border-white/10 px-3 py-1 text-xs font-bold text-zinc-400">
           {items.length} eventos

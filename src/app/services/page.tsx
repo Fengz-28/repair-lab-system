@@ -7,14 +7,14 @@ import {
 import { RepairContainer } from "@/components/repairlab";
 
 const services = [
-  ["Diagnostico electronico", "Revision tecnica para identificar fallas, alcance y ruta de reparacion.", "Revision"],
+  ["Diagnóstico electrónico", "Revisión técnica para identificar fallas, alcance y ruta de reparación.", "Revisión"],
   ["Reparacion de consolas", "Atencion a fallas comunes en energia, video, puertos, temperatura y almacenamiento.", "Gaming"],
-  ["Cambio HDMI", "Reemplazo y revision de puertos HDMI danados o sin senal.", "Puertos"],
+  ["Cambio HDMI", "Reemplazo y revisión de puertos HDMI dañados o sin señal.", "Puertos"],
   ["Microsoldadura", "Trabajo de precision en conectores, pistas y componentes de placa.", "Board level"],
-  ["Mantenimiento preventivo", "Limpieza profunda, control termico y revision general del equipo.", "Preventivo"],
+  ["Mantenimiento preventivo", "Limpieza profunda, control térmico y revisión general del equipo.", "Preventivo"],
   ["Reparacion de controles", "Servicio para drift, botones, carga, flex y fallas de mandos.", "Accesorios"],
   ["Limpieza profunda", "Remocion de polvo, residuos y mantenimiento interno para equipos exigidos.", "Cuidado"],
-  ["Repuestos y reacondicionamiento", "Preparacion de partes, equipos y componentes para uso o venta futura.", "Catalogo"],
+  ["Repuestos y reacondicionamiento", "Preparación de partes, equipos y componentes para uso o venta futura.", "Catálogo"],
 ];
 
 export default function ServicesPage() {
@@ -23,16 +23,16 @@ export default function ServicesPage() {
       <PublicHero
         eyebrow="Servicios"
         title="Servicios tecnicos para equipos electronicos."
-        description="Catalogo inicial de servicios para diagnostico, reparacion, mantenimiento y reacondicionamiento."
+        description="Catálogo inicial de servicios para diagnóstico, reparación, mantenimiento y reacondicionamiento."
         primaryHref="/contact"
         secondaryHref="/products"
         secondaryLabel="Ver productos"
       />
       <RepairContainer className="space-y-10 py-16">
         <PublicSectionHeader
-          eyebrow="Catalogo de servicios"
+          eyebrow="Catálogo de servicios"
           title="Especialidades RepairLab"
-          description="Servicios pensados para operar con cotizacion previa y seguimiento claro."
+          description="Servicios pensados para operar con cotización previa y seguimiento claro."
         />
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           {services.map(([title, description, badge]) => (

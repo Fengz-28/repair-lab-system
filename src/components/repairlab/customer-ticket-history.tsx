@@ -103,7 +103,7 @@ export function CustomerTicketHistory({ tickets }: { tickets: CustomerTicket[] }
                 ) : null}
                 {ticket.quotes[0] ? (
                   <RepairButton href={`/admin/tickets/${ticket.id}/quotes/${ticket.quotes[0].id}/pdf`} tone="ghost" size="sm">
-                    PDF cotizacion
+                    PDF de cotización
                   </RepairButton>
                 ) : null}
               </div>

@@ -64,7 +64,7 @@ export function MessageLogCard({ message }: { message: MessageLogCardData }) {
 
       {message.error || message.reason ? (
         <div className="mt-4">
-          <RepairInlineAlert tone="warning" title="Revisar envio" compact>
+          <RepairInlineAlert tone="warning" title="Revisar envío" compact>
             <p>{message.error ?? message.reason}</p>
           </RepairInlineAlert>
         </div>

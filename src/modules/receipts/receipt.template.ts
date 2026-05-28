@@ -8,7 +8,7 @@ export type ReceiptPreview = {
 
 export function renderReceptionReceiptPreview(input: ReceptionReceipt): ReceiptPreview {
   const receipt = receptionReceiptSchema.parse(input);
-  const title = `Comprobante de recepcion ${receipt.receiptNumber}`;
+  const title = `Comprobante de recepción ${receipt.receiptNumber}`;
   const rows = [
     ["Ticket", receipt.ticketNumber],
     ["Cliente", receipt.customerName],
@@ -16,7 +16,7 @@ export function renderReceptionReceiptPreview(input: ReceptionReceipt): ReceiptP
     ["Problema reportado", receipt.reportedIssue],
     ["Condicion fisica", receipt.physicalCondition],
     ["Accesorios", receipt.accessoriesReceived ?? "No registrados"],
-    ["Fecha de recepcion", receipt.receivedAt.toLocaleString("es-CR")],
+    ["Fecha de recepción", receipt.receivedAt.toLocaleString("es-CR")],
   ];
 
   return {
@@ -42,4 +42,3 @@ function escapeHtml(value: string) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 }
-

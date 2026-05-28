@@ -8,34 +8,34 @@ import { RepairButton, RepairContainer, RepairPanel } from "@/components/repairl
 
 const featuredServices = [
   {
-    title: "Reparacion de consolas",
+    title: "Reparación de consolas",
     badge: "Gaming",
-    description: "Diagnostico y reparacion para consolas con fallas de video, energia, puertos, temperatura o controles.",
+    description: "Diagnóstico y reparación para consolas con fallas de video, energía, puertos, temperatura o controles.",
   },
   {
     title: "Microsoldadura",
     badge: "Board level",
-    description: "Trabajo tecnico en conectores, pistas, componentes pequenos y reparaciones electronicas de precision.",
+    description: "Trabajo técnico en conectores, pistas, componentes pequeños y reparaciones electrónicas de precisión.",
   },
   {
-    title: "Diagnostico electronico",
+    title: "Diagnóstico electrónico",
     badge: "Revision",
-    description: "Evaluacion inicial para identificar causa probable, alcance de reparacion y ruta de cotizacion.",
+    description: "Evaluación inicial para identificar causa probable, alcance de reparación y ruta de cotización.",
   },
   {
     title: "Mantenimiento",
     badge: "Preventivo",
-    description: "Limpieza profunda, cambio de pasta termica y revision para mejorar estabilidad y temperatura.",
+    description: "Limpieza profunda, cambio de pasta térmica y revisión para mejorar estabilidad y temperatura.",
   },
   {
-    title: "Reparacion de controles",
+    title: "Reparación de controles",
     badge: "Accesorios",
     description: "Atencion a drift, botones, conectores, carga, flex y fallas comunes de mandos.",
   },
   {
     title: "Equipos reacondicionados",
-    badge: "Catalogo",
-    description: "Preparacion y revision de equipos para venta futura con historial y control interno.",
+    badge: "Catálogo",
+    description: "Preparación y revisión de equipos para venta futura con historial y control interno.",
   },
 ];
 
@@ -46,10 +46,10 @@ export default function HomePage() {
     <PublicShell>
       <PublicHero
         eyebrow="RepairLab / Electronic repair"
-        title="Reparacion electronica con seguimiento claro y documentado."
+        title="Reparación electrónica con seguimiento claro y documentado."
         description="Un taller moderno para recibir equipos, diagnosticar fallas, cotizar reparaciones y mantener al cliente informado con transparencia."
         primaryHref="/contact"
-        primaryLabel="Solicitar reparacion"
+        primaryLabel="Solicitar reparación"
         secondaryHref="/services"
         secondaryLabel="Ver servicios"
         badge="Portal de seguimiento preparado para clientes"
@@ -59,8 +59,8 @@ export default function HomePage() {
         <section className="space-y-8">
           <PublicSectionHeader
             eyebrow="Servicios destacados"
-            title="Soporte tecnico para electronica real"
-            description="Servicios pensados para consolas, controles, placas, repuestos y equipos que necesitan diagnostico profesional."
+            title="Soporte técnico para electrónica real"
+            description="Servicios pensados para consolas, controles, placas, repuestos y equipos que necesitan diagnóstico profesional."
           />
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {featuredServices.map((service) => (
@@ -73,7 +73,7 @@ export default function HomePage() {
           <PublicSectionHeader
             eyebrow="Proceso"
             title="Un flujo simple, trazable y profesional"
-            description="Desde la recepcion hasta la entrega, cada etapa queda preparada para seguimiento interno y comunicacion clara."
+            description="Desde la recepción hasta la entrega, cada etapa queda preparada para seguimiento interno y comunicación clara."
           />
           <div className="grid gap-4 md:grid-cols-5">
             {processSteps.map((step, index) => (
@@ -89,7 +89,7 @@ export default function HomePage() {
 
         <section className="grid gap-5 lg:grid-cols-4">
           {[
-            ["Seguimiento por portal", "El cliente puede revisar el estado de su reparacion con un enlace seguro."],
+            ["Seguimiento por portal", "El cliente puede revisar el estado de su reparación con un enlace seguro."],
             ["PDFs profesionales", "Cotizaciones y facturas internas listas para descargar e imprimir."],
             ["Historial tecnico", "Cada ticket conserva eventos, estados y actividad relevante."],
             ["Transparencia", "Cotizaciones, pagos y saldos se mantienen claros durante el proceso."],
@@ -104,10 +104,10 @@ export default function HomePage() {
         <section className="rounded-[2rem] border border-emerald-200 bg-emerald-50 p-8 text-center dark:border-emerald-900 dark:bg-emerald-950/35">
           <h2 className="text-3xl font-black text-zinc-950 dark:text-zinc-50">¿Tienes un equipo para revisar?</h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-300">
-            Agenda una recepcion o consulta el proceso para que podamos evaluar tu equipo con orden y trazabilidad.
+            Agenda una recepción o consulta el proceso para que podamos evaluar tu equipo con orden y trazabilidad.
           </p>
           <div className="mt-6">
-            <RepairButton href="/contact">Solicitar reparacion</RepairButton>
+            <RepairButton href="/contact">Solicitar reparación</RepairButton>
           </div>
         </section>
       </RepairContainer>

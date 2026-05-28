@@ -57,7 +57,7 @@ export async function createIntakeAction(
   if (!parsed.success) {
     return {
       ok: false,
-      message: "Revisa los campos marcados antes de registrar la recepcion.",
+      message: "Revisa los campos marcados antes de registrar la recepción.",
       errors: parsed.error.flatten().fieldErrors,
     };
   }
@@ -81,7 +81,7 @@ export async function createIntakeAction(
 
     return {
       ok: false,
-      message: "No se pudo registrar la recepcion. Intentalo de nuevo.",
+      message: "No se pudo registrar la recepción. Inténtalo de nuevo.",
     };
   }
 }

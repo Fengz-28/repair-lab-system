@@ -82,7 +82,7 @@ export async function receiveDeviceForRepair(
         fromStatus: null,
         toStatus: TicketStatus.RECEIVED,
         changedById: options.actorUserId ?? null,
-        internalComment: "Ticket creado automaticamente desde recepcion.",
+        internalComment: "Ticket creado automáticamente desde recepción.",
       },
     });
 

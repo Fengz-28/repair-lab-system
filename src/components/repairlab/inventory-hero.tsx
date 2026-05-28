@@ -18,7 +18,7 @@ export function InventoryHero({ stats }: { stats: InventoryHeroStats }) {
           <div className="max-w-3xl">
             <p className="text-xs font-black uppercase tracking-[0.22em] text-emerald-300">Admin / Inventario</p>
             <h1 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
-              Catalogo e inventario
+              Catálogo e inventario
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-zinc-300 sm:text-base">
               Controla servicios, productos, repuestos y stock real del taller sin convertir RepairLab en un ERP

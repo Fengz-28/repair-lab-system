@@ -15,7 +15,7 @@ export default function AdminTicketsLoading() {
       <AdminNav />
       <RepairPageHero
         eyebrow="Admin / Tickets"
-        title="Tickets de reparacion"
+        title="Tickets de reparación"
         description="Cargando tickets, filtros y acciones operativas."
       />
 

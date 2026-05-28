@@ -68,7 +68,7 @@ export default async function AdminMessageDetailPage({
 
         {message.metadata.error || message.metadata.reason ? (
           <RepairFloatingPanel className="border-amber-300/20 bg-amber-500/10 shadow-amber-950/10">
-            <h2 className="font-black text-zinc-950 dark:text-zinc-50">Estado del envio</h2>
+            <h2 className="font-black text-zinc-950 dark:text-zinc-50">Estado del envío</h2>
             <p className="mt-2 break-words text-sm font-semibold text-amber-100">
               {message.metadata.error ?? message.metadata.reason}
             </p>
@@ -89,9 +89,9 @@ export default async function AdminMessageDetailPage({
 
         <ContentPanel title="Texto" content={message.body ?? "Sin contenido de texto."} />
         <ContentPanel
-          title="HTML preview"
+          title="Vista previa HTML"
           description="Se muestra como texto para evitar ejecutar contenido HTML dentro del admin."
-          content={message.metadata.htmlPreview ?? "No hay HTML preview guardado para este mensaje."}
+          content={message.metadata.htmlPreview ?? "No hay vista previa HTML guardada para este mensaje."}
           compact
         />
       </RepairContainer>

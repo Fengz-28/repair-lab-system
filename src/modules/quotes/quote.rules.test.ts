@@ -23,7 +23,7 @@ describe("quote rules", () => {
         total: 100,
         nextStatus: InvoiceStatus.SENT,
       }),
-    ).toThrow("No se puede enviar una cotizacion sin lineas.");
+    ).toThrow("No se puede enviar una cotización sin líneas.");
 
     expect(() =>
       assertQuoteCanMoveToStatusFromSnapshot({
@@ -31,7 +31,7 @@ describe("quote rules", () => {
         total: 100,
         nextStatus: InvoiceStatus.APPROVED,
       }),
-    ).toThrow("No se puede aprobar una cotizacion sin lineas.");
+    ).toThrow("No se puede aprobar una cotización sin líneas.");
   });
 
   it("does not allow sending or approving quotes with zero total", () => {
@@ -41,7 +41,7 @@ describe("quote rules", () => {
         total: 0,
         nextStatus: InvoiceStatus.SENT,
       }),
-    ).toThrow("No se puede enviar una cotizacion con total cero.");
+    ).toThrow("No se puede enviar una cotización con total cero.");
 
     expect(() =>
       assertQuoteCanMoveToStatusFromSnapshot({
@@ -49,7 +49,7 @@ describe("quote rules", () => {
         total: 0,
         nextStatus: InvoiceStatus.APPROVED,
       }),
-    ).toThrow("No se puede aprobar una cotizacion con total cero.");
+    ).toThrow("No se puede aprobar una cotización con total cero.");
   });
 
   it("maps quote status changes to ticket status changes", () => {
