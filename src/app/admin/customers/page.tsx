@@ -59,7 +59,7 @@ export default async function AdminCustomersPage({
                 id="customer-search"
                 name="search"
                 defaultValue={search}
-                placeholder="Cliente, telefono, email, equipo o ticket"
+                placeholder="Cliente, teléfono, email, equipo o ticket"
                 className="mt-2 min-h-12 w-full rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm text-white placeholder:text-zinc-500 shadow-sm shadow-black/20 outline-none transition focus:border-cyan-300 focus:ring-2 focus:ring-cyan-500/20"
               />
             </div>
@@ -87,7 +87,7 @@ export default async function AdminCustomersPage({
             title={search ? "No encontramos clientes." : "No hay clientes registrados todavía."}
             description={
               search
-                ? "Prueba con otro nombre, telefono, email, equipo o codigo de ticket."
+                ? "Prueba con otro nombre, teléfono, email, equipo o código de ticket."
                 : "Cada recepción crea o reutiliza el cliente para que puedas ver historial, equipos y saldos desde el CRM."
             }
             eyebrow={search ? "Búsqueda sin resultados" : "CRM vacío"}

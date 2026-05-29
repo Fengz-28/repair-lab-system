@@ -77,7 +77,7 @@ function RateLimitedPage({ retryAfterSeconds }: { retryAfterSeconds: number }) {
         <RepairEmptyState
           title="Demasiadas solicitudes"
           description={`Por seguridad, espera ${retryAfterSeconds} segundos antes de volver a consultar este enlace.`}
-          eyebrow="Proteccion activa"
+          eyebrow="Protección activa"
           icon="429"
         />
       </RepairContainer>
@@ -93,8 +93,8 @@ function InvalidTokenPage() {
       <RepairContainer className="-mt-8 relative z-10 pb-12">
         <RepairEmptyState
           title="No encontramos este ticket"
-          description="Verifica que el enlace este completo. Si el problema continua, contacta al taller indicando tu codigo de ticket."
-          eyebrow="Enlace no valido"
+          description="Verifica que el enlace esté completo. Si el problema continúa, contacta al taller indicando tu código de ticket."
+          eyebrow="Enlace no válido"
           icon="404"
         />
       </RepairContainer>

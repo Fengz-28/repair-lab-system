@@ -4,7 +4,7 @@
 
 The RepairLab UI Architect Agent specializes in layout, visual hierarchy, responsive design, dark premium surfaces, accessibility, and component consistency.
 
-This agent helps RepairLab evolve into a polished technical SaaS without disturbing business logic.
+This agent helps RepairLab evolve into a polished internal workshop operating system without disturbing business logic.
 
 ## Responsibilities
 
@@ -15,6 +15,7 @@ This agent helps RepairLab evolve into a polished technical SaaS without disturb
 - Detect layout inconsistencies across admin and public pages.
 - Protect accessibility basics: contrast, focus, readable labels.
 - Ensure mobile and tablet layouts remain usable.
+- Prioritize workshop speed and operational clarity over SaaS-style decoration.
 - Prefer reusable RepairLab components over ad hoc styling.
 
 ## Not Responsible For
@@ -50,7 +51,7 @@ This agent helps RepairLab evolve into a polished technical SaaS without disturb
 - Do forms have readable labels, placeholders, and focus states?
 - Are empty states helpful?
 - Are status badges understandable without raw enums?
-- Does mobile feel intentional?
+- Does mobile feel intentional for real workshop use?
 
 ## Expected Output
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type React from "react";
 
-import { AdminNav, DemoChecklist } from "@/components/admin-nav";
+import { AdminNav } from "@/components/admin-nav";
 import {
   RepairButton,
   RepairContainer,
@@ -33,7 +33,7 @@ export default async function AdminDashboardPage() {
       <RepairPageHero
         eyebrow="Admin / Dashboard"
         title="Panel operativo del taller"
-        description="Vista ejecutiva para entender tickets activos, flujo comercial, pagos, saldos e inventario con lectura rapida."
+        description="Vista ejecutiva para priorizar trabajo activo, aprobaciones pendientes, cobros, entregas e inventario crítico."
         actions={
           <>
             <RepairButton href="/admin/intake">Nueva recepción</RepairButton>
@@ -50,7 +50,25 @@ export default async function AdminDashboardPage() {
           <RepairStatCard label="Saldo pendiente" value={formatMoney(dashboard.invoices.balanceDue)} tone="warning" />
         </RepairGrid>
 
-        <DemoChecklist />
+        <RepairPanel className="border-cyan-300/15 bg-zinc-950/85">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-200">
+            Prioridades operativas
+          </p>
+          <div className="mt-3 grid gap-2 text-sm text-zinc-200 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="rounded-2xl border border-white/10 bg-zinc-950/80 p-3">
+              <p className="font-bold text-zinc-50">Atención inmediata</p>
+              <p className="mt-1 text-zinc-400">Tickets en diagnóstico o espera de aprobación.</p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-zinc-950/80 p-3">
+              <p className="font-bold text-zinc-50">Cobros pendientes</p>
+              <p className="mt-1 text-zinc-400">Facturas con saldo para seguimiento activo.</p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-zinc-950/80 p-3 sm:col-span-2 lg:col-span-1">
+              <p className="font-bold text-zinc-50">Inventario crítico</p>
+              <p className="mt-1 text-zinc-400">Ítems con stock bajo que pueden frenar reparaciones.</p>
+            </div>
+          </div>
+        </RepairPanel>
 
         <RepairGrid className="gap-6 xl:grid-cols-2">
           <MetricPanel
@@ -94,7 +112,7 @@ export default async function AdminDashboardPage() {
           <MetricPanel
             title="Inventario"
             items={[
-              ["Items de catalogo", dashboard.inventory.catalogItems],
+              ["Items de catálogo", dashboard.inventory.catalogItems],
               ["Controlan stock", dashboard.inventory.trackedItems],
               ["Stock bajo", dashboard.inventory.lowStock],
               ["Sin stock", dashboard.inventory.outOfStock],
@@ -260,7 +278,7 @@ function InventoryAlertsPanel({
               {item.name}
             </Link>
             <p className="break-words text-zinc-500 dark:text-zinc-400">
-              Stock {item.quantityOnHand} / minimo {item.reorderLevel}
+              Stock {item.quantityOnHand} / mínimo {item.reorderLevel}
             </p>
           </div>
           <Badge>{item.quantityOnHand <= 0 ? "Sin stock" : "Stock bajo"}</Badge>
@@ -276,7 +294,7 @@ function RecentMovementsPanel({
   movements: DashboardData["lists"]["recentMovements"];
 }) {
   return (
-    <ListPanel title="Ultimos movimientos de inventario" empty="No hay movimientos de inventario.">
+    <ListPanel title="Últimos movimientos de inventario" empty="No hay movimientos de inventario.">
       {movements.map((movement) => (
         <ListItem key={movement.id}>
           <div className="min-w-0">
@@ -298,7 +316,7 @@ function RecentEventsPanel({
   events: DashboardData["lists"]["recentEvents"];
 }) {
   return (
-    <ListPanel title="Ultimos eventos" empty="No hay eventos recientes.">
+    <ListPanel title="Últimos eventos" empty="No hay eventos recientes.">
       {events.map((event) => (
         <ListItem key={event.id}>
           <div className="min-w-0">

@@ -153,7 +153,7 @@ export function CommandPalette() {
 
   const paletteDialog = open ? (
     <div
-      className="fixed inset-0 z-[100] bg-black/75 p-4 backdrop-blur-sm motion-safe:animate-in motion-safe:fade-in sm:p-6"
+      className="fixed inset-0 z-[120] flex items-start justify-center bg-black/80 p-3 backdrop-blur-sm motion-safe:animate-in motion-safe:fade-in sm:p-6"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) {
           close();
@@ -165,7 +165,7 @@ export function CommandPalette() {
         aria-modal="true"
         aria-labelledby="command-palette-title"
         onKeyDown={handleKeyDown}
-        className="repair-panel-reveal mx-auto mt-12 w-full max-w-2xl overflow-hidden rounded-[2rem] border border-cyan-300/20 bg-zinc-950 shadow-2xl shadow-cyan-950/20 sm:mt-20"
+        className="repair-panel-reveal mt-12 w-full max-w-2xl overflow-hidden rounded-[2rem] border border-cyan-300/25 bg-zinc-950/98 shadow-2xl shadow-black/50 ring-1 ring-white/10 sm:mt-16"
       >
         <div className="border-b border-white/10 p-4 sm:p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -211,7 +211,7 @@ export function CommandPalette() {
           <CommandSection title="Acciones">
             {visibleActions.length === 0 ? (
               <div className="rounded-2xl border border-white/10 bg-zinc-950/75 p-4 text-sm text-zinc-400">
-                No hay comandos estaticos para esa busqueda.
+                No hay comandos estáticos para esa búsqueda.
               </div>
             ) : (
               <ul className="grid gap-2">
@@ -336,7 +336,7 @@ export function CommandPalette() {
 
       <button
         type="button"
-        className="repair-button-motion repair-focus-ring fixed bottom-4 right-4 z-40 inline-flex min-h-11 items-center justify-center rounded-full border border-cyan-300/25 bg-zinc-950/90 px-4 py-2 text-xs font-black text-cyan-100 shadow-2xl shadow-black/40 backdrop-blur xl:hidden"
+        className="repair-button-motion repair-focus-ring fixed bottom-4 right-4 z-40 inline-flex min-h-11 items-center justify-center rounded-full border border-cyan-300/25 bg-zinc-950/90 px-4 py-2 text-xs font-black text-cyan-100 shadow-2xl shadow-black/40 backdrop-blur lg:hidden"
         onClick={openPalette}
       >
         Ctrl K

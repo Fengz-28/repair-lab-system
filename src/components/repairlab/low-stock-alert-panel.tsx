@@ -23,7 +23,7 @@ export function LowStockAlertPanel({
             Alerta de stock
           </p>
           <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">
-            {items.length} items en o por debajo del minimo
+            {items.length} items en o por debajo del mínimo
           </h2>
           <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
             Revisa repuestos criticos antes de aprobar trabajos que dependan de inventario controlado.
@@ -39,7 +39,7 @@ export function LowStockAlertPanel({
             <p className="break-words font-black text-zinc-950 dark:text-zinc-50">{item.name}</p>
             <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{item.sku ? `SKU: ${item.sku}` : "Sin SKU"}</p>
             <p className="mt-2 text-sm font-bold text-amber-700 dark:text-amber-200">
-              Stock {item.quantityOnHand} / minimo {item.reorderLevel}
+              Stock {item.quantityOnHand} / mínimo {item.reorderLevel}
             </p>
           </div>
         ))}

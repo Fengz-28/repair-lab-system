@@ -15,6 +15,7 @@ import {
   RepairTable,
 } from "@/components/repairlab";
 import { getTicketListData, type TicketListSearchParams } from "@/modules/tickets/ticket-list.service";
+import { getTicketStatusLabel, getTicketStatusTone } from "@/modules/tickets/ticket-status.presentation";
 import { requireLocalStaff } from "@/server/auth/local-admin";
 
 export const dynamic = "force-dynamic";
@@ -50,7 +51,7 @@ export default async function AdminTicketsPage({
         {lowStockCount > 0 ? (
           <section className="repair-panel-reveal flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-300/25 bg-amber-500/10 p-4 text-sm text-amber-100 shadow-sm shadow-black/20">
             <p>
-              <span className="font-bold">Bajo stock:</span> tienes {lowStockCount} items en o por debajo del minimo.
+              <span className="font-bold">Bajo stock:</span> tienes {lowStockCount} items en o por debajo del mínimo.
             </p>
             <RepairButton href="/admin/catalog" tone="secondary" size="sm">
               Ver inventario
@@ -83,7 +84,7 @@ function TicketFilters({ filters }: { filters: TicketListData["filters"] }) {
           <input
             name="search"
             defaultValue={filters.search}
-            placeholder="Ticket, cliente, telefono, equipo o problema"
+            placeholder="Ticket, cliente, teléfono, equipo o problema"
             className="min-h-11 rounded-full border border-white/10 bg-zinc-950 px-4 py-2 text-sm text-white placeholder:text-zinc-500 transition focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
           />
         </label>
@@ -120,7 +121,7 @@ function TicketFilters({ filters }: { filters: TicketListData["filters"] }) {
           name="view"
           defaultValue={filters.view}
           options={[
-            ["cards", "Cards"],
+            ["cards", "Tarjetas"],
             ["table", "Tabla"],
           ]}
         />
@@ -271,7 +272,7 @@ function FinancialSummary({
     return (
       <div className={compact ? "text-xs text-zinc-500 dark:text-zinc-400" : "rounded-2xl border border-white/10 bg-zinc-950/70 p-3 text-sm"}>
         <p>Sin factura</p>
-        {ticket.hasPendingQuote ? <p className="text-violet-600 dark:text-violet-300">Cotizacion pendiente</p> : null}
+        {ticket.hasPendingQuote ? <p className="text-violet-600 dark:text-violet-300">Cotización pendiente</p> : null}
       </div>
     );
   }
@@ -359,21 +360,9 @@ function ActionLink({
 }
 
 function StatusBadge({ status }: { status: TicketStatus }) {
-  const tones: Record<TicketStatus, "neutral" | "emerald" | "cyan" | "warning" | "danger" | "violet"> = {
-    RECEIVED: "cyan",
-    INITIAL_REVIEW: "cyan",
-    DIAGNOSIS: "warning",
-    WAITING_APPROVAL: "violet",
-    APPROVED: "emerald",
-    REPAIR_IN_PROGRESS: "cyan",
-    READY_FOR_PICKUP: "violet",
-    DELIVERED: "emerald",
-    CANCELLED: "danger",
-  };
-
   return (
-    <RepairBadge tone={tones[status]}>
-      {ticketStatusLabel(status)}
+    <RepairBadge tone={getTicketStatusTone(status)}>
+      {getTicketStatusLabel(status)}
     </RepairBadge>
   );
 }
@@ -384,7 +373,7 @@ function EmptyState({ hasFilters }: { hasFilters: boolean }) {
       title={hasFilters ? "No encontramos tickets con esos filtros." : "No hay tickets todavía."}
       description={
         hasFilters
-          ? "Prueba limpiar filtros o buscar por cliente, equipo, telefono o codigo de ticket."
+          ? "Prueba limpiar filtros o buscar por cliente, equipo, teléfono o código de ticket."
           : "Empieza registrando una recepción. El sistema creará el ticket y lo conectará con cliente, equipo y seguimiento."
       }
       eyebrow={hasFilters ? "Búsqueda sin resultados" : "Primer ticket"}
@@ -393,22 +382,6 @@ function EmptyState({ hasFilters }: { hasFilters: boolean }) {
       secondaryAction={!hasFilters ? <RepairButton href="/admin/dashboard" tone="secondary">Ver dashboard</RepairButton> : null}
     />
   );
-}
-
-function ticketStatusLabel(status: TicketStatus) {
-  const labels: Record<TicketStatus, string> = {
-    RECEIVED: "Recibido",
-    INITIAL_REVIEW: "Revision inicial",
-    DIAGNOSIS: "En diagnóstico",
-    WAITING_APPROVAL: "Esperando aprobación",
-    APPROVED: "Aprobado / listo para reparación",
-    REPAIR_IN_PROGRESS: "En reparación",
-    READY_FOR_PICKUP: "Listo para entrega",
-    DELIVERED: "Entregado",
-    CANCELLED: "Cancelado",
-  };
-
-  return labels[status] ?? status;
 }
 
 function formatMoney(value: number) {

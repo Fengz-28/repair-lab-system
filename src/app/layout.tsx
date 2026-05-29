@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Repair Lab System",
-  description: "Repair management platform",
+  title: "RepairLab | Sistema operativo del taller",
+  description:
+    "RepairLab es el sistema operativo interno para recepción, diagnóstico, cotizaciones, facturas, pagos, inventario y seguimiento profesional de reparaciones.",
 };
 
 export default function RootLayout({
@@ -12,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark h-full antialiased">
+    <html lang="es" className="dark h-full antialiased">
       <body className="min-h-full flex flex-col bg-[#030303] text-zinc-100">
         {children}
       </body>

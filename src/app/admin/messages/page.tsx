@@ -64,16 +64,16 @@ export default async function AdminMessagesPage({
             <select name="template" defaultValue={filters.template} className={fieldClassName}>
               <option value="">Todos los tipos</option>
               <option value="intake.received">Ticket recibido</option>
-              <option value="quote.sent">Cotizacion lista</option>
-              <option value="quote.approved">Cotizacion aprobada</option>
+              <option value="quote.sent">Cotización lista</option>
+              <option value="quote.approved">Cotización aprobada</option>
               <option value="ticket.ready_for_pickup">Equipo listo</option>
               <option value="ticket.delivered">Ticket cerrado</option>
               <option value="ticket.status_changed">Cambio de estado</option>
             </select>
             <select name="recent" defaultValue={filters.recent} className={fieldClassName}>
               <option value="">Todas las fechas</option>
-              <option value="7d">Ultimos 7 dias</option>
-              <option value="30d">Ultimos 30 dias</option>
+              <option value="7d">Últimos 7 días</option>
+              <option value="30d">Últimos 30 días</option>
             </select>
             <div className="grid gap-2 sm:flex">
               <button className="min-h-12 rounded-full border border-emerald-300/40 bg-emerald-500 px-5 py-3 text-sm font-black text-black shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-400 hover:shadow-cyan-400/20">

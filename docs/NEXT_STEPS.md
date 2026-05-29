@@ -4,7 +4,9 @@ Actualizado: 2026-05-25, America/Costa_Rica.
 
 ## Objetivo de esta hoja de ruta
 
-Priorizar pasos que reducen riesgo real sin romper el workflow ya construido. RepairLab ya tiene mucho producto funcional; el siguiente trabajo debe enfocarse en hardening, confiabilidad y preparacion de produccion controlada.
+Priorizar pasos que reducen riesgo real sin romper el workflow ya construido. RepairLab ya tiene mucho producto funcional; el siguiente trabajo debe enfocarse en hardening, confiabilidad, operacion real del taller y preparacion de uso controlado.
+
+La prioridad estrategica actual es workshop-first: mejorar la operacion interna del taller antes de construir capacidades SaaS, multi-tenant o integraciones avanzadas.
 
 ## Fase 0 - Confirmar estado antes de nuevas features
 
@@ -227,7 +229,7 @@ Requisitos:
 
 ## No hacer todavia
 
-- Multi-tenant.
+- Multi-tenant, salvo que el usuario pida explicitamente entrar en una fase SaaS.
 - Ecommerce completo.
 - Pagos online.
 - Facturacion fiscal oficial.

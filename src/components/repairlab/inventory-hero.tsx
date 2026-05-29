@@ -44,7 +44,7 @@ export function InventoryHero({ stats }: { stats: InventoryHeroStats }) {
                 Crear item
               </RepairButton>
               <RepairButton href="#catalogo" tone="secondary">
-                Ver catalogo
+                Ver catálogo
               </RepairButton>
             </div>
           </RepairFloatingPanel>

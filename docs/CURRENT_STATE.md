@@ -6,6 +6,8 @@ Actualizado: 2026-05-27, America/Costa_Rica.
 
 RepairLab tiene una base funcional amplia y modular. Ya no es solo una maqueta: existe flujo operativo interno, persistencia real en PostgreSQL, validacion Zod en acciones principales, autenticacion admin basica, eventos, auditoria, PDFs, portal publico, worker outbox local inicial y primera capa de tests unitarios.
 
+La posicion estrategica actual es workshop-first: RepairLab es primero un sistema operativo interno para el taller de reparacion del usuario. Su objetivo principal es mejorar recepcion, diagnostico, seguimiento, cotizaciones, facturas, pagos, inventario, comunicacion y crecimiento del taller. La opcion SaaS queda como futuro posible solo si el sistema demuestra valor en uso interno real.
+
 El proyecto sigue siendo pre-produccion. Hay varios puntos pensados correctamente pero aun incompletos: storage cloud, integraciones externas, automatizacion productiva de workers, backups productivos externos, CD/deploy, observabilidad y hardening de seguridad avanzado.
 
 La identidad visual actual es dark-first permanente, con base negra/zinc muy oscura y acentos emerald/cyan. La paleta global evita fondos azulados dominantes y prioriza contraste alto en cards, formularios, botones, badges y tablas.

@@ -10,8 +10,8 @@ type NavLink = {
 
 export function RepairTopbar() {
   return (
-    <div className="border-b border-emerald-400/30 bg-emerald-500 text-white">
-      <RepairContainer className="flex min-h-10 flex-wrap items-center justify-between gap-x-6 gap-y-2 py-2 text-xs font-medium sm:text-sm">
+    <div className="hidden border-b border-emerald-400/20 bg-emerald-500/95 text-white lg:block">
+      <RepairContainer className="flex min-h-9 flex-wrap items-center justify-between gap-x-5 gap-y-1 py-1.5 text-xs font-medium">
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
           <span className="inline-flex items-center gap-2">
             <span className="grid size-6 place-items-center rounded-full border border-white/30">T</span>
@@ -52,7 +52,7 @@ export function RepairNavbar({
 }) {
   return (
     <div className="sticky top-0 z-30 border-b border-white/10 bg-black/90 shadow-sm shadow-black/30 backdrop-blur-xl">
-      <RepairContainer className="flex flex-col gap-4 py-5 lg:flex-row lg:items-center lg:gap-7 lg:py-5">
+      <RepairContainer className="flex flex-col gap-3 py-4 lg:flex-row lg:items-center lg:gap-6 lg:py-4">
         <Link
           className="group flex min-w-fit items-center gap-4 rounded-3xl px-1 py-1 repair-focus-ring"
           href="/admin"
@@ -64,7 +64,7 @@ export function RepairNavbar({
             <span className="block text-[1.35rem] font-black tracking-tight text-zinc-50">
               Repair<span className="text-emerald-500">Lab</span>
             </span>
-            <span className="mt-1 block text-[0.68rem] font-black uppercase tracking-[0.24em] text-zinc-500">
+            <span className="mt-1 block text-[0.66rem] font-black uppercase tracking-[0.22em] text-zinc-500">
               Service OS
             </span>
           </span>
@@ -75,7 +75,7 @@ export function RepairNavbar({
         {user ? (
           <div className="flex min-w-fit flex-wrap items-center gap-3 lg:ml-auto lg:justify-end">
             {utility}
-            <div className="rounded-2xl border border-white/10 bg-zinc-950/80 px-4 py-2.5 shadow-sm shadow-black/20">
+            <div className="rounded-2xl border border-white/10 bg-zinc-950/80 px-4 py-2 shadow-sm shadow-black/20">
               <p className="max-w-48 truncate text-sm font-bold text-zinc-50">
                 {user.name}
               </p>
@@ -118,13 +118,13 @@ export function RepairPageHero({
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.18),transparent_28%),radial-gradient(circle_at_80%_0%,rgba(6,182,212,0.10),transparent_30%),linear-gradient(135deg,rgba(24,24,27,0.2),rgba(0,0,0,0.88))]" />
       <div className="absolute inset-0 opacity-30 [background-image:linear-gradient(120deg,transparent_0,transparent_48%,rgba(255,255,255,0.08)_49%,transparent_50%)] [background-size:42px_42px]" />
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-cyan-300/30 to-transparent" />
-      <RepairContainer className="relative py-12 sm:py-16">
+      <RepairContainer className="relative py-10 sm:py-12">
         {eyebrow ? (
           <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-300">{eyebrow}</p>
         ) : null}
         <div className="mt-4 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <h1 className="text-3xl font-black tracking-tight sm:text-5xl">{title}</h1>
+            <h1 className="text-3xl font-black tracking-tight sm:text-4xl">{title}</h1>
             {description ? (
               <p className="mt-4 max-w-2xl text-sm leading-6 text-zinc-300 sm:text-base">{description}</p>
             ) : null}
@@ -256,11 +256,11 @@ export function RepairButton({
   size?: "sm" | "md";
 }) {
   const toneClass = {
-    primary: "border border-emerald-300/40 bg-emerald-500 text-black shadow-lg shadow-emerald-500/25 hover:bg-emerald-400 hover:shadow-cyan-400/20",
+    primary: "border border-emerald-300/45 bg-emerald-500 text-black shadow-lg shadow-emerald-500/25 hover:bg-emerald-400 hover:shadow-cyan-400/20",
     secondary:
       "border border-white/15 bg-zinc-800 text-zinc-50 shadow-sm shadow-black/20 hover:border-cyan-300/35 hover:bg-zinc-700 hover:text-white",
     ghost:
-      "border border-white/15 bg-zinc-900/90 text-zinc-100 shadow-sm shadow-black/20 hover:border-white/25 hover:bg-zinc-800 hover:text-white",
+      "border border-white/15 bg-zinc-900/90 text-zinc-100 shadow-sm shadow-black/20 hover:border-cyan-300/25 hover:bg-zinc-800 hover:text-white",
   }[tone];
   const sizeClass = size === "sm" ? "min-h-10 px-4 py-2 text-xs" : "min-h-11 px-5 py-2.5 text-sm";
   const className = `repair-button-motion repair-focus-ring inline-flex items-center justify-center rounded-full font-bold disabled:cursor-not-allowed disabled:border-white/5 disabled:bg-zinc-900 disabled:text-zinc-500 disabled:shadow-none ${toneClass} ${sizeClass}`;

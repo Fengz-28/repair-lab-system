@@ -5,19 +5,25 @@ import { useFormStatus } from "react-dom";
 
 import { createIntakeAction } from "@/app/admin/intake/actions";
 import { RepairFormFeedback } from "@/components/repairlab";
+import { RepairSubmitButton } from "@/components/repairlab/form-fields";
 import { initialIntakeActionState } from "@/modules/intake/intake.action-state";
 
-const deviceTypes = [
-  "PHONE",
-  "TABLET",
-  "LAPTOP",
-  "DESKTOP",
-  "CONSOLE",
-  "ACCESSORY",
-  "OTHER",
-] as const;
+const deviceTypeOptions = [
+  { value: "PHONE", label: "Teléfono" },
+  { value: "TABLET", label: "Tablet" },
+  { value: "LAPTOP", label: "Laptop" },
+  { value: "DESKTOP", label: "Computadora de escritorio" },
+  { value: "CONSOLE", label: "Consola" },
+  { value: "ACCESSORY", label: "Accesorio" },
+  { value: "OTHER", label: "Otro" },
+];
 
-const contactMethods = ["WHATSAPP", "EMAIL", "PHONE", "NONE"] as const;
+const contactMethodOptions = [
+  { value: "WHATSAPP", label: "WhatsApp" },
+  { value: "EMAIL", label: "Correo electrónico" },
+  { value: "PHONE", label: "Llamada telefónica" },
+  { value: "NONE", label: "Sin preferencia" },
+];
 
 export function IntakeForm() {
   const [state, formAction] = useActionState(
@@ -30,20 +36,20 @@ export function IntakeForm() {
       <FormSection title="Cliente">
         <TextInput label="Nombre" name="customer.firstName" required />
         <TextInput label="Apellido" name="customer.lastName" />
-        <TextInput label="Email" name="customer.email" type="email" />
+        <TextInput label="Correo electrónico" name="customer.email" type="email" />
         <TextInput label="Teléfono" name="customer.phone" />
         <TextInput label="WhatsApp" name="customer.whatsappPhone" />
         <SelectInput
           label="Contacto preferido"
           name="customer.preferredContactMethod"
-          options={contactMethods}
+          options={contactMethodOptions}
           defaultValue="WHATSAPP"
         />
         <TextareaInput label="Notas del cliente" name="customer.notes" />
       </FormSection>
 
       <FormSection title="Equipo">
-        <SelectInput label="Tipo" name="device.type" options={deviceTypes} defaultValue="PHONE" />
+        <SelectInput label="Tipo de equipo" name="device.type" options={deviceTypeOptions} defaultValue="PHONE" />
         <TextInput label="Marca" name="device.brand" required />
         <TextInput label="Modelo" name="device.model" />
         <TextInput label="Serial" name="device.serial" />
@@ -51,13 +57,13 @@ export function IntakeForm() {
         <TextareaInput label="Notas del equipo" name="device.notes" />
       </FormSection>
 
-      <FormSection title="Recepcion">
+      <FormSection title="Recepción">
         <TextareaInput label="Accesorios recibidos" name="intake.accessoriesReceived" />
-        <TextareaInput label="Condicion fisica" name="intake.physicalCondition" required />
+        <TextareaInput label="Condición física" name="intake.physicalCondition" required />
         <TextareaInput label="Problema reportado" name="intake.reportedIssue" required />
         <TextareaInput label="Observaciones internas" name="intake.internalNotes" />
         <div className="grid gap-2">
-          <label className="text-sm font-medium text-zinc-800 dark:text-zinc-200" htmlFor="photos">
+          <label className="text-sm font-medium text-zinc-200" htmlFor="photos">
             Fotos privadas del estado inicial
           </label>
           <input
@@ -99,13 +105,11 @@ function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="min-h-11 w-full rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-black text-black shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:border disabled:border-white/5 disabled:bg-zinc-900 disabled:text-zinc-500 disabled:shadow-none sm:w-auto"
-    >
-      {pending ? "Registrando..." : "Registrar recepción"}
-    </button>
+    <RepairSubmitButton
+      pending={pending}
+      label="Registrar recepción"
+      pendingLabel="Registrando..."
+    />
   );
 }
 
@@ -118,7 +122,7 @@ function FormSection({
 }) {
   return (
     <fieldset className="grid gap-4">
-      <legend className="mb-2 text-base font-semibold text-zinc-950 dark:text-zinc-50">{title}</legend>
+      <legend className="mb-2 text-base font-semibold text-zinc-50">{title}</legend>
       <div className="grid gap-4 sm:grid-cols-2">{children}</div>
     </fieldset>
   );
@@ -137,7 +141,7 @@ function TextInput({
 }) {
   return (
     <div className="grid gap-2">
-      <label className="text-sm font-medium text-zinc-800 dark:text-zinc-200" htmlFor={name}>
+      <label className="text-sm font-medium text-zinc-200" htmlFor={name}>
         {label}
       </label>
       <input
@@ -162,7 +166,7 @@ function TextareaInput({
 }) {
   return (
     <div className="grid gap-2 sm:col-span-2">
-      <label className="text-sm font-medium text-zinc-800 dark:text-zinc-200" htmlFor={name}>
+      <label className="text-sm font-medium text-zinc-200" htmlFor={name}>
         {label}
       </label>
       <textarea
@@ -176,7 +180,7 @@ function TextareaInput({
   );
 }
 
-function SelectInput<T extends string>({
+function SelectInput({
   label,
   name,
   options,
@@ -184,12 +188,12 @@ function SelectInput<T extends string>({
 }: {
   label: string;
   name: string;
-  options: readonly T[];
-  defaultValue: T;
+  options: Array<{ label: string; value: string }>;
+  defaultValue: string;
 }) {
   return (
     <div className="grid gap-2">
-      <label className="text-sm font-medium text-zinc-800 dark:text-zinc-200" htmlFor={name}>
+      <label className="text-sm font-medium text-zinc-200" htmlFor={name}>
         {label}
       </label>
       <select
@@ -199,8 +203,8 @@ function SelectInput<T extends string>({
         className={fieldClassName}
       >
         {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
+          <option key={option.value} value={option.value}>
+            {option.label}
           </option>
         ))}
       </select>

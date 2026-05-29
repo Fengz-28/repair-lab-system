@@ -39,7 +39,7 @@ export function MessagesHero({ messages }: { messages: MessageHeroItem[] }) {
           <RepairFloatingPanel className="w-full bg-zinc-900/45 lg:max-w-md">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-200">Pulso de notificaciones</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              <HeroMetric label="Ultimos 7 dias" value={String(recent)} />
+              <HeroMetric label="Últimos 7 días" value={String(recent)} />
               <HeroMetric label="Providers" value={String(providers)} />
             </div>
             <div className="mt-5">

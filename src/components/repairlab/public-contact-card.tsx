@@ -15,11 +15,11 @@ export function PublicContactCard({ ticketNumber }: { ticketNumber: string }) {
             ¿Tienes dudas sobre tu reparación?
           </h2>
           <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
-            Contacta al taller indicando tu codigo de ticket. Asi podremos ubicar tu caso rapidamente sin exponer
+            Contacta al taller indicando tu código de ticket. Así podremos ubicar tu caso rápidamente sin exponer
             información interna del sistema.
           </p>
         </div>
-        <RepairBadge tone="emerald">Codigo {ticketNumber}</RepairBadge>
+        <RepairBadge tone="emerald">Código {ticketNumber}</RepairBadge>
       </div>
       <div className="mt-5 rounded-2xl border border-emerald-300/25 bg-emerald-500/10 p-4 text-sm font-semibold text-emerald-100">
         Canal de contacto del taller disponible para seguimiento manual. WhatsApp automático se implementará en una
@@ -46,7 +46,7 @@ export function PublicTrackingFooter() {
           <h3 className="font-bold text-white">Seguimiento</h3>
           <ul className="mt-3 space-y-2 text-sm text-zinc-400">
             <li>Estado de reparación</li>
-            <li>Cotizacion disponible</li>
+            <li>Cotización disponible</li>
             <li>Factura y saldo</li>
           </ul>
         </div>
