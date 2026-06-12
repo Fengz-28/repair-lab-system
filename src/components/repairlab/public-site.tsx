@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { ClipboardList, FileText, PackageCheck, SearchCheck } from "lucide-react";
 
-import { RepairBadge, RepairButton, RepairContainer } from "./index";
+import { AnimatedShaderBackground } from "@/components/repairlab/animated-shader-background";
+import { PublicNavbarShell } from "@/components/repairlab/public-navbar-shell";
+import { RepairButton, RepairContainer } from "@/components/repairlab";
 
 const publicLinks = [
   { href: "/", label: "Inicio" },
@@ -9,14 +12,19 @@ const publicLinks = [
   { href: "/contact", label: "Contacto" },
 ];
 
-export function PublicTopbar() {
+export function PublicTopbar({ accent = "cyan" }: { accent?: "emerald" | "cyan" }) {
+  const topbarClass =
+    accent === "cyan"
+      ? "border-b border-blue-400/30 bg-[#102a7a]/92 text-blue-100"
+      : "border-b border-cyan-400/25 bg-cyan-400 text-slate-950";
+
   return (
-    <div className="border-b border-emerald-400/30 bg-emerald-500 text-white">
-      <RepairContainer className="flex min-h-10 flex-wrap items-center justify-between gap-x-6 gap-y-2 py-2 text-xs font-medium sm:text-sm">
+    <div className={topbarClass}>
+      <RepairContainer className="flex min-h-10 flex-wrap items-center justify-between gap-x-6 gap-y-2 py-2 text-xs font-bold sm:text-sm">
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
           <span>+506 0000-0000</span>
-          <span>soporte@repairlab.local</span>
-          <span className="hidden md:inline">Taller electrónico / demo controlada</span>
+          <span>contacto@fengzlab.local</span>
+          <span className="hidden md:inline">Taller de reparacion electronica</span>
         </div>
         <span>Lun - Vie: 09:00 - 17:00</span>
       </RepairContainer>
@@ -24,57 +32,85 @@ export function PublicTopbar() {
   );
 }
 
-export function PublicNavbar() {
+export function PublicNavbar({
+  accent = "cyan",
+  hideOnScroll = false,
+}: {
+  accent?: "emerald" | "cyan";
+  hideOnScroll?: boolean;
+}) {
+  const brandAccent = accent === "cyan" ? "text-blue-400" : "text-cyan-400";
+  const logoShell =
+    accent === "cyan"
+      ? "grid size-12 place-items-center rounded-2xl border border-blue-300/40 bg-blue-400 text-lg font-black text-blue-950 shadow-lg shadow-blue-500/25 transition group-hover:shadow-blue-300/25"
+      : "grid size-12 place-items-center rounded-2xl border border-cyan-300/35 bg-cyan-400 text-lg font-black text-slate-950 shadow-lg shadow-cyan-500/20 transition group-hover:shadow-cyan-400/20";
+  const portalLink =
+    accent === "cyan"
+      ? "min-h-11 shrink-0 rounded-full border border-white/10 px-4 py-2.5 text-sm font-semibold text-zinc-200 transition hover:border-blue-300/35 hover:bg-blue-500/12 hover:text-blue-100"
+      : "min-h-11 shrink-0 rounded-full border border-white/10 px-4 py-2.5 text-sm font-semibold text-zinc-200 transition hover:border-cyan-300/35 hover:bg-cyan-500/10 hover:text-cyan-100";
+
   return (
-    <div className="sticky top-0 z-30 border-b border-white/10 bg-zinc-950/95 shadow-sm shadow-black/30 backdrop-blur">
-      <RepairContainer className="flex flex-col gap-4 py-4 lg:flex-row lg:items-center lg:justify-between">
+    <PublicNavbarShell hideOnScroll={hideOnScroll}>
+      <RepairContainer className="flex flex-col gap-3 py-3 lg:flex-row lg:items-center lg:justify-between lg:py-4">
         <Link className="group flex items-center gap-3" href="/">
-          <span className="grid size-12 place-items-center rounded-2xl bg-emerald-500 text-lg font-black text-white shadow-lg shadow-emerald-500/20 transition group-hover:scale-105">
-            R
-          </span>
+          <span className={logoShell}>F</span>
           <span>
-            <span className="block text-xl font-black tracking-tight text-zinc-950 dark:text-zinc-50">
-              Repair<span className="text-emerald-500">Lab</span>
+            <span className="block text-xl font-black tracking-tight text-zinc-50">
+              Fengz<span className={brandAccent}>Lab</span>
             </span>
-            <span className="block text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">
-              Reparación electrónica
+            <span
+              className={`repair-outline-button pointer-events-none mt-1 block [--border-right:2px] [--stroke-color:rgba(161,161,170,0.85)] text-[0.66rem] tracking-[0.22em] ${accent === "cyan" ? "[--animation-color:#60a5fa]" : "[--animation-color:#34d399]"}`}
+              aria-hidden
+            >
+              <span className="repair-outline-button-label">Taller tecnico</span>
+              <span className="repair-outline-button-hover">Taller tecnico</span>
             </span>
           </span>
         </Link>
 
-        <nav className="flex min-w-0 flex-1 gap-2 overflow-x-auto pb-1 lg:justify-center lg:overflow-visible lg:pb-0">
+        <nav className="grid w-full grid-cols-2 gap-2 sm:flex sm:min-w-0 sm:flex-1 sm:flex-wrap sm:gap-2 sm:pb-0 lg:flex-nowrap lg:justify-center">
           {publicLinks.map((link) => (
             <Link
               key={link.href}
-              className="min-h-11 shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold text-zinc-200 transition hover:bg-emerald-500/10 hover:text-emerald-200"
+              className="min-h-10 rounded-2xl border border-transparent px-3 py-2 text-center text-xs font-semibold text-zinc-200 transition hover:border-cyan-300/30 hover:bg-cyan-500/10 hover:text-cyan-100 sm:min-h-11 sm:shrink-0 sm:rounded-full sm:px-4 sm:py-2.5 sm:text-sm"
               href={link.href}
             >
               {link.label}
             </Link>
           ))}
-          <Link className="min-h-11 shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold text-zinc-200 transition hover:bg-cyan-500/10 hover:text-cyan-200" href="/track/demo">
+          <Link
+            className={`${portalLink} min-h-10 rounded-2xl px-3 py-2 text-center text-xs sm:min-h-11 sm:rounded-full sm:px-4 sm:py-2.5 sm:text-sm`}
+            href="/track/demo"
+          >
             Portal cliente
           </Link>
         </nav>
 
-        <div className="grid gap-2 sm:flex">
+        <div className="hidden items-center gap-2 lg:flex">
           <RepairButton href="/contact" size="sm">
-            Solicitar reparación
+            Solicitar reparacion
           </RepairButton>
           <RepairButton href="/admin" tone="secondary" size="sm">
             Admin
           </RepairButton>
         </div>
       </RepairContainer>
-    </div>
+    </PublicNavbarShell>
   );
 }
 
-export function PublicShell({ children }: { children: React.ReactNode }) {
+export function PublicShell({
+  children,
+  accent = "cyan",
+  homeHideNavOnScroll = false,
+}: {
+  children: React.ReactNode;
+  accent?: "emerald" | "cyan";
+  homeHideNavOnScroll?: boolean;
+}) {
   return (
     <main className="min-h-screen bg-black text-zinc-100">
-      <PublicTopbar />
-      <PublicNavbar />
+      <PublicNavbar accent={accent} hideOnScroll={homeHideNavOnScroll} />
       {children}
       <PublicFooter />
     </main>
@@ -86,10 +122,9 @@ export function PublicHero({
   title,
   description,
   primaryHref = "/contact",
-  primaryLabel = "Solicitar reparación",
+  primaryLabel = "Solicitar reparacion",
   secondaryHref,
   secondaryLabel,
-  badge,
 }: {
   eyebrow: string;
   title: string;
@@ -98,15 +133,14 @@ export function PublicHero({
   primaryLabel?: string;
   secondaryHref?: string;
   secondaryLabel?: string;
-  badge?: string;
 }) {
   return (
-    <section className="relative overflow-hidden bg-black text-white">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.20),transparent_30%),radial-gradient(circle_at_85%_0%,rgba(6,182,212,0.10),transparent_30%),linear-gradient(135deg,rgba(24,24,27,0.16),rgba(0,0,0,0.9))]" />
-      <div className="absolute inset-0 opacity-25 [background-image:linear-gradient(120deg,transparent_0,transparent_47%,rgba(255,255,255,0.08)_48%,transparent_50%)] [background-size:46px_46px]" />
-      <RepairContainer className="relative grid gap-10 py-14 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+    <section className="relative overflow-hidden border-b border-white/10 bg-black text-white">
+      <AnimatedShaderBackground className="z-0 hidden sm:block" intensity="lg" />
+      <div className="absolute inset-0 z-0 bg-[linear-gradient(135deg,rgba(0,0,0,0.18),rgba(0,0,0,0.90))]" />
+      <RepairContainer className="relative z-10 grid gap-10 py-14 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.22em] text-emerald-300">{eyebrow}</p>
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-300">{eyebrow}</p>
           <h1 className="mt-4 max-w-4xl text-4xl font-black tracking-tight sm:text-6xl">{title}</h1>
           <p className="mt-5 max-w-2xl text-sm leading-7 text-zinc-300 sm:text-base">{description}</p>
           <div className="mt-7 grid gap-3 sm:flex sm:flex-wrap">
@@ -117,7 +151,6 @@ export function PublicHero({
               </RepairButton>
             ) : null}
           </div>
-          {badge ? <div className="mt-6"><RepairBadge tone="cyan">{badge}</RepairBadge></div> : null}
         </div>
         <TechVisual />
       </RepairContainer>
@@ -136,9 +169,9 @@ export function PublicSectionHeader({
 }) {
   return (
     <div className="mx-auto max-w-3xl text-center">
-      <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-300">{eyebrow}</p>
-      <h2 className="mt-3 text-3xl font-black tracking-tight text-zinc-950 dark:text-zinc-50 sm:text-4xl">{title}</h2>
-      {description ? <p className="mt-4 text-sm leading-6 text-zinc-600 dark:text-zinc-300">{description}</p> : null}
+      <p className="text-xs font-black uppercase tracking-[0.2em] text-cyan-300">{eyebrow}</p>
+      <h2 className="mt-3 text-3xl font-black tracking-tight text-zinc-50 sm:text-4xl">{title}</h2>
+      {description ? <p className="mt-4 text-sm leading-6 text-zinc-300">{description}</p> : null}
     </div>
   );
 }
@@ -155,14 +188,14 @@ export function PublicServiceCard({
   href?: string;
 }) {
   return (
-    <article className="group rounded-3xl border border-white/10 bg-zinc-950/90 p-6 shadow-sm shadow-black/30 transition hover:-translate-y-1 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-950/20">
-      <div className="grid size-14 place-items-center rounded-2xl bg-emerald-50 text-sm font-black text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200">
-        RL
+    <article className="repair-rgb-card group rounded-3xl border border-white/10 bg-zinc-950/90 p-6 shadow-sm shadow-black/30 transition hover:-translate-y-1 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-950/20">
+      <div className="grid size-14 place-items-center rounded-2xl border border-cyan-300/35 bg-cyan-500/20 text-sm font-black text-cyan-100">
+        FL
       </div>
-      <RepairBadge tone="cyan">{badge}</RepairBadge>
-      <h3 className="mt-5 text-xl font-black text-zinc-950 dark:text-zinc-50">{title}</h3>
-      <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">{description}</p>
-      <Link className="mt-5 inline-flex text-sm font-black text-emerald-600 transition hover:text-emerald-700 dark:text-emerald-300" href={href}>
+      <p className="mt-4 text-xs font-black uppercase tracking-[0.16em] text-cyan-300">{badge}</p>
+      <h3 className="mt-3 text-xl font-black text-zinc-50">{title}</h3>
+      <p className="mt-3 text-sm leading-6 text-zinc-300">{description}</p>
+      <Link className="mt-5 inline-flex text-sm font-black text-cyan-300 transition hover:text-cyan-200" href={href}>
         Consultar servicio
       </Link>
     </article>
@@ -171,47 +204,55 @@ export function PublicServiceCard({
 
 export function PublicFooter() {
   return (
-    <footer className="bg-zinc-950 text-zinc-300">
-      <RepairContainer className="grid gap-8 py-10 md:grid-cols-[1.2fr_2fr]">
-        <div>
+    <footer className="relative overflow-hidden border-t border-white/10 bg-black text-zinc-300">
+      <AnimatedShaderBackground className="hidden sm:block" intensity="sm" />
+      <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 to-black/90" />
+      <RepairContainer className="relative z-10 grid gap-8 py-12 md:grid-cols-[1.2fr_2fr]">
+        <div className="space-y-4">
           <p className="text-2xl font-black text-white">
-            Repair<span className="text-emerald-400">Lab</span>
+            Fengz<span className="text-cyan-400">Lab</span>
           </p>
-          <p className="mt-3 max-w-md text-sm leading-6 text-zinc-400">
-            Servicio técnico para electrónica, consolas, controles y componentes. Sistema de seguimiento de reparación
-            preparado para clientes.
+          <p className="max-w-md text-sm leading-6 text-zinc-300">
+            Taller de reparacion electronica con diagnostico, cotizacion, seguimiento profesional y entrega documentada.
           </p>
         </div>
         <div className="grid gap-6 sm:grid-cols-3">
-          <FooterGroup title="Servicios" items={["Diagnóstico", "Consolas", "Microsoldadura", "Mantenimiento"]} />
-          <FooterGroup title="Enlaces" items={["Inicio", "Servicios", "Productos", "Contacto"]} />
-          <FooterGroup title="Contacto" items={["soporte@repairlab.local", "+506 0000-0000", "Lun - Vie"]} />
+          <FooterGroup title="Servicios" items={["Diagnostico", "Consolas", "Microsoldadura", "Mantenimiento"]} />
+          <FooterGroup title="Enlaces rapidos" items={["Inicio", "Servicios", "Productos", "Contacto"]} />
+          <FooterGroup title="Contacto" items={["contacto@fengzlab.local", "+506 0000-0000", "Lun - Vie"]} />
         </div>
       </RepairContainer>
-      <div className="border-t border-zinc-800 py-5 text-center text-xs text-zinc-500">
-        RepairLab. Sistema de seguimiento de reparación.
+      <div className="relative z-10 border-t border-white/10 py-5 text-center text-xs text-zinc-500">
+        FengzLab. Taller tecnico con seguimiento transparente.
       </div>
     </footer>
   );
 }
 
 function TechVisual() {
+  const flow = [
+    { label: "Recepcion segura", icon: ClipboardList },
+    { label: "Diagnostico tecnico", icon: SearchCheck },
+    { label: "Cotizacion transparente", icon: FileText },
+    { label: "Entrega documentada", icon: PackageCheck },
+  ];
+
   return (
     <div className="relative mx-auto w-full max-w-md">
-      <div className="absolute -inset-6 rounded-[2rem] bg-emerald-500/15 blur-3xl" />
-      <div className="relative rounded-[2rem] border border-white/10 bg-zinc-900/45 p-5 shadow-2xl shadow-black/30 backdrop-blur">
+      <div className="absolute -inset-6 rounded-[2rem] bg-cyan-500/20 blur-3xl" />
+      <div className="repair-premium-card relative rounded-[2rem] border border-white/10 bg-zinc-900/45 p-5 shadow-2xl shadow-black/30 backdrop-blur">
         <div className="rounded-3xl border border-white/10 bg-zinc-950/80 p-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black uppercase tracking-[0.18em] text-emerald-300">Mesa técnica</span>
-            <span className="rounded-full bg-emerald-400 px-3 py-1 text-xs font-black text-zinc-950">Online</span>
+            <span className="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">Mesa tecnica</span>
+            <span className="rounded-full bg-cyan-400 px-3 py-1 text-xs font-black text-slate-950">Activa</span>
           </div>
           <div className="mt-5 grid gap-3">
-            {["Recepción segura", "Diagnóstico técnico", "Cotización transparente", "Entrega documentada"].map((item, index) => (
-              <div key={item} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-zinc-900/35 p-3">
-                <span className="grid size-9 place-items-center rounded-full bg-emerald-500 text-xs font-black text-white">
-                  {index + 1}
+            {flow.map((item) => (
+              <div key={item.label} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-zinc-900/35 p-3">
+                <span className="grid size-9 place-items-center rounded-full border border-cyan-300/35 bg-cyan-500/20 text-cyan-100">
+                  <item.icon className="size-4" />
                 </span>
-                <span className="text-sm font-semibold text-zinc-200">{item}</span>
+                <span className="text-sm font-semibold text-zinc-200">{item.label}</span>
               </div>
             ))}
           </div>

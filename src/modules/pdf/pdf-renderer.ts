@@ -41,8 +41,8 @@ export async function savePdf(ctx: PdfContext) {
 }
 
 export function drawHeader(ctx: PdfContext, title: string, documentNumber: string) {
-  drawText(ctx, "Repair Lab System", pageMargin, ctx.y, 18, true);
-  drawText(ctx, "Documento administrativo interno", pageMargin, ctx.y - 18, 9);
+  drawText(ctx, "FengzLab", pageMargin, ctx.y, 18, true);
+  drawText(ctx, "Documento de servicio", pageMargin, ctx.y - 18, 9);
   drawText(ctx, title, 390, ctx.y, 18, true);
   drawText(ctx, documentNumber, 390, ctx.y - 18, 10);
   ctx.y -= 58;
@@ -102,7 +102,7 @@ export function drawTable<T>(ctx: PdfContext, columns: PdfTableColumn<T>[], rows
 
   if (rows.length === 0) {
     ensureSpace(ctx, rowHeight);
-    drawText(ctx, "Sin líneas registradas.", pageMargin + 6, ctx.y - 9, 9);
+    drawText(ctx, "Sin lineas registradas.", pageMargin + 6, ctx.y - 9, 9);
     ctx.y -= rowHeight;
     return;
   }
@@ -138,7 +138,7 @@ export function drawTotals(ctx: PdfContext, totals: [string, string][]) {
 }
 
 function addFooter(ctx: PdfContext) {
-  const footer = `Generado el ${new Date().toLocaleString("es-CR")} - Documento generado desde Repair Lab System`;
+  const footer = `Generado el ${new Date().toLocaleString("es-CR")} - Documento generado por FengzLab`;
   drawText(ctx, footer, pageMargin, 30, 8, false, rgb(0.45, 0.45, 0.48));
 }
 
@@ -217,6 +217,12 @@ function wrapText(ctx: PdfContext, text: string, maxWidth: number, size: number)
 
 function safeText(text: string) {
   return text
+    .replace(/[Ã¡Ã Ã¤Ã¢]/gi, "a")
+    .replace(/[Ã©Ã¨Ã«Ãª]/gi, "e")
+    .replace(/[Ã­Ã¬Ã¯Ã®]/gi, "i")
+    .replace(/[Ã³Ã²Ã¶Ã´]/gi, "o")
+    .replace(/[ÃºÃ¹Ã¼Ã»]/gi, "u")
+    .replace(/Ã±/gi, "n")
     .replace(/[áàäâ]/gi, "a")
     .replace(/[éèëê]/gi, "e")
     .replace(/[íìïî]/gi, "i")
@@ -229,3 +235,4 @@ function safeText(text: string) {
 function truncate(value: string, max: number) {
   return value.length > max ? `${value.slice(0, max - 3)}...` : value;
 }
+
