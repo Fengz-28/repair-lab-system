@@ -1,13 +1,13 @@
+import { RepairButton, RepairContainer, RepairInlineAlert, RepairPanel } from "@/components/repairlab";
 import { PublicHero, PublicSectionHeader, PublicShell } from "@/components/repairlab/public-site";
-import { RepairBadge, RepairButton, RepairContainer, RepairInlineAlert, RepairPanel } from "@/components/repairlab";
 
 export default function ContactPage() {
   return (
     <PublicShell>
       <PublicHero
         eyebrow="Contacto"
-        title="Solicita una revisión para tu equipo."
-        description="Comparte la información básica de tu caso por los canales del taller. El formulario visual queda preparado para una integración segura futura."
+        title="Solicita una revision para tu equipo."
+        description="Comparte la informacion base de tu caso y te orientamos con diagnostico, cotizacion y siguientes pasos para la reparacion."
         primaryHref="#formulario"
         primaryLabel="Ver formulario"
         secondaryHref="/services"
@@ -16,63 +16,80 @@ export default function ContactPage() {
 
       <RepairContainer className="space-y-12 py-16">
         <PublicSectionHeader
-          eyebrow="Comunicación"
-          title="Atención clara desde el primer contacto"
-          description="Por ahora este formulario es visual y no envía datos. Las integraciones reales se activarán cuando exista el contrato seguro."
+          eyebrow="Comunicacion"
+          title="Atencion clara desde el primer contacto"
+          description="Usa este formulario como guia de preingreso y, mientras activamos el envio desde el sitio, coordina por llamada o correo con el taller."
         />
 
         <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
           <div id="formulario">
-          <RepairPanel className="space-y-5">
-            <div>
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
-                Formulario placeholder
-              </p>
-              <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Solicitud de reparación</h2>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Input label="Nombre" />
-              <Input label="Contacto" />
-              <Input label="Equipo" />
-              <Input label="Modelo / serial" />
-            </div>
-            <label className="grid gap-2 text-sm font-bold text-zinc-800 dark:text-zinc-200">
-              Problema reportado
-              <textarea
-                rows={5}
-                className="min-h-28 rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm text-white placeholder:text-zinc-500 shadow-sm shadow-black/20 outline-none transition focus:border-cyan-300 focus:ring-2 focus:ring-cyan-500/20"
-                placeholder="Describe brevemente la falla"
-              />
-            </label>
-            <RepairInlineAlert tone="info" title="Formulario visual">
-              <p>Este formulario no envía datos todavía. Usa los canales del taller mientras se habilita la integración segura.</p>
-            </RepairInlineAlert>
-            <button
-              type="button"
-              disabled
-              className="min-h-11 rounded-full bg-zinc-300 px-5 py-2.5 text-sm font-black text-zinc-600 disabled:cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-400"
-            >
-              Envío disponible próximamente
-            </button>
-          </RepairPanel>
+            <RepairPanel className="repair-rgb-card repair-rgb-card-always space-y-5">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">
+                  Preingreso del caso
+                </p>
+                <h2 className="mt-2 text-2xl font-black text-zinc-50">Solicitud de reparacion</h2>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Input label="Nombre" />
+                <Input label="Contacto" />
+                <Input label="Equipo" />
+                <Input label="Modelo / serial" />
+              </div>
+              <label className="grid gap-2 text-sm font-bold text-zinc-200">
+                Problema reportado
+                <textarea
+                  rows={5}
+                  className="repair-input-surface min-h-28"
+                  placeholder="Describe brevemente la falla"
+                />
+              </label>
+              <RepairInlineAlert tone="info" title="Canales activos">
+                <p>
+                  El envio desde el sitio sigue en preparacion. Para abrir tu caso hoy, usa llamada o correo y comparte
+                  estos mismos datos con el taller.
+                </p>
+              </RepairInlineAlert>
+              <button
+                type="button"
+                disabled
+                className="min-h-11 rounded-full border border-white/10 bg-zinc-900 px-5 py-2.5 text-sm font-black text-zinc-500 disabled:cursor-not-allowed"
+              >
+                Envio web en preparacion
+              </button>
+            </RepairPanel>
           </div>
 
           <aside className="space-y-5">
-            <RepairPanel>
-              <RepairBadge tone="emerald">Contacto</RepairBadge>
+            <RepairPanel className="repair-rgb-card">
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-cyan-300">Contacto</p>
               <div className="mt-4 space-y-3 text-sm">
-                <Info label="Teléfono" value="+506 0000-0000" />
-                <Info label="Correo" value="soporte@repairlab.local" />
+                <Info label="Telefono" value="+506 0000-0000" />
+                <Info label="Correo" value="contacto@fengzlab.local" />
                 <Info label="Horario" value="Lun - Vie: 09:00 - 17:00" />
               </div>
+              <div className="mt-5 space-y-3">
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <RepairButton href="tel:+50600000000" tone="secondary" size="sm">
+                    Llamar
+                  </RepairButton>
+                  <RepairButton href="mailto:contacto@fengzlab.local" tone="secondary" size="sm">
+                    Correo
+                  </RepairButton>
+                </div>
+              </div>
             </RepairPanel>
-            <RepairPanel className="border-emerald-300/20 bg-emerald-500/10">
-              <h3 className="text-xl font-black text-zinc-950 dark:text-zinc-50">WhatsApp</h3>
-              <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
-                La integración automática de WhatsApp se implementará próximamente. Por ahora el contacto es manual.
+
+            <RepairPanel className="repair-rgb-card border-cyan-300/20 bg-cyan-500/10">
+              <h3 className="text-xl font-black text-zinc-50">Seguimiento profesional</h3>
+              <p className="mt-3 text-sm leading-6 text-zinc-300">
+                Cuando tu caso entre al flujo del taller, recibiras trazabilidad clara por ticket, cotizacion y portal
+                de seguimiento.
               </p>
               <div className="mt-5">
-                <RepairButton href="/services" tone="secondary" size="sm">Revisar servicios</RepairButton>
+                <RepairButton href="/services" tone="secondary" size="sm">
+                  Revisar servicios
+                </RepairButton>
               </div>
             </RepairPanel>
           </aside>
@@ -84,12 +101,9 @@ export default function ContactPage() {
 
 function Input({ label }: { label: string }) {
   return (
-    <label className="grid gap-2 text-sm font-bold text-zinc-800 dark:text-zinc-200">
+    <label className="grid gap-2 text-sm font-bold text-zinc-200">
       {label}
-      <input
-        className="min-h-12 rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm text-white placeholder:text-zinc-500 shadow-sm shadow-black/20 outline-none transition focus:border-cyan-300 focus:ring-2 focus:ring-cyan-500/20"
-        placeholder={label}
-      />
+      <input className="repair-input-surface" placeholder={label} />
     </label>
   );
 }
@@ -97,8 +111,8 @@ function Input({ label }: { label: string }) {
 function Info({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-2xl border border-white/10 bg-zinc-950/75 p-3">
-      <p className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">{label}</p>
-      <p className="mt-1 break-words font-black text-zinc-950 dark:text-zinc-50">{value}</p>
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-400">{label}</p>
+      <p className="mt-1 break-words font-black text-zinc-50">{value}</p>
     </div>
   );
 }
