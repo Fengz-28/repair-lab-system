@@ -300,3 +300,9 @@ No se aplico migracion Prisma en esta seccion. Los indices candidatos quedaron d
 Section G creo `docs/production/backups-restore.md` y consolido el flujo de backup/restore para PostgreSQL y storage privado.
 
 No se cambio runtime, Prisma ni Docker. No se agrego script de restore porque restaurar datos activos requiere target temporal, backup previo y aprobacion explicita.
+
+## Section H status
+
+Section H creo `docs/production/observability.md` y documento el estado de healthcheck, logging y monitoreo.
+
+No se cambio runtime. El healthcheck existente ya valida DB y storage sin exponer secretos; logs estructurados y alertas externas quedan diferidos para una seccion operativa posterior.
