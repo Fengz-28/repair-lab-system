@@ -162,17 +162,17 @@ Estado actual de Section A:
 - Healthcheck: existe.
 - Backups locales: existen.
 - Docker local/demo: existe.
-- Compose productivo final: pendiente.
+- Compose productivo final: baseline agregado en Section I.
 - Secrets reales: pendientes y no deben inventarse.
 - Rate limiting: existe como estrategia in-memory; no es final para multiples instancias.
 - Storage privado local: documentado; requiere estrategia productiva si el VPS necesita volumen persistente o S3/MinIO.
-- Launch checklist final: pendiente para Section K.
+- Launch checklist final: agregado en Section K.
 
 ## First blockers
 
 Primeros bloqueos de produccion identificados:
 
-- Variables criticas aun viven como placeholders en `.env.example`; Section B debe separar obligatorias, opcionales, publicas y secretas.
+- Variables criticas aun viven como placeholders en `.env.example`; Section B ya separo obligatorias, opcionales, publicas y secretas.
 - `AUTH_SECRET`, credenciales admin y URLs publicas deben definirse con valores reales antes de exponer el sistema.
 - `docker-compose.yml` es local/demo; falta compose o guia final de VPS con reverse proxy, TLS y secretos reales.
 - Rate limiting es in-memory; sirve para una instancia simple, pero debe documentarse como limite antes de escalar.
@@ -252,15 +252,9 @@ curl http://localhost:3000/api/health
 - No agregar pricing SaaS.
 - No usar credenciales demo para un entorno expuesto.
 
-## Siguiente seccion
+## Estado del flujo A-K
 
-Section B es la siguiente seccion recomendada. Debe profundizar el siguiente bloque de produccion sin expandir alcance:
-
-- revisar `.env.example` contra uso real del codigo;
-- documentar variables obligatorias vs opcionales;
-- identificar placeholders peligrosos antes de deploy.
-
-Este README queda como indice vivo. Cada seccion posterior debe actualizarlo solo cuando cambie el estado real del sistema.
+Sections A-K ya estan documentadas. Este README queda como indice vivo; cualquier seccion posterior debe definirse explicitamente antes de modificar runtime, Prisma, Docker/VPS o seguridad.
 
 ## Section B status
 
