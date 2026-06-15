@@ -306,3 +306,21 @@ No se cambio runtime, Prisma ni Docker. No se agrego script de restore porque re
 Section H creo `docs/production/observability.md` y documento el estado de healthcheck, logging y monitoreo.
 
 No se cambio runtime. El healthcheck existente ya valida DB y storage sin exponer secretos; logs estructurados y alertas externas quedan diferidos para una seccion operativa posterior.
+
+## Section I status
+
+Section I creo `docker-compose.production.yml` y `docs/production/vps-deploy.md` como baseline para un VPS simple.
+
+PostgreSQL queda sin puerto publico, la app se publica solo en `127.0.0.1:${APP_PORT:-3000}` para reverse proxy HTTPS, los uploads/backups usan volumenes persistentes y las migraciones se ejecutan explicitamente con el servicio `migrate`.
+
+## Section J status
+
+Section J creo `docs/production/test-validation.md` y agrego pruebas enfocadas para rate limiting y seguridad de storage privado.
+
+La validacion de esta seccion cubre Prisma validate, lint, typecheck y test suite. E2E, Docker build y restore drill quedan como validaciones manuales/operativas posteriores.
+
+## Section K status
+
+Section K creo `docs/production/launch-checklist.md` y consolido los gates finales de lanzamiento desde Sections A-J.
+
+No se cambio runtime, Prisma ni Docker. La checklist cubre preflight, secuencia de deploy, post-launch, no-go conditions y riesgos diferidos para un primer despliegue controlado del taller.
