@@ -1,6 +1,6 @@
 # Section K - Production Launch Checklist
 
-Status: final launch checklist consolidated from Sections A-J. No runtime logic changed.
+Status: final launch checklist consolidated from Sections A-K and the Production Push Goal. No runtime logic changed.
 
 ## Goal
 
@@ -10,7 +10,25 @@ This is not a feature roadmap. It is a release gate for a small workshop-first p
 
 ## Launch decision
 
-Do not launch publicly until all critical gates below are complete:
+Current final status:
+
+```txt
+GO for local validation.
+GO for staging validation.
+GO for Cloudflare Tunnel staging after a domain is available and secrets/origins are configured safely.
+GO for VPS purchase only if budget, renewal terms, and staging-first rules are accepted.
+NO-GO for final production with real customers.
+```
+
+Final production remains no-go until:
+
+- staging deploy is completed;
+- HTTPS and domain path are verified;
+- restore drill against temporary DB/storage is completed;
+- monitoring and alerts are configured;
+- remaining runtime/UI/security pending changes are reviewed and committed or reverted cleanly.
+
+Do not launch publicly with real customer data until all critical gates below are complete:
 
 - real production secrets are configured outside Git;
 - database migrations are reviewed and executable;
@@ -21,6 +39,46 @@ Do not launch publicly until all critical gates below are complete:
 - `/api/health` returns healthy status without leaking sensitive diagnostics;
 - lint, typecheck, Prisma validation, and tests pass;
 - reverse proxy and TLS are configured on the VPS.
+
+## Current evidence
+
+Completed production-prep artifacts:
+
+- `docs/production/env.md`
+- `docs/production/authz.md`
+- `docs/production/security-controls.md`
+- `docs/production/private-files.md`
+- `docs/production/database-integrity.md`
+- `docs/production/backups-restore.md`
+- `docs/production/observability.md`
+- `docs/production/vps-deploy.md`
+- `docs/production/test-validation.md`
+- `docs/production/validation-results.md`
+- `docs/production/staging-preflight.md`
+- `docs/production/restore-drill.md`
+- `docs/production/monitoring-plan.md`
+- `docs/production/domain-vps-purchase-checklist.md`
+
+Latest validation evidence is recorded in `docs/production/validation-results.md`:
+
+- `npm run lint`: pass.
+- `npx tsc --noEmit`: pass.
+- `npm run test`: pass.
+- `npm run build`: pass with one non-blocking Turbopack/NFT warning.
+- `docker compose -f docker-compose.production.yml config --quiet`: pass with dummy non-secret env values.
+
+Known build warning to review before final production:
+
+```txt
+Encountered unexpected file in NFT list
+
+Trace:
+./next.config.ts
+./src/server/storage/private-storage.ts
+./src/app/api/health/route.ts
+```
+
+This warning does not block staging validation, but it should be reviewed before final production if it affects image size, deploy behavior, or traced files.
 
 ## Preflight checklist
 
@@ -132,6 +190,27 @@ curl -fsS http://127.0.0.1:3000/api/health
 
 Reference: `docs/production/test-validation.md`.
 
+### Staging, domain, and monitoring
+
+- [x] Staging/VPS preflight exists.
+- [x] Domain/VPS purchase checklist exists.
+- [x] Safe restore drill plan exists.
+- [x] Basic monitoring plan exists.
+- [ ] Domain has been purchased.
+- [ ] Cloudflare Tunnel staging path has been configured, if used.
+- [ ] VPS has been purchased.
+- [ ] Staging deploy has completed.
+- [ ] HTTPS/domain path has been verified.
+- [ ] External uptime monitoring has been configured.
+- [ ] Restore drill has completed against temporary targets.
+
+References:
+
+- `docs/production/staging-preflight.md`
+- `docs/production/domain-vps-purchase-checklist.md`
+- `docs/production/restore-drill.md`
+- `docs/production/monitoring-plan.md`
+
 ## Deployment sequence
 
 Recommended first production rollout:
@@ -189,6 +268,9 @@ Do not launch if any of these are true:
 - `npm run test`, lint, typecheck, or Prisma validation fails without a documented accepted reason.
 - Customer portal exposes internal notes, private files, or staff-only details.
 - The system is being marketed as a SaaS platform before internal workshop validation.
+- Runtime/UI/security working-tree changes remain unreviewed or mixed with release commits.
+- Monitoring/alerts are not configured for the exposed environment.
+- HTTPS/domain path has not been verified.
 
 ## Deferred after launch
 
@@ -206,4 +288,10 @@ These are important, but not blockers for a controlled first workshop deployment
 
 ## Final readiness statement
 
-FengzLab / RepairLab is ready for a controlled production launch only when this checklist is complete or every open item has an explicit owner, risk acceptance, and follow-up date.
+FengzLab / RepairLab is currently ready for local validation and staging preparation.
+
+It is acceptable to proceed to Cloudflare Tunnel staging after a domain is available and environment origins/secrets are configured safely.
+
+It is acceptable to buy a VPS only if budget and terms are acceptable and the first deployment remains staging-first.
+
+It is not ready for final production with real customers until staging deploy, HTTPS/domain verification, restore drill, monitoring/alerts, and working-tree cleanup are completed and reflected in this checklist.
