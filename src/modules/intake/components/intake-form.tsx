@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
@@ -32,7 +32,7 @@ export function IntakeForm() {
   );
 
   return (
-    <form action={formAction} className="space-y-6 rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-sm shadow-black/25 sm:space-y-8 sm:p-6">
+    <form action={formAction} className="repair-premium-card space-y-6 rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-sm shadow-black/25 sm:space-y-8 sm:p-6">
       <FormSection title="Cliente">
         <TextInput label="Nombre" name="customer.firstName" required />
         <TextInput label="Apellido" name="customer.lastName" />
@@ -72,7 +72,7 @@ export function IntakeForm() {
             type="file"
             accept="image/jpeg,image/png,image/webp,application/pdf"
             multiple
-            className="block w-full text-sm dark:text-zinc-100"
+            className="repair-input-surface block w-full cursor-pointer text-sm file:mr-3 file:rounded-full file:border-0 file:bg-cyan-400 file:px-3 file:py-1.5 file:text-xs file:font-bold file:text-slate-950 hover:file:bg-cyan-300"
           />
           <p className="text-xs text-zinc-500 dark:text-zinc-400">
             Archivos privados: se guardan fuera de /public y solo el admin puede abrirlos.
@@ -212,5 +212,5 @@ function SelectInput({
   );
 }
 
-const fieldClassName =
-  "min-h-11 w-full rounded-2xl border border-white/10 bg-zinc-950 px-3 py-2 text-sm text-white placeholder:text-zinc-500 shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/20";
+const fieldClassName = "repair-input-surface text-sm";
+

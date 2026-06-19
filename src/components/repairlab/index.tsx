@@ -10,7 +10,7 @@ type NavLink = {
 
 export function RepairTopbar() {
   return (
-    <div className="hidden border-b border-emerald-400/20 bg-emerald-500/95 text-white lg:block">
+    <div className="hidden border-b border-cyan-400/25 bg-[#0a2a57]/95 text-cyan-100 lg:block">
       <RepairContainer className="flex min-h-9 flex-wrap items-center justify-between gap-x-5 gap-y-1 py-1.5 text-xs font-medium">
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
           <span className="inline-flex items-center gap-2">
@@ -19,15 +19,15 @@ export function RepairTopbar() {
           </span>
           <span className="inline-flex items-center gap-2">
             <span className="grid size-6 place-items-center rounded-full border border-white/30">E</span>
-            soporte@repairlab.local
+            contacto@fengzlab.local
           </span>
           <span className="hidden items-center gap-2 md:inline-flex">
             <span className="grid size-6 place-items-center rounded-full border border-white/30">L</span>
-            Taller local / demo controlada
+            Operación del taller
           </span>
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-          <span className="hidden sm:inline">Sistema interno RepairLab</span>
+          <span className="hidden sm:inline">Sistema interno FengzLab</span>
           <span className="inline-flex items-center gap-2">
             <span className="grid size-6 place-items-center rounded-full border border-white/30">H</span>
             Lun - Vie: 09:00 - 17:00
@@ -51,21 +51,21 @@ export function RepairNavbar({
   } | null;
 }) {
   return (
-    <div className="sticky top-0 z-30 border-b border-white/10 bg-black/90 shadow-sm shadow-black/30 backdrop-blur-xl">
-      <RepairContainer className="flex flex-col gap-3 py-4 lg:flex-row lg:items-center lg:gap-6 lg:py-4">
+    <div className="sticky top-0 z-30 border-b border-white/10 bg-black/88 shadow-sm shadow-black/30 backdrop-blur-xl">
+      <RepairContainer className="flex flex-col gap-4 py-4 lg:flex-row lg:items-center lg:gap-8 lg:py-4">
         <Link
           className="group flex min-w-fit items-center gap-4 rounded-3xl px-1 py-1 repair-focus-ring"
           href="/admin"
         >
-          <span className="repair-card-motion grid size-12 place-items-center rounded-2xl bg-emerald-500 text-lg font-black text-black shadow-lg shadow-emerald-500/20 group-hover:shadow-cyan-400/15 sm:size-[3.25rem]">
+          <span className="repair-card-motion grid size-12 place-items-center rounded-2xl bg-cyan-400 text-lg font-black text-slate-950 shadow-lg shadow-cyan-500/20 group-hover:shadow-cyan-300/20 sm:size-[3.25rem]">
             R
           </span>
           <span className="leading-none">
             <span className="block text-[1.35rem] font-black tracking-tight text-zinc-50">
-              Repair<span className="text-emerald-500">Lab</span>
+              Repair<span className="text-cyan-400">Lab</span>
             </span>
             <span className="mt-1 block text-[0.66rem] font-black uppercase tracking-[0.22em] text-zinc-500">
-              Service OS
+              Sistema interno
             </span>
           </span>
         </Link>
@@ -96,7 +96,7 @@ export function RepairNavbar({
 export function RepairDropdownMenu({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="repair-panel-reveal rounded-b-3xl border border-white/10 bg-zinc-950 p-5 shadow-2xl shadow-black/40">
-      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600">{title}</p>
+      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">{title}</p>
       <div className="grid gap-2">{children}</div>
     </div>
   );
@@ -115,12 +115,12 @@ export function RepairPageHero({
 }) {
   return (
     <section className="relative overflow-hidden border-b border-white/10 bg-black text-white shadow-2xl shadow-black/30">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.18),transparent_28%),radial-gradient(circle_at_80%_0%,rgba(6,182,212,0.10),transparent_30%),linear-gradient(135deg,rgba(24,24,27,0.2),rgba(0,0,0,0.88))]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(34,211,238,0.14),transparent_28%),radial-gradient(circle_at_80%_0%,rgba(59,130,246,0.12),transparent_30%),linear-gradient(135deg,rgba(24,24,27,0.2),rgba(0,0,0,0.88))]" />
       <div className="absolute inset-0 opacity-30 [background-image:linear-gradient(120deg,transparent_0,transparent_48%,rgba(255,255,255,0.08)_49%,transparent_50%)] [background-size:42px_42px]" />
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-cyan-300/30 to-transparent" />
       <RepairContainer className="relative py-10 sm:py-12">
         {eyebrow ? (
-          <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-300">{eyebrow}</p>
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-cyan-300">{eyebrow}</p>
         ) : null}
         <div className="mt-4 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
@@ -155,7 +155,7 @@ export function RepairPageShell({
 }) {
   return (
     <main className={`relative min-h-screen overflow-hidden bg-black text-zinc-50 ${className}`}>
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_8%,rgba(6,182,212,0.08),transparent_28%),radial-gradient(circle_at_86%_2%,rgba(16,185,129,0.07),transparent_24%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_8%,rgba(6,182,212,0.1),transparent_28%),radial-gradient(circle_at_86%_2%,rgba(59,130,246,0.08),transparent_24%)]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-96 bg-gradient-to-b from-zinc-900/30 to-transparent" />
       <div className="relative">{children}</div>
     </main>
@@ -180,7 +180,7 @@ export function RepairSurface({
   className?: string;
 }) {
   return (
-    <section className={`repair-panel-reveal rounded-[2rem] border border-white/10 bg-zinc-950/45 p-4 shadow-2xl shadow-black/20 sm:p-5 ${className}`}>
+    <section className={`repair-panel-reveal repair-premium-card rounded-[2rem] border border-white/10 bg-zinc-950/45 p-4 shadow-2xl shadow-black/20 sm:p-5 ${className}`}>
       {children}
     </section>
   );
@@ -219,7 +219,7 @@ export function RepairCard({
 }) {
   return (
     <div
-      className={`repair-panel-reveal repair-card-motion relative overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(24,24,27,0.96),rgba(3,7,18,0.9))] p-5 shadow-sm shadow-black/30 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-950/20 ${className}`}
+      className={`repair-panel-reveal repair-card-motion repair-premium-card relative overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(24,24,27,0.96),rgba(3,7,18,0.9))] p-5 shadow-sm shadow-black/30 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-950/20 ${className}`}
     >
       <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/35 to-transparent" />
       {children}
@@ -235,8 +235,8 @@ export function RepairPanel({
   className?: string;
 }) {
   return (
-    <div className={`repair-panel-reveal relative overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(18,18,20,0.96),rgba(3,3,3,0.92))] p-5 shadow-sm shadow-black/30 backdrop-blur ${className}`}>
-      <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-emerald-300/25 to-transparent" />
+    <div className={`repair-panel-reveal repair-premium-card relative overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(18,18,20,0.96),rgba(3,3,3,0.92))] p-5 shadow-sm shadow-black/30 backdrop-blur ${className}`}>
+      <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/30 to-transparent" />
       {children}
     </div>
   );
@@ -256,14 +256,14 @@ export function RepairButton({
   size?: "sm" | "md";
 }) {
   const toneClass = {
-    primary: "border border-emerald-300/45 bg-emerald-500 text-black shadow-lg shadow-emerald-500/25 hover:bg-emerald-400 hover:shadow-cyan-400/20",
+    primary: "border border-cyan-300/45 bg-cyan-400 text-slate-950 shadow-lg shadow-cyan-500/25 hover:bg-cyan-300 hover:shadow-cyan-300/25",
     secondary:
       "border border-white/15 bg-zinc-800 text-zinc-50 shadow-sm shadow-black/20 hover:border-cyan-300/35 hover:bg-zinc-700 hover:text-white",
     ghost:
       "border border-white/15 bg-zinc-900/90 text-zinc-100 shadow-sm shadow-black/20 hover:border-cyan-300/25 hover:bg-zinc-800 hover:text-white",
   }[tone];
   const sizeClass = size === "sm" ? "min-h-10 px-4 py-2 text-xs" : "min-h-11 px-5 py-2.5 text-sm";
-  const className = `repair-button-motion repair-focus-ring inline-flex items-center justify-center rounded-full font-bold disabled:cursor-not-allowed disabled:border-white/5 disabled:bg-zinc-900 disabled:text-zinc-500 disabled:shadow-none ${toneClass} ${sizeClass}`;
+  const className = `repair-button-motion repair-focus-ring relative inline-flex items-center justify-center overflow-hidden rounded-full font-bold disabled:cursor-not-allowed disabled:border-white/5 disabled:bg-zinc-900 disabled:text-zinc-500 disabled:shadow-none ${toneClass} ${sizeClass}`;
 
   if (as === "button") {
     return (
@@ -289,7 +289,7 @@ export function RepairBadge({
 }) {
   const classes = {
     neutral: "border-white/10 bg-zinc-900 text-zinc-200",
-    emerald: "border-emerald-400/30 bg-emerald-500/15 text-emerald-100",
+    emerald: "border-cyan-400/30 bg-cyan-500/15 text-cyan-100",
     cyan: "border-cyan-400/30 bg-cyan-500/12 text-cyan-100",
     warning: "border-amber-400/35 bg-amber-500/15 text-amber-100",
     danger: "border-red-400/35 bg-red-500/15 text-red-100",
@@ -297,7 +297,7 @@ export function RepairBadge({
   }[tone];
   const dotClasses = {
     neutral: "bg-zinc-400",
-    emerald: "bg-emerald-300",
+    emerald: "bg-cyan-300",
     cyan: "bg-cyan-300",
     warning: "bg-amber-300",
     danger: "bg-red-300",
@@ -342,22 +342,22 @@ export function RepairTable({ children }: { children: React.ReactNode }) {
 export function RepairStatCard({
   label,
   value,
-  tone = "emerald",
+  tone = "cyan",
 }: {
   label: string;
   value: string | number;
   tone?: "emerald" | "cyan" | "warning" | "neutral";
 }) {
   const glow = {
-    emerald: "from-emerald-500/18",
+    emerald: "from-cyan-500/18",
     cyan: "from-cyan-500/18",
     warning: "from-amber-500/18",
     neutral: "from-zinc-500/12",
   }[tone];
   const bar = {
-    emerald: "from-emerald-400 to-cyan-300",
+    emerald: "from-cyan-300 to-blue-400",
     cyan: "from-cyan-300 to-sky-400",
-    warning: "from-amber-300 to-emerald-300",
+    warning: "from-amber-300 to-cyan-300",
     neutral: "from-zinc-500 to-zinc-300",
   }[tone];
 
@@ -396,7 +396,7 @@ export function RepairEmptyState({
       <div className="mx-auto grid size-14 place-items-center rounded-3xl border border-cyan-300/20 bg-cyan-500/10 text-sm font-black text-cyan-100 shadow-lg shadow-cyan-950/20 sm:size-16">
         {icon ?? "RL"}
       </div>
-      <p className="mt-5 text-xs font-black uppercase tracking-[0.18em] text-emerald-300">{eyebrow}</p>
+      <p className="mt-5 text-xs font-black uppercase tracking-[0.18em] text-cyan-300">{eyebrow}</p>
       <h2 className="mt-2 text-xl font-black text-zinc-50">{title}</h2>
       {description ? (
         <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-zinc-400">{description}</p>
@@ -441,13 +441,13 @@ export function RepairInlineAlert({
   compact?: boolean;
 }) {
   const classes = {
-    success: "border-emerald-300/25 bg-emerald-500/10 text-emerald-100",
+    success: "border-cyan-300/25 bg-cyan-500/10 text-cyan-100",
     warning: "border-amber-300/25 bg-amber-500/10 text-amber-100",
     error: "border-red-300/25 bg-red-500/10 text-red-100",
     info: "border-cyan-300/25 bg-cyan-500/10 text-cyan-100",
   }[tone];
   const dot = {
-    success: "bg-emerald-300",
+    success: "bg-cyan-300",
     warning: "bg-amber-300",
     error: "bg-red-300",
     info: "bg-cyan-300",
@@ -521,20 +521,20 @@ export function RepairFooter() {
       <RepairContainer className="grid gap-8 py-10 md:grid-cols-[1.1fr_2fr]">
         <div>
           <p className="text-2xl font-black text-white">
-            Repair<span className="text-emerald-400">Lab</span>
+            Repair<span className="text-cyan-400">Lab</span>
           </p>
           <p className="mt-3 max-w-sm text-sm leading-6 text-zinc-400">
-            Plataforma interna para operar reparaciones, clientes, cotizaciones, pagos e inventario.
+            Sistema interno para operar reparaciones, clientes, cotizaciones, pagos e inventario.
           </p>
         </div>
         <div className="grid gap-6 sm:grid-cols-3">
           <FooterGroup title="Operaciones" items={["Recepción", "Tickets", "Cotizaciones", "Facturas"]} />
           <FooterGroup title="Gestión" items={["Clientes", "Inventario", "Mensajes", "Panel"]} />
-          <FooterGroup title="Contacto" items={["soporte@repairlab.local", "+506 0000-0000", "Lun - Vie"]} />
+          <FooterGroup title="Contacto" items={["contacto@fengzlab.local", "+506 0000-0000", "Lun - Vie"]} />
         </div>
       </RepairContainer>
       <div className="border-t border-zinc-800 py-5 text-center text-xs text-zinc-500">
-        RepairLab System. Documento visual interno para demo controlada.
+        FengzLab. Documento visual del sistema interno.
       </div>
     </footer>
   );
@@ -552,3 +552,4 @@ function FooterGroup({ title, items }: { title: string; items: string[] }) {
     </div>
   );
 }
+

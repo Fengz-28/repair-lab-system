@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 import { AdminNav } from "@/components/admin-nav";
 import { CustomerCRMStats } from "@/components/repairlab/crm-stats-grid";
@@ -35,7 +35,7 @@ export default async function AdminCustomersPage({
       <RepairPageHero
         eyebrow="Admin / CRM"
         title="Clientes"
-        description="Customer intelligence para revisar historial tecnico, equipos, tickets, facturas, pagos y saldos pendientes desde una vista operativa."
+        description="Customer intelligence para revisar historial técnico, equipos, tickets, facturas, pagos y saldos pendientes desde una vista operativa."
         actions={
           <>
             <RepairButton href="/admin/intake">Nueva recepción</RepairButton>
@@ -64,7 +64,7 @@ export default async function AdminCustomersPage({
               />
             </div>
             <div className="grid gap-2 sm:flex sm:items-end lg:pt-7">
-              <button className="min-h-12 rounded-full border border-emerald-300/40 bg-emerald-500 px-5 py-3 text-sm font-black text-black shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-400 hover:shadow-cyan-400/20">
+              <button className="min-h-12 rounded-full border border-cyan-300/45 bg-cyan-400 px-5 py-3 text-sm font-black text-slate-950 shadow-lg shadow-cyan-500/25 transition hover:bg-cyan-300 hover:shadow-cyan-300/25">
                 Buscar
               </button>
               <Link
@@ -76,7 +76,7 @@ export default async function AdminCustomersPage({
             </div>
           </form>
           {search ? (
-            <div className="mt-4 inline-flex rounded-full border border-emerald-300/25 bg-emerald-500/10 px-4 py-2 text-xs font-bold text-emerald-100">
+            <div className="mt-4 inline-flex rounded-full border border-cyan-300/25 bg-cyan-500/10 px-4 py-2 text-xs font-bold text-cyan-100">
               Filtro activo: {search}
             </div>
           ) : null}

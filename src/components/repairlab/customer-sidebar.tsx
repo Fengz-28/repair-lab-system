@@ -1,4 +1,4 @@
-import { formatMoney } from "@/modules/customers/customer-labels";
+﻿import { formatMoney } from "@/modules/customers/customer-labels";
 
 import { RepairBadge, RepairButton, RepairFloatingPanel } from "./index";
 
@@ -28,7 +28,7 @@ export function CustomerSidebar({
   return (
     <aside className="space-y-5 lg:sticky lg:top-28">
       <RepairFloatingPanel>
-        <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-300 dark:text-cyan-300">
           Contacto rápido
         </p>
         <div className="mt-4 space-y-3 text-sm">
@@ -42,12 +42,12 @@ export function CustomerSidebar({
       <RepairFloatingPanel className={balanceDue > 0 ? "border-amber-300/20 shadow-amber-950/10" : undefined}>
         <div className="flex items-start justify-between gap-3">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-300 dark:text-cyan-300">
               Inteligencia CRM
             </p>
             <h2 className="mt-2 text-xl font-black text-zinc-950 dark:text-zinc-50">Resumen</h2>
           </div>
-          <RepairBadge tone={balanceDue > 0 ? "warning" : "emerald"}>
+          <RepairBadge tone={balanceDue > 0 ? "warning" : "cyan"}>
             {balanceDue > 0 ? "Por cobrar" : "Al día"}
           </RepairBadge>
         </div>
@@ -62,7 +62,7 @@ export function CustomerSidebar({
       </RepairFloatingPanel>
 
       <RepairFloatingPanel>
-        <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-300 dark:text-cyan-300">
           Acciones
         </p>
         <div className="mt-4 grid gap-2">
@@ -100,3 +100,4 @@ function MiniMetric({ label, value, highlight = false }: { label: string; value:
     </div>
   );
 }
+

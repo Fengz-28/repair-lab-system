@@ -14,7 +14,7 @@ export default function CustomerDetailLoading() {
       <RepairPageHero
         eyebrow="CRM / Cliente"
         title="Cargando cliente"
-        description="Preparando historial tecnico, equipos, saldos y actividad reciente."
+        description="Preparando historial técnico, equipos, saldos y actividad reciente."
       />
       <RepairContainer className="-mt-8 relative z-10 pb-12">
         <RepairGrid className="gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">

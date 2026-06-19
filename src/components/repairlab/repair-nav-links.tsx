@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -14,7 +14,7 @@ export function RepairNavLinks({ links }: { links: NavLink[] }) {
   return (
     <nav
       aria-label="Navegación administrativa"
-      className="-mx-1 flex min-w-0 flex-1 gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] lg:mx-0 lg:justify-start lg:overflow-visible lg:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden"
+      className="-mx-1 flex min-w-0 flex-1 gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] lg:mx-0 lg:justify-start lg:overflow-visible lg:px-0 lg:pb-0 xl:gap-2.5 [&::-webkit-scrollbar]:hidden"
     >
       {links.map((link) => {
         const isActive = isActivePath(pathname, link.href);
@@ -25,13 +25,13 @@ export function RepairNavLinks({ links }: { links: NavLink[] }) {
             aria-current={isActive ? "page" : undefined}
             className={
               isActive
-                ? "repair-nav-item repair-focus-ring relative min-h-10 shrink-0 rounded-full border border-cyan-300/15 bg-white/[0.05] px-3.5 py-2 text-sm font-black text-zinc-50 shadow-sm shadow-black/20"
-                : "repair-nav-item repair-focus-ring min-h-10 shrink-0 rounded-full border border-transparent px-3.5 py-2 text-sm font-semibold text-zinc-300 hover:border-white/10 hover:bg-white/[0.06] hover:text-emerald-200 hover:shadow-sm hover:shadow-black/20"
+                ? "repair-nav-item repair-focus-ring relative min-h-10 shrink-0 rounded-full border border-cyan-300/20 bg-cyan-500/10 px-3.5 py-2 text-xs font-bold text-zinc-50 shadow-sm shadow-black/20 xl:px-4 xl:text-sm"
+                : "repair-nav-item repair-focus-ring min-h-10 shrink-0 rounded-full border border-transparent px-3.5 py-2 text-xs font-semibold text-zinc-300 hover:border-white/10 hover:bg-white/[0.06] hover:text-cyan-100 hover:shadow-sm hover:shadow-black/20 xl:px-4 xl:text-sm"
             }
             href={link.href}
           >
             {isActive ? (
-              <span className="absolute inset-x-5 -bottom-px h-px rounded-full bg-cyan-300/50" />
+              <span className="absolute inset-x-6 -bottom-px h-px rounded-full bg-cyan-300/40" />
             ) : null}
             {link.label}
           </Link>
@@ -48,3 +48,4 @@ function isActivePath(pathname: string, href: string) {
 
   return pathname === href || pathname.startsWith(`${href}/`);
 }
+

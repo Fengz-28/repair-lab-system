@@ -75,11 +75,11 @@ function FinancialSummary({
   paymentStatus: PaymentStatus;
 }) {
   return (
-    <RepairPanel className="space-y-4">
+    <RepairPanel className="space-y-4 repair-premium-card">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
-            Payment dashboard
+            Panel de pagos
           </p>
           <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Resumen financiero</h2>
         </div>
@@ -97,8 +97,8 @@ function FinancialSummary({
 function SummaryBox({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-2xl border border-white/10 bg-zinc-950 p-4">
-      <p className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">{label}</p>
-      <p className="mt-2 break-words text-xl font-black text-zinc-950 dark:text-zinc-50">{value}</p>
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-400">{label}</p>
+      <p className="mt-2 break-words text-xl font-black text-zinc-50">{value}</p>
     </div>
   );
 }
@@ -120,25 +120,25 @@ function RegisterPaymentForm({
   );
 
   return (
-    <form action={formAction} className="space-y-5 rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/25 lg:sticky lg:top-28">
+    <form action={formAction} className="repair-premium-card space-y-5 rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/25 lg:sticky lg:top-28">
       <input type="hidden" name="ticketId" value={ticketId} />
       <input type="hidden" name="invoiceId" value={invoiceId} />
       <div>
         <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
-          Accion financiera
+          Acción financiera
         </p>
-        <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Registrar pago</h2>
-        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+        <h2 className="mt-2 text-2xl font-black text-zinc-50">Registrar pago</h2>
+        <p className="mt-2 text-sm text-zinc-300">
           Registra pagos internos manuales. No procesa dinero ni contacta proveedores externos.
         </p>
       </div>
       {disabled ? (
         <p className="rounded-2xl border border-emerald-400/30 bg-emerald-500/15 p-4 text-sm font-semibold text-emerald-100">
-          Esta factura ya esta pagada.
+          Esta factura ya está pagada.
         </p>
       ) : (
         <>
-          <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
+          <label className="grid gap-2 text-sm font-medium text-zinc-200">
             Monto
             <input
               name="amount"
@@ -150,8 +150,8 @@ function RegisterPaymentForm({
               className={fieldClassName}
             />
           </label>
-          <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
-            Metodo de pago
+          <label className="grid gap-2 text-sm font-medium text-zinc-200">
+            Método de pago
             <select
               name="method"
               defaultValue="CASH"
@@ -164,7 +164,7 @@ function RegisterPaymentForm({
               <option value="OTHER">Otro</option>
             </select>
           </label>
-          <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
+          <label className="grid gap-2 text-sm font-medium text-zinc-200">
             Referencia
             <input
               name="reference"
@@ -172,7 +172,7 @@ function RegisterPaymentForm({
               className={fieldClassName}
             />
           </label>
-          <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
+          <label className="grid gap-2 text-sm font-medium text-zinc-200">
             Notas internas
             <textarea
               name="notes"
@@ -197,24 +197,24 @@ function PaymentHistory({
   currency: string;
 }) {
   return (
-    <RepairPanel className="space-y-4">
+    <RepairPanel className="space-y-4 repair-premium-card">
       <div>
         <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
           Actividad de pagos
         </p>
-        <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Historial de pagos</h2>
+        <h2 className="mt-2 text-2xl font-black text-zinc-50">Historial de pagos</h2>
       </div>
       {payments.length === 0 ? (
         <RepairEmptyState
           title="No hay pagos registrados."
-          description="Cuando registres un pago manual, aparecera aqui con fecha, metodo, referencia y notas internas."
-          eyebrow="Historial vacio"
+          description="Cuando registres un pago manual, aparecerá aquí con fecha, método, referencia y notas internas."
+          eyebrow="Historial vacío"
           icon="PG"
           compact
         />
       ) : (
         <RepairInventoryTable>
-          <table className="w-full min-w-[720px] border-collapse text-left text-sm">
+          <table className="w-full min-w-[720px] border-collapse text-left text-sm hidden md:table">
             <thead className="bg-zinc-950/95 text-zinc-300">
               <tr>
                 <th className="border-b border-white/10 px-3 py-2">Fecha</th>
@@ -236,6 +236,16 @@ function PaymentHistory({
               ))}
             </tbody>
           </table>
+          <div className="grid gap-3 p-3 md:hidden">
+            {payments.map((payment) => (
+              <div key={payment.id} className="repair-premium-card rounded-2xl border border-white/10 bg-zinc-950/80 p-3 text-sm">
+                <p className="font-black text-zinc-50">{currency} {payment.amount}</p>
+                <p className="text-zinc-400">{payment.createdAt}</p>
+                <p className="text-zinc-300">{paymentMethodLabel(payment.method)}</p>
+                <p className="text-zinc-400">Ref: {payment.reference ?? "-"}</p>
+              </div>
+            ))}
+          </div>
         </RepairInventoryTable>
       )}
     </RepairPanel>
@@ -300,5 +310,4 @@ function paymentMethodLabel(method: PaymentMethod) {
   return labels[method] ?? method;
 }
 
-const fieldClassName =
-  "min-h-11 rounded-2xl border border-white/10 bg-zinc-950 px-3 py-2 text-sm text-white placeholder:text-zinc-500 shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/20";
+const fieldClassName = "repair-input-surface text-sm";

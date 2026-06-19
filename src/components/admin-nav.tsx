@@ -1,4 +1,4 @@
-import { RepairPanel, RepairNavbar, RepairTopbar } from "@/components/repairlab";
+﻿import { RepairPanel, RepairNavbar } from "@/components/repairlab";
 import { CommandPalette } from "@/modules/ux/components/command-palette";
 import { NotificationsCenter } from "@/modules/ux/components/notifications-center";
 import { getAdminNotificationItems } from "@/modules/ux/notifications/notification-center.service";
@@ -20,7 +20,6 @@ export async function AdminNav() {
 
   return (
     <div className="relative left-1/2 w-screen -translate-x-1/2">
-      <RepairTopbar />
       <RepairNavbar
         links={adminLinks}
         utility={
@@ -82,3 +81,4 @@ export function DemoChecklist() {
     </RepairPanel>
   );
 }
+

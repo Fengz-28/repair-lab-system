@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type { InvoiceStatus, PaymentStatus, TicketStatus } from "@prisma/client";
 
 import {
@@ -28,8 +28,8 @@ export function CustomerTicketHistory({ tickets }: { tickets: CustomerTicket[] }
   return (
     <RepairPanel className="space-y-4">
       <div>
-        <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
-          Historial tecnico
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-300 dark:text-cyan-300">
+          Historial técnico
         </p>
         <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Tickets del cliente</h2>
       </div>
@@ -45,12 +45,12 @@ export function CustomerTicketHistory({ tickets }: { tickets: CustomerTicket[] }
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
                     <Link
-                      className="break-words text-lg font-black text-zinc-950 transition hover:text-emerald-600 dark:text-zinc-50 dark:hover:text-emerald-300"
+                      className="break-words text-lg font-black text-zinc-950 transition hover:text-cyan-300 dark:text-zinc-50 dark:hover:text-cyan-300"
                       href={`/admin/tickets/${ticket.id}`}
                     >
                       {ticket.ticketNumber}
                     </Link>
-                    <RepairBadge tone={ticket.status === "DELIVERED" ? "emerald" : ticket.status === "CANCELLED" ? "danger" : "cyan"}>
+                    <RepairBadge tone={ticket.status === "DELIVERED" ? "cyan" : ticket.status === "CANCELLED" ? "danger" : "cyan"}>
                       {ticketStatusLabel(ticket.status)}
                     </RepairBadge>
                   </div>
@@ -70,11 +70,11 @@ export function CustomerTicketHistory({ tickets }: { tickets: CustomerTicket[] }
                       </div>
                       <div className="flex justify-between gap-3">
                         <span className="text-zinc-500 dark:text-zinc-400">Saldo</span>
-                        <span className={ticket.totals.balanceDue > 0 ? "font-black text-amber-700 dark:text-amber-200" : "font-black text-emerald-700 dark:text-emerald-200"}>
+                        <span className={ticket.totals.balanceDue > 0 ? "font-black text-amber-700 dark:text-amber-200" : "font-black text-cyan-200 dark:text-cyan-200"}>
                           {formatMoney(ticket.totals.balanceDue)}
                         </span>
                       </div>
-                      <RepairBadge tone={ticket.totals.balanceDue > 0 ? "warning" : "emerald"}>
+                      <RepairBadge tone={ticket.totals.balanceDue > 0 ? "warning" : "cyan"}>
                         {paymentStatusLabel(ticket.invoice.paymentStatus)}
                       </RepairBadge>
                     </div>
@@ -114,3 +114,4 @@ export function CustomerTicketHistory({ tickets }: { tickets: CustomerTicket[] }
     </RepairPanel>
   );
 }
+

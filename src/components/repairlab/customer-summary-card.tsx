@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type { TicketStatus } from "@prisma/client";
 
 import { formatMoney, ticketStatusLabel } from "@/modules/customers/customer-labels";
@@ -35,12 +35,12 @@ export function CustomerSummaryCard({ customer }: { customer: CustomerSummaryCar
     <article className="group rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/30 transition hover:-translate-y-0.5 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-950/20">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex min-w-0 items-start gap-4">
-          <div className="grid size-14 shrink-0 place-items-center rounded-2xl border border-emerald-300/20 bg-emerald-500/10 text-lg font-black text-emerald-100 ring-1 ring-emerald-500/10">
+          <div className="grid size-14 shrink-0 place-items-center rounded-2xl border border-cyan-300/20 bg-cyan-500/10 text-lg font-black text-cyan-100 ring-1 ring-cyan-500/10">
             {initials}
           </div>
           <div className="min-w-0">
             <Link
-              className="break-words text-xl font-black text-zinc-950 transition hover:text-emerald-600 dark:text-zinc-50 dark:hover:text-emerald-300"
+              className="break-words text-xl font-black text-zinc-950 transition hover:text-cyan-300 dark:text-zinc-50 dark:hover:text-cyan-300"
               href={`/admin/customers/${customer.id}`}
             >
               {customer.name}
@@ -107,7 +107,7 @@ function Metric({ label, value, highlight = false }: { label: string; value: str
 function Financial({ label, value, tone = "neutral" }: { label: string; value: string; tone?: "neutral" | "emerald" }) {
   return (
     <div className={tone === "emerald"
-      ? "rounded-2xl border border-emerald-300/20 bg-emerald-500/10 p-3"
+      ? "rounded-2xl border border-cyan-300/20 bg-cyan-500/10 p-3"
       : "rounded-2xl border border-white/10 bg-zinc-950/75 p-3"}
     >
       <p className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">{label}</p>
@@ -115,3 +115,4 @@ function Financial({ label, value, tone = "neutral" }: { label: string; value: s
     </div>
   );
 }
+

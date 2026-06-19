@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { requireLocalStaff, UserRole } from "@/server/auth/local-admin";
+import { requireSameOriginRequest } from "@/server/security/csrf";
 import { convertQuoteToInvoiceSchema } from "@/modules/invoices/invoice.schema";
 import { convertQuoteToInvoice } from "@/modules/invoices/invoice.service";
 import type { TicketActionState } from "@/modules/tickets/ticket.action-state";
@@ -23,6 +24,8 @@ export async function changeTicketStatusAction(
   _previousState: TicketActionState,
   formData: FormData,
 ): Promise<TicketActionState> {
+  await requireSameOriginRequest();
+
   const session = await requireLocalStaff({
     roles: [UserRole.ADMIN, UserRole.TECHNICIAN],
   });
@@ -61,6 +64,8 @@ export async function addInternalCommentAction(
   _previousState: TicketActionState,
   formData: FormData,
 ): Promise<TicketActionState> {
+  await requireSameOriginRequest();
+
   const session = await requireLocalStaff({
     roles: [UserRole.ADMIN, UserRole.TECHNICIAN],
   });
@@ -98,6 +103,8 @@ export async function updateTechnicalNotesAction(
   _previousState: TicketActionState,
   formData: FormData,
 ): Promise<TicketActionState> {
+  await requireSameOriginRequest();
+
   const session = await requireLocalStaff({
     roles: [UserRole.ADMIN, UserRole.TECHNICIAN],
   });
@@ -137,6 +144,8 @@ export async function addTicketAttachmentPlaceholderAction(
   _previousState: TicketActionState,
   formData: FormData,
 ): Promise<TicketActionState> {
+  await requireSameOriginRequest();
+
   const session = await requireLocalStaff({
     roles: [UserRole.ADMIN, UserRole.TECHNICIAN],
   });
@@ -178,6 +187,8 @@ export async function convertQuoteToInvoiceAction(
   _previousState: TicketActionState,
   formData: FormData,
 ): Promise<TicketActionState> {
+  await requireSameOriginRequest();
+
   const session = await requireLocalStaff({
     roles: [UserRole.ADMIN, UserRole.TECHNICIAN],
   });

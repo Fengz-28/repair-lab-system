@@ -19,10 +19,10 @@ export function FinancialSummaryCard({
     <RepairPanel>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600">{title}</p>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">{title}</p>
           {number ? <h2 className="mt-1 break-words text-lg font-black text-zinc-950 dark:text-zinc-50">{number}</h2> : null}
         </div>
-        {status ? <RepairBadge tone="emerald">{status}</RepairBadge> : null}
+        {status ? <RepairBadge tone="cyan">{status}</RepairBadge> : null}
       </div>
       {total ? <p className="mt-5 text-3xl font-black tracking-tight text-zinc-950 dark:text-zinc-50">{total}</p> : null}
       {children ? <div className="mt-4">{children}</div> : null}

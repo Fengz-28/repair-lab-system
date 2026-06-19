@@ -86,9 +86,9 @@ export default async function TicketInvoicePage({
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
-                Line items
+                Líneas de factura
               </p>
-              <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Lineas facturadas</h2>
+              <h2 className="mt-2 text-2xl font-black text-zinc-50">Líneas facturadas</h2>
             </div>
             <div className="flex flex-wrap gap-2">
               <StatusBadge label="Factura" value={invoiceStatusLabel(invoice.status)} />
@@ -100,7 +100,7 @@ export default async function TicketInvoicePage({
             <thead className="bg-zinc-950/95 text-zinc-300">
               <tr>
                 <th className="border-b border-white/10 px-3 py-2">Tipo</th>
-                <th className="border-b border-white/10 px-3 py-2">Descripcion</th>
+                <th className="border-b border-white/10 px-3 py-2">Descripción</th>
                 <th className="border-b border-white/10 px-3 py-2">Cantidad</th>
                 <th className="border-b border-white/10 px-3 py-2">Unitario</th>
                 <th className="border-b border-white/10 px-3 py-2">Total</th>
@@ -113,7 +113,7 @@ export default async function TicketInvoicePage({
                   <td className="px-3 py-2">
                     <p className="break-words">{item.description}</p>
                     {item.catalogItem ? (
-                      <p className="text-zinc-500 dark:text-zinc-400">Catálogo: {item.catalogItem.name}</p>
+                      <p className="text-zinc-400">Catálogo: {item.catalogItem.name}</p>
                     ) : null}
                   </td>
                   <td className="px-3 py-2">{item.quantity}</td>
@@ -156,9 +156,9 @@ export default async function TicketInvoicePage({
 
 function InfoItem({ label, value }: { label: string; value: string }) {
   return (
-    <RepairPanel>
-      <p className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">{label}</p>
-      <p className="mt-1 break-words text-sm font-black text-zinc-950 dark:text-zinc-50">{value}</p>
+    <RepairPanel className="repair-premium-card">
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-400">{label}</p>
+      <p className="mt-1 break-words text-sm font-black text-zinc-50">{value}</p>
     </RepairPanel>
   );
 }

@@ -6,11 +6,14 @@ import { registerManualPaymentSchema } from "@/modules/payments/payment.schema";
 import { registerManualPayment } from "@/modules/payments/payment.service";
 import type { TicketActionState } from "@/modules/tickets/ticket.action-state";
 import { requireLocalStaff, UserRole } from "@/server/auth/local-admin";
+import { requireSameOriginRequest } from "@/server/security/csrf";
 
 export async function registerManualPaymentAction(
   _previousState: TicketActionState,
   formData: FormData,
 ): Promise<TicketActionState> {
+  await requireSameOriginRequest();
+
   const session = await requireLocalStaff({ roles: [UserRole.ADMIN] });
   const ticketId = String(formData.get("ticketId") ?? "");
   const invoiceId = String(formData.get("invoiceId") ?? "");

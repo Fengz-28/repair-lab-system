@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type React from "react";
 
 import { RepairBadge, RepairButton, RepairContainer } from "@/components/repairlab";
@@ -25,7 +25,7 @@ export function TicketHero({
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(16,185,129,0.24),transparent_30%),radial-gradient(circle_at_82%_5%,rgba(6,182,212,0.16),transparent_28%),linear-gradient(135deg,rgba(15,23,42,0.2),rgba(0,0,0,0.86))]" />
       <div className="absolute inset-0 opacity-25 [background-image:linear-gradient(120deg,transparent_0,transparent_48%,rgba(255,255,255,0.08)_49%,transparent_50%)] [background-size:44px_44px]" />
       <RepairContainer className="relative py-10 sm:py-14">
-        <div className="flex flex-wrap items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-emerald-300">
+        <div className="flex flex-wrap items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-cyan-300">
           <Link className="hover:text-white" href="/admin/tickets">Tickets</Link>
           <span>/</span>
           <span>{ticketNumber}</span>
@@ -55,3 +55,4 @@ export function TicketHero({
     </section>
   );
 }
+

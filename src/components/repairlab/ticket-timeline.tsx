@@ -15,7 +15,7 @@ export function RepairTicketTimeline({ items }: { items: RepairTimelineItem[] })
     <RepairPanel>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600">Workflow</p>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">Workflow</p>
           <h2 className="mt-1 text-lg font-black text-zinc-950 dark:text-zinc-50">Línea de tiempo del ticket</h2>
         </div>
         <span className="rounded-full border border-white/10 px-3 py-1 text-xs font-bold text-zinc-400">
@@ -37,7 +37,7 @@ export function RepairTicketTimeline({ items }: { items: RepairTimelineItem[] })
 
 export function RepairTimelineItem({ item }: { item: RepairTimelineItem }) {
   const tone = {
-    emerald: "border-emerald-500 bg-emerald-500 shadow-emerald-500/30",
+    emerald: "border-cyan-500 bg-cyan-500 shadow-cyan-500/30",
     cyan: "border-cyan-500 bg-cyan-500 shadow-cyan-500/30",
     warning: "border-amber-500 bg-amber-500 shadow-amber-500/30",
     violet: "border-violet-500 bg-violet-500 shadow-violet-500/30",
@@ -75,7 +75,7 @@ export function TimelineStageRail({
           key={stage.label}
           className={`rounded-2xl border px-3 py-2 text-xs font-bold ${
             stage.active
-              ? "border-emerald-400/30 bg-emerald-500/15 text-emerald-100"
+              ? "border-cyan-400/30 bg-cyan-500/15 text-cyan-100"
               : stage.done
                 ? "border-white/10 bg-zinc-950 text-zinc-300"
                 : "border-white/10 bg-zinc-900 text-zinc-500"

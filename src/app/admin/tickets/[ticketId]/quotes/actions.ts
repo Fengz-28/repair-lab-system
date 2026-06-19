@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { requireLocalStaff, UserRole } from "@/server/auth/local-admin";
+import { requireSameOriginRequest } from "@/server/security/csrf";
 import type { QuoteActionState } from "@/modules/quotes/quote.action-state";
 import {
   addQuoteItemSchema,
@@ -15,6 +16,8 @@ export async function createQuoteAction(
   _previousState: QuoteActionState,
   formData: FormData,
 ): Promise<QuoteActionState> {
+  await requireSameOriginRequest();
+
   const session = await requireLocalStaff({
     roles: [UserRole.ADMIN, UserRole.TECHNICIAN],
   });
@@ -42,7 +45,7 @@ export async function createQuoteAction(
 
     return {
       ok: true,
-      message: "Cotizacion creada.",
+      message: "Cotización creada.",
     };
   } catch (error) {
     return {
@@ -56,6 +59,8 @@ export async function addQuoteItemAction(
   _previousState: QuoteActionState,
   formData: FormData,
 ): Promise<QuoteActionState> {
+  await requireSameOriginRequest();
+
   const session = await requireLocalStaff({
     roles: [UserRole.ADMIN, UserRole.TECHNICIAN],
   });
@@ -100,6 +105,8 @@ export async function changeQuoteStatusAction(
   _previousState: QuoteActionState,
   formData: FormData,
 ): Promise<QuoteActionState> {
+  await requireSameOriginRequest();
+
   const session = await requireLocalStaff({
     roles: [UserRole.ADMIN, UserRole.TECHNICIAN],
   });

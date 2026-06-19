@@ -1,4 +1,4 @@
-import { RepairPanel } from "./index";
+﻿import { RepairPanel } from "./index";
 
 export function CustomerDevicesCard({
   devices,
@@ -14,7 +14,7 @@ export function CustomerDevicesCard({
   return (
     <RepairPanel className="space-y-4">
       <div>
-        <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-300 dark:text-cyan-300">
           Equipos
         </p>
         <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Dispositivos relacionados</h2>
@@ -28,7 +28,7 @@ export function CustomerDevicesCard({
           {devices.map((device) => (
             <article key={device.id} className="rounded-2xl border border-white/10 bg-zinc-950/75 p-4">
               <div className="flex items-start gap-3">
-                <div className="grid size-11 shrink-0 place-items-center rounded-2xl border border-emerald-300/20 bg-emerald-500/10 text-sm font-black text-emerald-100">
+                <div className="grid size-11 shrink-0 place-items-center rounded-2xl border border-cyan-300/20 bg-cyan-500/10 text-sm font-black text-cyan-100">
                   EQ
                 </div>
                 <div className="min-w-0">
@@ -46,3 +46,4 @@ export function CustomerDevicesCard({
     </RepairPanel>
   );
 }
+

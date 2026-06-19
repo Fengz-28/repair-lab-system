@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type { MessageStatus } from "@prisma/client";
 
 import {
@@ -34,7 +34,7 @@ export function MessageLogCard({ message }: { message: MessageLogCardData }) {
             <RepairBadge tone="cyan">{providerLabel(message.provider)}</RepairBadge>
           </div>
           <Link
-            className="mt-3 block break-words text-xl font-black text-zinc-950 transition hover:text-emerald-600 dark:text-zinc-50 dark:hover:text-emerald-300"
+            className="mt-3 block break-words text-xl font-black text-zinc-950 transition hover:text-cyan-300 dark:text-zinc-50 dark:hover:text-cyan-300"
             href={`/admin/messages/${message.id}`}
           >
             {message.subject ?? "Sin asunto"}
@@ -94,3 +94,4 @@ function StatusBadge({ status, provider }: { status: MessageStatus; provider?: s
 
   return <RepairBadge tone={badgeTone}>{messageStatusLabel(status, provider)}</RepairBadge>;
 }
+

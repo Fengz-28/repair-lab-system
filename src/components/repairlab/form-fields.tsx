@@ -159,13 +159,11 @@ export function RepairSubmitButton({
     <button
       type="submit"
       disabled={pending}
-      className={`repair-button-motion repair-focus-ring min-h-11 rounded-full border border-emerald-300/40 bg-emerald-500 px-5 py-2.5 text-sm font-black text-black shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-400 hover:shadow-cyan-400/20 disabled:cursor-not-allowed disabled:border-white/5 disabled:bg-zinc-900 disabled:text-zinc-500 disabled:shadow-none ${fullWidth ? "w-full" : "w-full sm:w-auto"}`}
+      className={`repair-button-motion repair-focus-ring min-h-11 rounded-full border border-cyan-300/40 bg-cyan-400 px-5 py-2.5 text-sm font-black text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:bg-cyan-300 hover:shadow-cyan-300/25 disabled:cursor-not-allowed disabled:border-white/5 disabled:bg-zinc-900 disabled:text-zinc-500 disabled:shadow-none ${fullWidth ? "w-full" : "w-full sm:w-auto"}`}
     >
       {pending ? pendingLabel : label}
     </button>
   );
 }
 
-const fieldClassName =
-  "min-h-11 w-full rounded-2xl border border-white/10 bg-zinc-950 px-3 py-2 text-sm text-white placeholder:text-zinc-500 shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/20";
-
+const fieldClassName = "repair-input-surface text-sm";

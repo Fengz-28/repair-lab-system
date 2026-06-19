@@ -43,12 +43,12 @@ export default async function AdminHomePage() {
 
       <RepairPageHero
         eyebrow="Admin / Inicio"
-        title="Repair Lab System"
-        description="Sistema operativo para gestionar reparaciones, clientes, cotizaciones, facturas, pagos e inventario con una experiencia moderna de taller técnico."
+        title="Sistema interno FengzLab"
+        description="Panel operativo para gestionar reparaciones, clientes, cotizaciones, facturas, pagos e inventario con una experiencia moderna de taller técnico."
         actions={
           <>
             <RepairButton href="/admin/intake">Nueva recepción</RepairButton>
-            <RepairButton href="/admin/dashboard" tone="secondary">Ver dashboard</RepairButton>
+            <RepairButton href="/admin/dashboard" tone="secondary">Ver panel</RepairButton>
           </>
         }
       />
@@ -72,7 +72,7 @@ export default async function AdminHomePage() {
           </div>
 
           <RepairPanel>
-            <h2 className="text-base font-black text-zinc-950 dark:text-zinc-50">Ultimos tickets</h2>
+            <h2 className="text-base font-black text-zinc-950 dark:text-zinc-50">Últimos tickets</h2>
             {recentTickets.length === 0 ? (
               <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">No hay tickets todavía.</p>
             ) : (
@@ -80,7 +80,7 @@ export default async function AdminHomePage() {
                 {recentTickets.map((ticket) => (
                   <li key={ticket.id} className="flex flex-wrap justify-between gap-3 rounded-2xl border border-white/10 bg-zinc-950/75 p-4">
                     <div className="min-w-0">
-                      <Link className="font-bold text-zinc-950 underline decoration-emerald-400 underline-offset-4 dark:text-zinc-50" href={`/admin/tickets/${ticket.id}`}>
+                      <Link className="font-bold text-zinc-950 underline decoration-cyan-400 underline-offset-4 dark:text-zinc-50" href={`/admin/tickets/${ticket.id}`}>
                         {ticket.ticketNumber}
                       </Link>
                       <p className="break-words text-zinc-500 dark:text-zinc-400">
@@ -115,7 +115,7 @@ function HomeCard({
   return (
     <Link href={href}>
       <RepairCard className="min-h-36">
-        <div className="grid size-12 place-items-center rounded-2xl border border-emerald-300/20 bg-emerald-500/10 text-sm font-black text-emerald-100">
+        <div className="grid size-12 place-items-center rounded-2xl border border-cyan-300/20 bg-cyan-500/10 text-sm font-black text-cyan-100">
           RL
         </div>
         <h2 className="mt-4 text-base font-black text-zinc-950 dark:text-zinc-50">{title}</h2>
@@ -124,3 +124,5 @@ function HomeCard({
     </Link>
   );
 }
+
+

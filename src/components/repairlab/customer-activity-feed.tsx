@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 import { RepairPanel } from "./index";
 
@@ -16,7 +16,7 @@ export function CustomerActivityFeed({
   return (
     <RepairPanel className="space-y-4">
       <div>
-        <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-300 dark:text-cyan-300">
           Actividad
         </p>
         <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Movimientos recientes</h2>
@@ -30,7 +30,7 @@ export function CustomerActivityFeed({
           {activity.map((event, index) => (
             <li key={event.id} className="relative grid grid-cols-[42px_1fr] gap-3">
               <div className="relative flex justify-center">
-                <span className="grid size-10 place-items-center rounded-full border border-emerald-300/25 bg-emerald-500/10 text-xs font-black text-emerald-100">
+                <span className="grid size-10 place-items-center rounded-full border border-cyan-300/25 bg-cyan-500/10 text-xs font-black text-cyan-100">
                   {index + 1}
                 </span>
                 {index < activity.length - 1 ? (
@@ -55,3 +55,4 @@ export function CustomerActivityFeed({
     </RepairPanel>
   );
 }
+

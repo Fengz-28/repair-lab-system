@@ -75,30 +75,30 @@ function GuidedQuoteFlow({
   quote?: Quote;
 }) {
   return (
-    <section className="space-y-5 rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/25 sm:p-6">
+    <section className="repair-premium-card space-y-5 rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/25 sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0 space-y-2">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
             Flujo comercial
           </p>
-          <h2 className="text-2xl font-black text-zinc-950 dark:text-zinc-50">
+          <h2 className="text-2xl font-black text-zinc-50">
             Flujo de cotización
           </h2>
-          <ol className="list-decimal space-y-1 pl-5 text-sm text-zinc-700 dark:text-zinc-300">
+          <ol className="list-decimal space-y-1 pl-5 text-sm text-zinc-300">
             <li>Crear cotización en borrador.</li>
             <li>Agregar líneas con precios mientras esté en borrador.</li>
             <li>Revisar el total estimado.</li>
             <li>Enviar la cotización al cliente.</li>
             <li>Esperar aprobación o rechazo.</li>
           </ol>
-          <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+          <p className="text-sm font-medium text-zinc-200">
             El precio se coloca en las líneas de la cotización, no en el ticket.
           </p>
         </div>
         <div className="grid w-full gap-2 text-sm sm:w-auto">
           <StatusPill label="Ticket" value={ticketStatusLabel(ticketStatus)} tone="ticket" />
           <StatusPill
-            label="Cotizacion"
+            label="Cotización"
             value={quote ? quoteStatusLabel(quote.status) : "Sin cotización"}
             tone="quote"
           />
@@ -116,20 +116,20 @@ function CreateQuoteForm({ ticketId }: { ticketId: string }) {
   const [state, formAction] = useActionState(createQuoteAction, initialQuoteActionState);
 
   return (
-    <form id="crear-cotizacion" action={formAction} className="space-y-5 rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/25 sm:p-6">
+    <form id="crear-cotizacion" action={formAction} className="repair-premium-card space-y-5 rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/25 sm:p-6">
       <input type="hidden" name="ticketId" value={ticketId} />
       <div>
         <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">
           Nueva propuesta
         </p>
-        <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Crear cotización</h2>
-        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+        <h2 className="mt-2 text-2xl font-black text-zinc-50">Crear cotización</h2>
+        <p className="mt-2 text-sm text-zinc-300">
           Crea una cotización en borrador. Luego agrega mano de obra, repuestos o servicios con precio.
         </p>
       </div>
       <div className="grid gap-4 sm:grid-cols-3">
-        <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
-          Expira en dias
+        <label className="grid gap-2 text-sm font-medium text-zinc-200">
+          Expira en días
           <input
             name="expiresInDays"
             type="number"
@@ -140,7 +140,7 @@ function CreateQuoteForm({ ticketId }: { ticketId: string }) {
           />
         </label>
       </div>
-      <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
+      <label className="grid gap-2 text-sm font-medium text-zinc-200">
         Notas visibles para cliente
         <textarea
           name="customerNotes"
@@ -148,7 +148,7 @@ function CreateQuoteForm({ ticketId }: { ticketId: string }) {
           className={fieldClassName}
         />
       </label>
-      <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
+      <label className="grid gap-2 text-sm font-medium text-zinc-200">
         Notas internas
         <textarea
           name="internalNotes"
@@ -186,11 +186,11 @@ function QuoteList({
   return (
     <section className="space-y-4">
       {quotes.map((quote) => (
-        <article key={quote.id} className="space-y-5 rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/25 transition hover:border-emerald-400/40 hover:bg-zinc-900/80 hover:shadow-2xl hover:shadow-emerald-950/10 sm:p-6">
+        <article key={quote.id} className="repair-premium-card space-y-5 rounded-3xl border border-white/10 bg-zinc-950/90 p-5 shadow-sm shadow-black/25 transition hover:border-emerald-400/40 hover:bg-zinc-900/80 hover:shadow-2xl hover:shadow-emerald-950/10 sm:p-6">
           <div className="flex flex-wrap justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">Cotizacion</p>
-              <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">Cotización</p>
+              <h2 className="mt-2 text-2xl font-black text-zinc-50">
                 {quote.invoiceNumber}
               </h2>
               <StatusBadge status={quote.status} />
@@ -232,7 +232,7 @@ function QuoteList({
 function QuoteItemsTable({ items }: { items: QuoteItem[] }) {
   return (
     <RepairInventoryTable>
-      <table className="w-full min-w-[720px] border-collapse text-left text-sm">
+      <table className="w-full min-w-[720px] border-collapse text-left text-sm hidden md:table">
         <thead className="bg-zinc-950/95 text-zinc-300">
           <tr>
             <th className="border-b border-white/10 px-3 py-2">Tipo</th>
@@ -267,6 +267,22 @@ function QuoteItemsTable({ items }: { items: QuoteItem[] }) {
           )}
         </tbody>
       </table>
+      <div className="grid gap-3 p-3 md:hidden">
+        {items.length === 0 ? (
+          <p className="text-sm text-zinc-400">
+            Aún no hay líneas. Agrega mano de obra, repuestos, productos o servicios.
+          </p>
+        ) : (
+          items.map((item) => (
+            <div key={item.id} className="repair-premium-card rounded-2xl border border-white/10 bg-zinc-950/80 p-3 text-sm">
+              <p className="font-bold text-zinc-100">{item.description}</p>
+              <p className="mt-1 text-zinc-400">{quoteItemTypeLabel(item.itemType)} · Cantidad {item.quantity}</p>
+              <p className="mt-2 text-zinc-200">Unitario: {item.unitPrice}</p>
+              <p className="font-black text-zinc-50">Total: {item.lineTotal}</p>
+            </div>
+          ))
+        )}
+      </div>
     </RepairInventoryTable>
   );
 }
@@ -283,17 +299,17 @@ function AddQuoteItemForm({
   const [state, formAction] = useActionState(addQuoteItemAction, initialQuoteActionState);
 
   return (
-    <form action={formAction} className="grid gap-4 rounded-2xl border border-white/10 bg-zinc-950 p-4">
+    <form action={formAction} className="repair-premium-card grid gap-4 rounded-2xl border border-white/10 bg-zinc-950 p-4">
       <input type="hidden" name="ticketId" value={ticketId} />
       <input type="hidden" name="quoteId" value={quoteId} />
       <div>
-        <h3 className="text-lg font-black text-zinc-950 dark:text-zinc-50">Agregar precio</h3>
-        <p className="text-sm text-zinc-600 dark:text-zinc-300">
+        <h3 className="text-lg font-black text-zinc-50">Agregar precio</h3>
+        <p className="text-sm text-zinc-300">
           Agrega aquí mano de obra, repuestos, productos o servicios. Estos valores forman el precio final de la cotización.
         </p>
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-        <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
+        <label className="grid gap-2 text-sm font-medium text-zinc-200">
           Catálogo opcional
           <select
             name="catalogItemId"
@@ -307,7 +323,7 @@ function AddQuoteItemForm({
             ))}
           </select>
         </label>
-        <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
+        <label className="grid gap-2 text-sm font-medium text-zinc-200">
           Tipo
           <select
             name="itemType"
@@ -319,15 +335,15 @@ function AddQuoteItemForm({
             <option value="PART">Repuesto</option>
           </select>
         </label>
-        <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200 lg:col-span-2">
-          Descripcion
+        <label className="grid gap-2 text-sm font-medium text-zinc-200 lg:col-span-2">
+          Descripción
           <input
             name="description"
             required
             className={fieldClassName}
           />
         </label>
-        <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
+        <label className="grid gap-2 text-sm font-medium text-zinc-200">
           Cantidad
           <input
             name="quantity"
@@ -338,7 +354,7 @@ function AddQuoteItemForm({
             className={fieldClassName}
           />
         </label>
-        <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
+        <label className="grid gap-2 text-sm font-medium text-zinc-200">
           Precio unitario
           <input
             name="unitPrice"
@@ -348,11 +364,11 @@ function AddQuoteItemForm({
           />
         </label>
       </div>
-      <p className="text-xs text-zinc-500 dark:text-zinc-400">
-        Si seleccionas un item del catalogo y dejas el precio vacio, se usa su precio base. Total de linea = cantidad x precio unitario.
+      <p className="text-xs text-zinc-400">
+        Si seleccionas un ítem del catálogo y dejas el precio vacío, se usa su precio base. Total de línea = cantidad × precio unitario.
       </p>
       <ActionMessage ok={state.ok} message={state.message} />
-      <SubmitButton label="Agregar linea" pendingLabel="Agregando..." />
+      <SubmitButton label="Agregar línea" pendingLabel="Agregando..." />
     </form>
   );
 }
@@ -544,11 +560,11 @@ function quoteStatusActionLabel(status: InvoiceStatus) {
 function ticketStatusLabel(status: TicketStatus) {
   const labels: Record<TicketStatus, string> = {
     RECEIVED: "Recibido",
-    INITIAL_REVIEW: "Revision inicial",
-    DIAGNOSIS: "Diagnostico",
+    INITIAL_REVIEW: "Revisión inicial",
+    DIAGNOSIS: "Diagnóstico",
     WAITING_APPROVAL: "Esperando aprobación",
     APPROVED: "Aprobado",
-    REPAIR_IN_PROGRESS: "Reparacion en proceso",
+    REPAIR_IN_PROGRESS: "Reparación en proceso",
     READY_FOR_PICKUP: "Listo para retirar",
     DELIVERED: "Entregado",
     CANCELLED: "Cancelado",
@@ -571,5 +587,4 @@ function ActionMessage({ ok, message }: { ok: boolean; message: string }) {
   return <RepairFormFeedback ok={ok} message={message} />;
 }
 
-const fieldClassName =
-  "min-h-11 rounded-2xl border border-white/10 bg-zinc-950 px-3 py-2 text-sm text-white placeholder:text-zinc-500 shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/20";
+const fieldClassName = "repair-input-surface text-sm";

@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type { TicketStatus } from "@prisma/client";
 
 import { AdminNav } from "@/components/admin-nav";
@@ -110,8 +110,8 @@ function TicketFilters({ filters }: { filters: TicketListData["filters"] }) {
           name="sort"
           defaultValue={filters.sort}
           options={[
-            ["recent", "Mas recientes"],
-            ["oldest", "Mas antiguos"],
+            ["recent", "Más recientes"],
+            ["oldest", "Más antiguos"],
             ["invoiced_desc", "Mayor total facturado"],
             ["balance_desc", "Saldo pendiente mayor"],
           ]}
@@ -128,7 +128,7 @@ function TicketFilters({ filters }: { filters: TicketListData["filters"] }) {
         <div className="flex flex-col gap-2 sm:flex-row lg:items-end">
           <button
             type="submit"
-            className="repair-button-motion repair-focus-ring min-h-11 rounded-full border border-emerald-300/40 bg-emerald-500 px-5 py-2 text-sm font-black text-black shadow-lg shadow-emerald-500/25 hover:bg-emerald-400 hover:shadow-cyan-400/20"
+            className="repair-button-motion repair-focus-ring min-h-11 rounded-full border border-cyan-300/45 bg-cyan-400 px-5 py-2 text-sm font-black text-slate-950 shadow-lg shadow-cyan-500/25 hover:bg-cyan-300 hover:shadow-cyan-300/25"
           >
             Aplicar
           </button>
@@ -183,7 +183,7 @@ function TicketCards({ tickets }: { tickets: TicketListItem[] }) {
         >
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="min-w-0">
-              <Link className="text-lg font-black text-zinc-950 underline decoration-emerald-400 underline-offset-4 dark:text-zinc-50" href={`/admin/tickets/${ticket.id}`}>
+              <Link className="text-lg font-black text-zinc-950 underline decoration-cyan-400 underline-offset-4 dark:text-zinc-50" href={`/admin/tickets/${ticket.id}`}>
                 {ticket.ticketNumber}
               </Link>
               <p className="text-sm text-zinc-500 dark:text-zinc-400">
@@ -349,7 +349,7 @@ function ActionLink({
     <Link
       className={
         primary
-        ? "repair-button-motion repair-focus-ring min-h-10 rounded-full border border-emerald-300/40 bg-emerald-500 px-3 py-2 text-xs font-black text-black shadow-sm shadow-emerald-500/25 hover:bg-emerald-400"
+        ? "repair-button-motion repair-focus-ring min-h-10 rounded-full border border-cyan-300/40 bg-cyan-400 px-3 py-2 text-xs font-black text-slate-950 shadow-sm shadow-cyan-500/25 hover:bg-cyan-300"
         : "repair-button-motion repair-focus-ring min-h-10 rounded-full border border-white/15 bg-zinc-800 px-3 py-2 text-xs font-bold text-zinc-100 hover:border-cyan-300/35 hover:bg-zinc-700 hover:text-white"
       }
       href={href}
@@ -390,3 +390,7 @@ function formatMoney(value: number) {
     maximumFractionDigits: 2,
   })}`;
 }
+
+
+
+

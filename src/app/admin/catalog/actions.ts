@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { requireLocalStaff, UserRole } from "@/server/auth/local-admin";
+import { requireSameOriginRequest } from "@/server/security/csrf";
 import type { CatalogActionState } from "@/modules/catalog/catalog.action-state";
 import {
   createCatalogItemSchema,
@@ -21,6 +22,8 @@ export async function createCatalogItemAction(
   _previousState: CatalogActionState,
   formData: FormData,
 ): Promise<CatalogActionState> {
+  await requireSameOriginRequest();
+
   const session = await requireLocalStaff({ roles: [UserRole.ADMIN] });
 
   const parsed = createCatalogItemSchema.safeParse({
@@ -71,6 +74,8 @@ export async function updateCatalogInventoryTrackingAction(
   _previousState: CatalogActionState,
   formData: FormData,
 ): Promise<CatalogActionState> {
+  await requireSameOriginRequest();
+
   const session = await requireLocalStaff({ roles: [UserRole.ADMIN] });
 
   const parsed = updateCatalogInventoryTrackingSchema.safeParse({
@@ -111,6 +116,8 @@ export async function updateCatalogItemStatusAction(
   _previousState: CatalogActionState,
   formData: FormData,
 ): Promise<CatalogActionState> {
+  await requireSameOriginRequest();
+
   const session = await requireLocalStaff({ roles: [UserRole.ADMIN] });
 
   const parsed = updateCatalogItemStatusSchema.safeParse({
@@ -148,6 +155,8 @@ export async function adjustInventoryAction(
   _previousState: CatalogActionState,
   formData: FormData,
 ): Promise<CatalogActionState> {
+  await requireSameOriginRequest();
+
   const session = await requireLocalStaff({ roles: [UserRole.ADMIN] });
 
   const parsed = adjustInventorySchema.safeParse({

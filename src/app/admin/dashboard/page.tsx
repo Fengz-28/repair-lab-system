@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type React from "react";
 
 import { AdminNav } from "@/components/admin-nav";
@@ -171,7 +171,7 @@ function PaymentsPanel({ dashboard }: { dashboard: DashboardData }) {
         <MetricRow label="Recibido este mes" value={formatMoney(dashboard.payments.receivedThisMonth)} />
       </dl>
       <div className="mt-4 space-y-2">
-        <h3 className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Pagos por metodo</h3>
+        <h3 className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Pagos por método</h3>
         {dashboard.payments.byMethod.length === 0 ? (
           <EmptyText>No hay pagos registrados.</EmptyText>
         ) : (
@@ -391,3 +391,8 @@ function formatMoney(value: number) {
     maximumFractionDigits: 2,
   })}`;
 }
+
+
+
+
+

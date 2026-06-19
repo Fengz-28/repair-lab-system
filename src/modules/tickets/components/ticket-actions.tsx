@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
@@ -45,10 +45,10 @@ export function TicketGuidedActions({
   return (
     <section className="space-y-3 rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-sm shadow-black/25">
       <div>
-        <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">
+        <h2 className="text-base font-semibold text-zinc-50">
           Acciones recomendadas
         </h2>
-        <p className="text-sm text-zinc-600 dark:text-zinc-300">
+        <p className="text-sm text-zinc-300">
           Estado actual: {ticketStatusLabel(currentStatus)}
         </p>
       </div>
@@ -90,21 +90,21 @@ export function TicketStatusForm({
   const isFinal = allowedNextStatuses.length === 0;
 
   return (
-    <form action={formAction} className="space-y-3 rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-sm shadow-black/25">
+    <form action={formAction} className="space-y-3 rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-sm shadow-black/25 repair-premium-card">
       <input type="hidden" name="ticketId" value={ticketId} />
       <div>
-        <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Cambiar estado</h2>
-        <p className="text-sm text-zinc-600 dark:text-zinc-300">
+        <h2 className="text-base font-semibold text-zinc-50">Cambiar estado</h2>
+        <p className="text-sm text-zinc-300">
           Estado actual: {ticketStatusLabel(currentStatus)}
         </p>
       </div>
       {isFinal ? (
         <RepairInlineAlert tone="success" compact>
-          <p>Este ticket esta en estado final. No requiere cambios adicionales de estado.</p>
+          <p>Este ticket está en estado final. No requiere cambios adicionales de estado.</p>
         </RepairInlineAlert>
       ) : (
         <>
-          <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
+          <label className="grid gap-2 text-sm font-medium text-zinc-200">
             Siguiente estado
             <select
               name="nextStatus"
@@ -117,7 +117,7 @@ export function TicketStatusForm({
               ))}
             </select>
           </label>
-          <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
+          <label className="grid gap-2 text-sm font-medium text-zinc-200">
             Comentario interno opcional
             <textarea
               name="internalComment"
@@ -140,9 +140,9 @@ export function InternalCommentForm({ ticketId }: { ticketId: string }) {
   );
 
   return (
-    <form action={formAction} className="space-y-3 rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-sm shadow-black/25">
+    <form action={formAction} className="space-y-3 rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-sm shadow-black/25 repair-premium-card">
       <input type="hidden" name="ticketId" value={ticketId} />
-      <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Comentario interno</h2>
+      <h2 className="text-base font-semibold text-zinc-50">Comentario interno</h2>
       <textarea
         name="body"
         rows={4}
@@ -172,17 +172,17 @@ export function TechnicalNotesForm({
   );
 
   return (
-    <form action={formAction} className="space-y-3 rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-sm shadow-black/25">
+    <form action={formAction} className="space-y-3 rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-sm shadow-black/25 repair-premium-card">
       <input type="hidden" name="ticketId" value={ticketId} />
-      <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Notas tecnicas</h2>
+      <h2 className="text-base font-semibold text-zinc-50">Notas técnicas</h2>
       <TextArea
-        label="Diagnostico tecnico"
+        label="Diagnóstico técnico"
         name="diagnosis"
         defaultValue={diagnosis}
-        helpText="Describe la causa probable, pruebas realizadas y hallazgos tecnicos."
+        helpText="Describe la causa probable, pruebas realizadas y hallazgos técnicos."
       />
       <TextArea
-        label="Trabajo realizado / resolucion"
+        label="Trabajo realizado / resolución"
         name="resolution"
         defaultValue={resolution}
         helpText="Registra las reparaciones realizadas, piezas usadas y resultado final."
@@ -206,11 +206,11 @@ export function AttachmentPlaceholderForm({ ticketId }: { ticketId: string }) {
   );
 
   return (
-    <form action={formAction} className="space-y-3 rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-sm shadow-black/25">
+    <form action={formAction} className="space-y-3 rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-sm shadow-black/25 repair-premium-card">
       <input type="hidden" name="ticketId" value={ticketId} />
       <div>
-        <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50">Archivo privado</h2>
-        <p className="text-sm text-zinc-600 dark:text-zinc-300">
+        <h2 className="text-base font-semibold text-zinc-50">Archivo privado</h2>
+        <p className="text-sm text-zinc-300">
           Sube un adjunto interno privado. No se publica ni expone al cliente.
         </p>
       </div>
@@ -218,7 +218,7 @@ export function AttachmentPlaceholderForm({ ticketId }: { ticketId: string }) {
         name="attachment"
         type="file"
         accept="image/jpeg,image/png,image/webp,application/pdf"
-        className="block w-full text-sm dark:text-zinc-100"
+        className="repair-input-surface block w-full cursor-pointer text-sm file:mr-3 file:rounded-full file:border-0 file:bg-cyan-400 file:px-3 file:py-1.5 file:text-xs file:font-bold file:text-slate-950 hover:file:bg-cyan-300"
       />
       <ActionMessage ok={state.ok} message={state.message} />
       <SubmitButton label="Agregar archivo" pendingLabel="Agregando..." />
@@ -265,9 +265,9 @@ function TextArea({
   helpText: string;
 }) {
   return (
-    <label className="grid gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
+      <label className="grid gap-2 text-sm font-medium text-zinc-200">
       {label}
-      <span className="text-xs font-normal text-zinc-500 dark:text-zinc-400">{helpText}</span>
+      <span className="text-xs font-normal text-zinc-400">{helpText}</span>
       <textarea
         name={name}
         rows={4}
@@ -297,7 +297,7 @@ function OperationalActionForm({
   );
 
   return (
-    <form action={formAction} className="space-y-2 rounded-2xl border border-white/10 bg-zinc-950 p-3">
+    <form action={formAction} className="space-y-2 rounded-2xl border border-white/10 bg-zinc-950 p-3 repair-premium-card">
       <input type="hidden" name="ticketId" value={ticketId} />
       <input type="hidden" name="nextStatus" value={nextStatus} />
       <input type="hidden" name="internalComment" value={comment} />
@@ -357,8 +357,8 @@ function operationalActionComment(status: TicketStatus) {
     DIAGNOSIS: "Equipo enviado a diagnóstico técnico.",
     WAITING_APPROVAL: "Ticket en espera de aprobación de cotización.",
     APPROVED: "Ticket listo para iniciar reparación.",
-    REPAIR_IN_PROGRESS: "Reparacion iniciada.",
-    READY_FOR_PICKUP: "Reparacion terminada. Equipo listo para entrega.",
+    REPAIR_IN_PROGRESS: "Reparación iniciada.",
+    READY_FOR_PICKUP: "Reparación terminada. Equipo listo para entrega.",
     DELIVERED: "Equipo entregado al cliente. Ticket cerrado.",
     CANCELLED: "Ticket cancelado.",
   };
@@ -369,8 +369,8 @@ function operationalActionComment(status: TicketStatus) {
 function ticketStatusLabel(status: TicketStatus) {
   const labels: Record<TicketStatus, string> = {
     RECEIVED: "Recibido",
-    INITIAL_REVIEW: "Revision inicial",
-    DIAGNOSIS: "Diagnostico",
+    INITIAL_REVIEW: "Revisión inicial",
+    DIAGNOSIS: "Diagnóstico",
     WAITING_APPROVAL: "Esperando aprobación",
     APPROVED: "Listo para reparación",
     REPAIR_IN_PROGRESS: "En reparación",
@@ -402,12 +402,20 @@ function SubmitButton({
   );
 }
 
-const fieldClassName =
-  "min-h-10 w-full rounded-2xl border border-white/10 bg-zinc-950 px-3 py-2 text-sm text-white placeholder:text-zinc-500 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/20";
+const fieldClassName = "repair-input-surface text-sm";
 
 const primaryButtonClassName =
-  "min-h-10 w-full rounded-full bg-emerald-500 px-4 py-2 text-sm font-black text-black shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-400";
+  "min-h-10 w-full rounded-full border border-cyan-300/40 bg-cyan-400 px-4 py-2 text-sm font-black text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:bg-cyan-300";
 
 function ActionMessage({ ok, message }: { ok: boolean; message: string }) {
   return <RepairFormFeedback ok={ok} message={message} />;
 }
+
+
+
+
+
+
+
+
+

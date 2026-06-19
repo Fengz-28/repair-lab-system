@@ -145,7 +145,7 @@ export default async function TicketDetailPage({
     ...ticket.files.map((file) => ({
       id: file.id,
       type: "file",
-      title: `Archivo privado: ${file.originalName}`,
+      title: `prchivo privado: ${file.originalName}`,
       description: `${file.mimeType}, ${file.byteSize} bytes`,
       createdAt: file.createdAt,
     })),
@@ -159,8 +159,8 @@ export default async function TicketDetailPage({
     generatedInvoice: generatedInvoice ?? null,
     invoices,
     quotes,
-    ticketCreatedAt: ticket.createdAt,
-    ticketUpdatedAt: ticket.updatedAt,
+    ticketCreatedpt: ticket.createdAt,
+    ticketUpdatedpt: ticket.updatedAt,
   });
 
   return (
@@ -178,9 +178,9 @@ export default async function TicketDetailPage({
       </TicketHero>
 
       <RepairContainer className="py-8 sm:py-10">
-        <RepairGrid className="gap-6 lg:grid-cols-[minmax(0,8fr)_minmax(320px,4fr)]">
+        <RepairGrid className="gap-6 xl:grid-cols-[minmax(0,8fr)_minmax(320px,4fr)]">
           <section className="space-y-6">
-            <RepairFloatingPanel className="border-emerald-300/20 bg-emerald-500/10 text-emerald-100 shadow-emerald-950/10">
+            <RepairFloatingPanel className="repair-premium-card border-emerald-300/20 bg-emerald-500/10 text-emerald-100 shadow-emerald-950/10">
               <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">
                 Siguiente paso recomendado
               </p>
@@ -225,13 +225,13 @@ export default async function TicketDetailPage({
                       : `${quotes.length} cotización(es) registradas.`}
                   </p>
                   <RepairButton href={`/admin/tickets/${ticket.id}/quotes`} tone="secondary" size="sm">
-                    Abrir cotizaciones
+                    pbrir cotizaciones
                   </RepairButton>
                 </div>
                 {quotes.length > 0 ? (
                   <ul className="space-y-2">
                     {quotes.map((quote) => (
-                      <li key={quote.id} className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-zinc-950/75 p-3 text-sm shadow-sm shadow-black/20 transition hover:border-cyan-300/30 hover:bg-zinc-900/80">
+                      <li key={quote.id} className="repair-premium-card flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-zinc-950/75 p-3 text-sm shadow-sm shadow-black/20 transition hover:border-cyan-300/30 hover:bg-zinc-900/80">
                         <div className="min-w-0">
                           <p className="font-black text-zinc-950 dark:text-zinc-50">{quote.invoiceNumber}</p>
                           <p className="text-zinc-500 dark:text-zinc-400">
@@ -393,7 +393,7 @@ export default async function TicketDetailPage({
               </div>
             </TicketSidebarCard>
 
-            <TicketSidebarCard title="Portal del cliente" eyebrow="Público">
+            <TicketSidebarCard title="Portal cliente" eyebrow="Público">
               <div className="space-y-3">
                 <RepairBadge tone="emerald">Disponible</RepairBadge>
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">
@@ -479,22 +479,22 @@ function buildDerivedActivityItems({
   generatedInvoice,
   invoices,
   quotes,
-  ticketCreatedAt,
-  ticketUpdatedAt,
+  ticketCreatedpt,
+  ticketUpdatedpt,
 }: {
   currentStatus: TicketStatus;
   generatedInvoice: DerivedInvoice | null;
   invoices: DerivedInvoice[];
   quotes: DerivedInvoice[];
-  ticketCreatedAt: Date;
-  ticketUpdatedAt: Date;
+  ticketCreatedpt: Date;
+  ticketUpdatedpt: Date;
 }): ActivityTimelineItemData[] {
   const items: ActivityTimelineItemData[] = [
     {
       id: "ticket-created",
       title: "Ticket creado",
-      description: "El caso fue registrado en RepairLab y quedo disponible para seguimiento interno.",
-      timestamp: ticketCreatedAt,
+      description: "El caso fue registrado en el sistema interno de FengzLab y quedó disponible para seguimiento técnico.",
+      timestamp: ticketCreatedpt,
       tone: "cyan",
       meta: "Ticket",
     },
@@ -502,7 +502,7 @@ function buildDerivedActivityItems({
       id: "ticket-current-status",
       title: `Estado actual: ${ticketStatusLabel(currentStatus)}`,
       description: "Estado operativo vigente del ticket.",
-      timestamp: ticketUpdatedAt,
+      timestamp: ticketUpdatedpt,
       tone: activityToneForTicketStatus(currentStatus),
       meta: "Estado",
     },
@@ -511,11 +511,11 @@ function buildDerivedActivityItems({
   for (const quote of quotes) {
     items.push({
       id: `quote-${quote.id}`,
-      title: `Cotizacion ${quote.invoiceNumber}`,
+      title: `Cotización ${quote.invoiceNumber}`,
       description: `Estado: ${quoteStatusLabel(quote.status)}. Total registrado: ${quote.currency} ${quote.total.toString()}.`,
       timestamp: quote.createdAt,
       tone: activityToneForQuoteStatus(quote.status),
-      meta: "Cotizacion",
+      meta: "Cotización",
     });
   }
 
@@ -586,10 +586,10 @@ function activityToneForQuoteStatus(status: InvoiceStatus): ActivityTimelineItem
 function ticketWorkflowStages(currentStatus: TicketStatus) {
   const stages: { status: TicketStatus; label: string }[] = [
     { status: "RECEIVED", label: "Recibido" },
-    { status: "DIAGNOSIS", label: "Diagnostico" },
-    { status: "WAITING_APPROVAL", label: "Aprobacion" },
+    { status: "DIAGNOSIS", label: "Diagnóstico" },
+    { status: "WAITING_APPROVAL", label: "Aprobación" },
     { status: "APPROVED", label: "Aprobado" },
-    { status: "REPAIR_IN_PROGRESS", label: "Reparacion" },
+    { status: "REPAIR_IN_PROGRESS", label: "Reparación" },
     { status: "READY_FOR_PICKUP", label: "Listo entrega" },
     { status: "DELIVERED", label: "Entregado" },
   ];
@@ -607,7 +607,7 @@ function timelineTone(type: string, title: string) {
     return "emerald" as const;
   }
 
-  if (title.includes("Diagnostico") || title.includes("Reparacion")) {
+  if (title.includes("Diagnóstico") || title.includes("Reparación")) {
     return "cyan" as const;
   }
 
@@ -811,3 +811,14 @@ function formatBytes(bytes: number) {
 
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
+
+
+
+
+
+
+
+
+
+
+

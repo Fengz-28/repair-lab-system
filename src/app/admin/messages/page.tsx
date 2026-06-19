@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { MessageStatus } from "@prisma/client";
 
 import { AdminNav } from "@/components/admin-nav";
@@ -76,7 +76,7 @@ export default async function AdminMessagesPage({
               <option value="30d">Últimos 30 días</option>
             </select>
             <div className="grid gap-2 sm:flex">
-              <button className="min-h-12 rounded-full border border-emerald-300/40 bg-emerald-500 px-5 py-3 text-sm font-black text-black shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-400 hover:shadow-cyan-400/20">
+              <button className="min-h-12 rounded-full border border-cyan-300/45 bg-cyan-400 px-5 py-3 text-sm font-black text-slate-950 shadow-lg shadow-cyan-500/25 transition hover:bg-cyan-300 hover:shadow-cyan-300/25">
                 Filtrar
               </button>
               <Link
@@ -93,7 +93,7 @@ export default async function AdminMessagesPage({
           <RepairEmptyState
             title="No hay mensajes para mostrar."
             description="Cuando se creen tickets, se envíen cotizaciones o cambien estados importantes, los mensajes transaccionales quedarán registrados aquí."
-            eyebrow={hasActiveFilters ? "Filtro sin resultados" : "Centro de mensajes vacio"}
+            eyebrow={hasActiveFilters ? "Filtro sin resultados" : "Centro de mensajes vacío"}
             icon="MS"
             action={hasActiveFilters ? <RepairButton href="/admin/messages">Limpiar filtros</RepairButton> : <RepairButton href="/admin/tickets">Ver tickets</RepairButton>}
             secondaryAction={hasActiveFilters ? <RepairButton href="/admin/tickets" tone="secondary">Ver tickets</RepairButton> : null}
@@ -110,5 +110,4 @@ export default async function AdminMessagesPage({
   );
 }
 
-const fieldClassName =
-  "min-h-12 rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm text-white placeholder:text-zinc-500 shadow-sm shadow-black/20 outline-none transition focus:border-cyan-300 focus:ring-2 focus:ring-cyan-500/20";
+const fieldClassName = "repair-input-surface text-sm";

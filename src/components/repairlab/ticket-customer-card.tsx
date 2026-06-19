@@ -1,4 +1,4 @@
-import { RepairPanel } from "@/components/repairlab";
+﻿import { RepairPanel } from "@/components/repairlab";
 
 export function TicketCustomerCard({
   name,
@@ -14,11 +14,11 @@ export function TicketCustomerCard({
   return (
     <RepairPanel>
       <div className="flex items-start gap-4">
-        <div className="grid size-14 shrink-0 place-items-center rounded-2xl border border-emerald-300/20 bg-emerald-500/10 text-lg font-black text-emerald-100">
+        <div className="grid size-14 shrink-0 place-items-center rounded-2xl border border-cyan-300/20 bg-cyan-500/10 text-lg font-black text-cyan-100">
           {name.slice(0, 1).toUpperCase()}
         </div>
         <div className="min-w-0">
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-600">Cliente</p>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">Cliente</p>
           <h2 className="mt-1 break-words text-lg font-black text-zinc-950 dark:text-zinc-50">{name}</h2>
         </div>
       </div>
@@ -39,3 +39,4 @@ function Info({ label, value, wide = false }: { label: string; value: string; wi
     </div>
   );
 }
+
