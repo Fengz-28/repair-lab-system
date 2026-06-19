@@ -1,6 +1,6 @@
 # Section G - Backups and Restore
 
-Status: audited and documented. No runtime logic changed.
+Status: audited and documented. Home-hosted tunnel notes added. No runtime logic changed.
 
 ## Current backup commands
 
@@ -186,3 +186,25 @@ After production use starts:
 - No restore script exists because automated restore is destructive without explicit target and approval.
 - No backup monitoring/alerting exists yet.
 - `docker-compose.yml` is still local/demo, not final production deployment design.
+
+## Home-hosted tunnel backup policy
+
+For the current Cloudflare Tunnel setup, the local workstation is also the temporary server. Treat it like production hardware during any real workshop use.
+
+Before entering real repair/customer data through `https://staging.fengzlab.tech`:
+
+- [ ] Run `npm run backup:db`.
+- [ ] Run `npm run backup:storage`.
+- [ ] Confirm both backup artifacts exist under `backups/`.
+- [ ] Copy the backup artifacts to at least one external encrypted location.
+- [ ] Confirm the external copy is not inside the Git working tree.
+- [ ] Record the backup timestamp before starting real work.
+
+Recommended early cadence while home-hosted:
+
+- run a full backup before each public/staging validation session;
+- run a full backup after any day with real workshop data;
+- copy backups off the workstation the same day;
+- do not rely on the workstation disk as the only copy.
+
+Do not include `.env`, secrets, browser sessions, Cloudflare credentials, or personal files in application backups.

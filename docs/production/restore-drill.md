@@ -1,6 +1,6 @@
 # Safe Restore Drill Plan
 
-Status: planning document only. No restore command has been executed.
+Status: planning document only. Home-hosted tunnel notes added. No restore command has been executed.
 
 ## Purpose
 
@@ -237,3 +237,24 @@ Until this drill succeeds against temporary targets, FengzLab / RepairLab should
 GO for staging with conditions.
 NO-GO for final production with real customer data.
 ```
+
+## Home-hosted restore drill notes
+
+For the current tunnel setup, the restore drill should stay local and temporary.
+
+Recommended target shape:
+
+- temporary database: `repairlab_restore_test_<YYYYMMDD>` inside the local PostgreSQL container;
+- temporary storage: `storage/restore-drills/<YYYYMMDD>/private`;
+- temporary app process only if explicitly approved and pointed at the temporary targets.
+
+Extra checks for home-hosted operation:
+
+- [ ] Confirm the active app on port `3001` is stopped or not pointed at restore targets.
+- [ ] Confirm Cloudflare Tunnel is not routing public users to a temporary restore app.
+- [ ] Confirm no real customer is using staging during the drill.
+- [ ] Confirm backup artifacts are copied elsewhere before testing restore.
+- [ ] Confirm temporary restore folders are outside `public/`.
+- [ ] Confirm cleanup restores the normal `.env` values and active storage path.
+
+Do not use Cloudflare Tunnel as part of the restore drill unless the user explicitly approves a temporary smoke test. Restore validation should work locally first.
