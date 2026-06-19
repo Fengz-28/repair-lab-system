@@ -18,7 +18,6 @@ Files inspected:
 - `src/server/storage/private-storage.ts`
 - `src/server/security/rate-limit.ts`
 - `src/modules/email/email.service.ts`
-- `src/components/dev/css-studio.tsx`
 - `scripts/seed-admin.mjs`
 - `scripts/backup-db.mjs`
 - `scripts/backup-storage.mjs`
@@ -47,7 +46,6 @@ MAX_UPLOAD_FILE_SIZE_MB
 MAX_UPLOAD_FILES_PER_INTAKE
 MAX_UPLOAD_FILES_PER_TICKET
 NEXT_PUBLIC_APP_URL
-NEXT_PUBLIC_ENABLE_CSS_STUDIO
 NODE_ENV
 POSTGRES_CONTAINER_NAME
 PRIVATE_STORAGE_ROOT
@@ -112,7 +110,6 @@ Examples:
 - `ADMIN_PASSWORD` - used by `npm run seed:admin`. Secret. Must be strong even for exposed demos.
 - `ADMIN_NAME` - used by `npm run seed:admin`.
 - `POSTGRES_CONTAINER_NAME` - used by local DB backup helper. Default: `repair_lab_postgres`.
-- `NEXT_PUBLIC_ENABLE_CSS_STUDIO` - dev-only CSS Studio toggle. Must remain `false` in production.
 
 ### Optional integration
 
@@ -138,9 +135,7 @@ Examples:
 ### Public browser-safe
 
 - `NEXT_PUBLIC_APP_URL`
-- `NEXT_PUBLIC_ENABLE_CSS_STUDIO`
 
-Only `NEXT_PUBLIC_*` variables should be considered browser-exposed by convention. `NEXT_PUBLIC_ENABLE_CSS_STUDIO` must be `false` outside local development.
 
 ### Secret
 

@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 
-import { CssStudioDev } from "@/components/dev/css-studio";
-
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -25,7 +23,6 @@ export default function RootLayout({
   return (
     <html lang="es" className="dark h-full antialiased">
       <body className="min-h-full flex flex-col bg-[#030303] text-zinc-100">
-        <CssStudioDev />
         {children}
       </body>
     </html>

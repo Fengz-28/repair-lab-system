@@ -103,7 +103,6 @@ NEXT_PUBLIC_APP_URL=https://staging-or-production-domain
 ADMIN_ALLOWED_ORIGINS=https://staging-or-production-domain
 CORS_ALLOWED_ORIGINS=https://staging-or-production-domain
 PRIVATE_STORAGE_ROOT=/app/storage/private
-NEXT_PUBLIC_ENABLE_CSS_STUDIO=false
 RATE_LIMIT_ENABLED=true
 ```
 

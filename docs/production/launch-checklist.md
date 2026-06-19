@@ -88,7 +88,6 @@ This warning does not block staging validation, but it should be reviewed before
 - [ ] `DATABASE_URL` points to the production PostgreSQL database.
 - [ ] `AUTH_SECRET` is strong, unique, and not the local placeholder.
 - [ ] `APP_URL`, `PUBLIC_SITE_URL`, `ADMIN_ALLOWED_ORIGINS`, and `CORS_ALLOWED_ORIGINS` use the production HTTPS origin.
-- [ ] `NEXT_PUBLIC_ENABLE_CSS_STUDIO=false`.
 - [ ] Optional integrations remain disabled unless contracts, logging, rollback, and env values are ready.
 - [ ] No real secrets were added to docs, source code, logs, or Git history.
 
