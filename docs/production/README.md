@@ -318,3 +318,9 @@ La validacion de esta seccion cubre Prisma validate, lint, typecheck y test suit
 Section K creo `docs/production/launch-checklist.md` y consolido los gates finales de lanzamiento desde Sections A-J.
 
 No se cambio runtime, Prisma ni Docker. La checklist cubre preflight, secuencia de deploy, post-launch, no-go conditions y riesgos diferidos para un primer despliegue controlado del taller.
+
+## Home-hosted tunnel status
+
+Se agrego `docs/production/home-hosted-tunnel.md` para documentar la fase temporal de staging/operacion temprana desde la workstation local por Cloudflare Tunnel hacia `http://localhost:3001`.
+
+Esta fase es apta para validacion local/staging controlada y operacion temprana con cautela. No reemplaza los gates finales de produccion, restore drill, monitoreo y despliegue VPS futuro.
