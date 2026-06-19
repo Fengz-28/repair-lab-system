@@ -1,12 +1,25 @@
 # Staging and VPS Preflight
 
-Status: planning document only. No domain, VPS, secrets, or deployment has been configured.
+Status: staging tunnel available. Domain and Cloudflare Tunnel exist for `staging.fengzlab.tech`; VPS production remains future work.
 
 ## Purpose
 
-Use this checklist before buying a domain, renting a VPS, or exposing FengzLab / RepairLab outside a controlled local environment.
+Use this checklist before exposing FengzLab / RepairLab outside localhost through Cloudflare Tunnel, a staging host, or a future VPS.
 
-The first target is a staging deployment. Production with real customer data should wait until staging validates the deploy path, backups, restore drill, HTTPS, monitoring, and the core workshop workflow.
+The current target is staging through Cloudflare Tunnel to a local origin. Production with real customer data should wait until staging validates auth, backups, restore drill, HTTPS, monitoring, and the core workshop workflow.
+
+## Current home-hosted tunnel target
+
+Current temporary target:
+
+- Public staging URL: `https://staging.fengzlab.tech`.
+- Local origin: `http://localhost:3001`.
+- Cloudflare Tunnel: required and monitored outside the app.
+- Cloudflare Access: recommended while staging is exposed.
+- Next.js runtime: local workstation.
+- Database and private storage: local, backed up before real use.
+
+This target is acceptable for controlled staging and early workshop validation. It is not the final production architecture.
 
 ## Recommended VPS minimum specs
 
@@ -280,7 +293,7 @@ Known risks:
 - public portal tokens are bearer-style links;
 - backup scripts are local/manual until scheduled externally;
 - restore drill is still required;
-- build currently passes with one Turbopack/NFT warning documented in `docs/production/validation-results.md`;
+- build currently passes without the previous Turbopack/NFT healthcheck warning;
 - manual QA is still required before real customer traffic.
 
 ## Staging-first rule
@@ -296,3 +309,24 @@ Final production with real customers remains no-go until:
 - monitoring is configured;
 - manual workshop workflow QA passes;
 - launch checklist is updated with a current GO / NO-GO status.
+
+## Home-hosted tunnel preflight
+
+Before using `https://staging.fengzlab.tech` through Cloudflare Tunnel:
+
+- [ ] `.env` local uses `APP_URL=https://staging.fengzlab.tech`.
+- [ ] `.env` local uses `NEXT_PUBLIC_APP_URL=https://staging.fengzlab.tech`.
+- [ ] `AUTH_SECRET` is strong, stable, and not committed.
+- [ ] `PRIVATE_STORAGE_ROOT` points outside `public/` and is persistent.
+- [ ] App is running on `http://localhost:3001`.
+- [ ] Tunnel route points to `http://localhost:3001`.
+- [ ] Cloudflare Access protects staging or staging access is otherwise intentionally limited.
+- [ ] `GET /api/health` returns `ok` locally.
+- [ ] Staging loads public pages through HTTPS.
+- [ ] Staff login persists after refresh on `/admin`, `/admin/tickets`, and `/admin/intake`.
+- [ ] No n8n, Ollama, PostgreSQL, storage path, Prisma Studio, or Docker port is exposed publicly.
+- [ ] A current DB backup and private storage backup exist before real workshop data is entered.
+
+## Manual QA reference
+
+Use `docs/production/manual-qa.md` for the current staging checklist across public pages, admin workflow, portal/PDFs, security checks, and home-hosted tunnel risks.
