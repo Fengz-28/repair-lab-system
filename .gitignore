@@ -58,3 +58,14 @@ next-env.d.ts
 !/backups/storage/
 /backups/storage/*
 !/backups/storage/.gitkeep
+
+# Local AI/IDE tooling
+.agents/
+.claude/
+.codegraph/
+.codex/
+.cursor/
+.gemini/
+.mcp.json
+.vscode/
+.zed/
