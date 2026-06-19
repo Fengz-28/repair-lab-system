@@ -9,6 +9,7 @@ import { recordLoginAttempt } from "@/server/auth/login-attempts";
 import { verifyPassword } from "@/server/auth/password";
 import { prisma } from "@/server/db/prisma";
 import { getClientIdentity } from "@/server/security/client-identity";
+import { requireSameOriginRequest } from "@/server/security/csrf";
 import { checkRateLimit, loginRateLimitConfig, resetRateLimit } from "@/server/security/rate-limit";
 
 export type LoginActionState = {
@@ -19,17 +20,21 @@ export type LoginActionState = {
 const loginSchema = z.object({
   email: z.string().trim().email(),
   password: z.string().min(1),
+  next: z.string().optional(),
 });
 
 export async function loginAction(
   _previousState: LoginActionState,
   formData: FormData,
 ): Promise<LoginActionState> {
+  await requireSameOriginRequest();
+
   const requestHeaders = await headers();
   const client = getClientIdentity(requestHeaders);
   const parsed = loginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
+    next: formData.get("next") || undefined,
   });
 
   if (!parsed.success) {
@@ -112,5 +117,17 @@ export async function loginAction(
   });
 
   await createStaffSession(user.id);
-  redirect("/admin");
+  redirect(safeAdminRedirect(parsed.data.next));
+}
+
+function safeAdminRedirect(value?: string) {
+  if (!value || !value.startsWith("/admin")) {
+    return "/admin";
+  }
+
+  if (value.startsWith("//") || value.includes("://") || value.includes("\\")) {
+    return "/admin";
+  }
+
+  return value;
 }

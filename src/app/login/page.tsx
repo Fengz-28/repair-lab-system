@@ -7,11 +7,17 @@ import { LoginForm } from "./login-form";
 
 export const dynamic = "force-dynamic";
 
-export default async function LoginPage() {
+type LoginPageProps = {
+  searchParams?: Promise<{ next?: string | string[] }>;
+};
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const params = await searchParams;
+  const next = safeAdminRedirect(Array.isArray(params?.next) ? params.next[0] : params?.next);
   const session = await getCurrentStaffSession();
 
   if (session) {
-    redirect("/admin");
+    redirect(next);
   }
 
   return (
@@ -33,7 +39,7 @@ export default async function LoginPage() {
               </p>
             </div>
             <div className="mt-8">
-              <LoginForm />
+              <LoginForm next={next} />
             </div>
           </div>
         </div>
@@ -42,4 +48,16 @@ export default async function LoginPage() {
       <RepairFooter />
     </main>
   );
+}
+
+function safeAdminRedirect(value?: string) {
+  if (!value || !value.startsWith("/admin")) {
+    return "/admin";
+  }
+
+  if (value.startsWith("//") || value.includes("://") || value.includes("\\")) {
+    return "/admin";
+  }
+
+  return value;
 }
