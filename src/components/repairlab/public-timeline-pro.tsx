@@ -1,6 +1,6 @@
 import { Clock3, Sparkles } from "lucide-react";
 
-export function PublicTimeline({
+export function PublicTimelinePro({
   items,
 }: {
   items: {
@@ -16,12 +16,12 @@ export function PublicTimeline({
           <Clock3 className="size-3.5" />
           Actividad pública
         </p>
-        <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-50">Línea de tiempo de reparación</h2>
+        <h2 className="mt-2 text-2xl font-black text-zinc-50">Línea de tiempo de reparación</h2>
       </div>
 
       {items.length === 0 ? (
         <p className="mt-5 rounded-2xl border border-white/10 bg-zinc-950/75 p-4 text-sm text-zinc-400">
-          Aun no hay eventos publicos para mostrar.
+          Aún no hay eventos públicos para mostrar.
         </p>
       ) : (
         <ol className="mt-6 space-y-4">
@@ -37,9 +37,7 @@ export function PublicTimeline({
               </div>
               <div className="min-w-0 rounded-2xl border border-white/10 bg-zinc-950/75 p-4">
                 <p className="break-words text-sm font-black text-zinc-50">{item.title}</p>
-                <p className="mt-1 text-xs font-medium text-zinc-400">
-                  {item.createdAt.toLocaleString("es-CR")}
-                </p>
+                <p className="mt-1 text-xs font-medium text-zinc-400">{item.createdAt.toLocaleString("es-CR")}</p>
               </div>
             </li>
           ))}

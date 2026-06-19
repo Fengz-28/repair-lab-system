@@ -1,4 +1,6 @@
-import { RepairBadge, RepairButton, RepairContainer } from "./index";
+import { AnimatedShaderBackground } from "@/components/repairlab/animated-shader-background";
+import { RepairBadge, RepairButton, RepairContainer } from "@/components/repairlab";
+import { ShieldCheck, Ticket, Wrench } from "lucide-react";
 
 export function ClientTrackingHero({
   ticketNumber,
@@ -12,24 +14,29 @@ export function ClientTrackingHero({
   createdAt?: Date;
 }) {
   return (
-    <section className="relative overflow-hidden bg-zinc-950 text-white">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.28),transparent_30%),radial-gradient(circle_at_85%_15%,rgba(6,182,212,0.16),transparent_28%),linear-gradient(135deg,rgba(9,9,11,0.15),rgba(0,0,0,0.88))]" />
-      <div className="absolute inset-0 opacity-25 [background-image:linear-gradient(120deg,transparent_0,transparent_47%,rgba(255,255,255,0.08)_48%,transparent_50%)] [background-size:48px_48px]" />
-      <RepairContainer className="relative py-12 sm:py-16 lg:py-20">
+    <section className="relative overflow-hidden border-b border-white/10 bg-zinc-950 text-white">
+      <AnimatedShaderBackground className="z-0" intensity="md" />
+      <div className="absolute inset-0 z-0 bg-[linear-gradient(135deg,rgba(0,0,0,0.28),rgba(0,0,0,0.9))]" />
+      <RepairContainer className="relative z-10 py-12 sm:py-16 lg:py-20">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-emerald-300">
-              RepairLab / Portal cliente
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-cyan-300">
+              Fengz Lab / Portal de seguimiento
             </p>
             <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl">
               Estado de reparación
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-zinc-300 sm:text-base">
-              Consulta el avance de tu equipo, revisa documentos disponibles y usa tu codigo de ticket para
+              Consulta el avance de tu equipo, revisa documentos disponibles y usa tu código de ticket para
               comunicarte con el taller.
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-3">
-              {ticketNumber ? <RepairBadge tone="emerald">Ticket {ticketNumber}</RepairBadge> : null}
+              {ticketNumber ? (
+                <RepairBadge tone="cyan">
+                  <Ticket className="size-3.5" />
+                  Ticket {ticketNumber}
+                </RepairBadge>
+              ) : null}
               {statusLabel ? <RepairBadge tone="cyan">{statusLabel}</RepairBadge> : null}
               {createdAt ? (
                 <RepairBadge>Ingreso {createdAt.toLocaleDateString("es-CR")}</RepairBadge>
@@ -37,12 +44,22 @@ export function ClientTrackingHero({
             </div>
           </div>
 
-          <div className="w-full rounded-3xl border border-white/10 bg-zinc-900/45 p-5 shadow-2xl shadow-black/20 backdrop-blur lg:max-w-sm">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-200">Equipo en taller</p>
+          <div className="fengz-carbon-panel fengz-rgb-edge-static repair-premium-card w-full rounded-3xl border border-white/15 p-5 shadow-2xl shadow-black/30 backdrop-blur lg:max-w-sm">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-cyan-200">Equipo en taller</p>
             <p className="mt-3 break-words text-2xl font-black">{deviceLabel ?? "Seguimiento seguro"}</p>
             <p className="mt-2 text-sm leading-6 text-zinc-300">
               La información mostrada aquí es pública para este enlace y no incluye notas internas del taller.
             </p>
+            <div className="mt-4 grid gap-2 text-xs text-zinc-300">
+              <div className="inline-flex items-center gap-2">
+                <ShieldCheck className="size-3.5 text-cyan-300" />
+                Enlace privado por token
+              </div>
+              <div className="inline-flex items-center gap-2">
+                <Wrench className="size-3.5 text-cyan-300" />
+                Avance técnico en tiempo real
+              </div>
+            </div>
             <div className="mt-5">
               <RepairButton href="#contacto" tone="primary">
                 Contactar al taller
@@ -54,3 +71,4 @@ export function ClientTrackingHero({
     </section>
   );
 }
+

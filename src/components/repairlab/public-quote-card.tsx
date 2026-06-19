@@ -33,7 +33,7 @@ export function QuotePublicCard({ quote, token }: { quote: PublicQuote; token: s
         <div>
           <p className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-300">
             <FileText className="size-3.5" />
-            Cotizacion
+            Cotización
           </p>
           <h2 className="mt-2 text-2xl font-black text-zinc-50">{quote.invoiceNumber}</h2>
         </div>
@@ -53,7 +53,7 @@ export function QuotePublicCard({ quote, token }: { quote: PublicQuote; token: s
                     Tipo
                   </span>
                 </TableHeader>
-                <TableHeader>Descripcion</TableHeader>
+                <TableHeader>Descripción</TableHeader>
                 <TableHeader>Cantidad</TableHeader>
                 <TableHeader>Unitario</TableHeader>
                 <TableHeader>
@@ -103,7 +103,7 @@ export function QuotePublicCard({ quote, token }: { quote: PublicQuote; token: s
         <div className="rounded-2xl border border-cyan-300/20 bg-cyan-500/10 p-4 text-sm leading-6 text-cyan-100">
           {quote.customerNotes
             ? quote.customerNotes
-            : "Precios sujetos a disponibilidad y validacion final del taller."}
+            : "Precios sujetos a disponibilidad y validación final del taller."}
         </div>
         <Totals
           rows={[
@@ -116,10 +116,10 @@ export function QuotePublicCard({ quote, token }: { quote: PublicQuote; token: s
 
       <div className="mt-5 grid gap-3 sm:flex sm:flex-wrap sm:items-center">
         <RepairButton href={`/track/${token}/quote.pdf`} tone="primary">
-          Descargar PDF de cotizacion
+          Descargar PDF de cotización
         </RepairButton>
         <span className="rounded-full border border-white/10 bg-zinc-900 px-4 py-2 text-sm font-semibold text-zinc-300">
-          Si necesitas aprobar o ajustar esta cotizacion, contacta directamente a FengzLab.
+          Si necesitas aprobar o ajustar esta cotización, contacta directamente a FengzLab.
         </span>
       </div>
     </section>

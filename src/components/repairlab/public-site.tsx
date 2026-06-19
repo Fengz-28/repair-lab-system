@@ -24,7 +24,7 @@ export function PublicTopbar({ accent = "cyan" }: { accent?: "emerald" | "cyan" 
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
           <span>+506 0000-0000</span>
           <span>contacto@fengzlab.local</span>
-          <span className="hidden md:inline">Taller de reparacion electronica</span>
+          <span className="hidden md:inline">Taller de reparación electrónica</span>
         </div>
         <span>Lun - Vie: 09:00 - 17:00</span>
       </RepairContainer>
@@ -62,8 +62,8 @@ export function PublicNavbar({
               className={`repair-outline-button pointer-events-none mt-1 block [--border-right:2px] [--stroke-color:rgba(161,161,170,0.85)] text-[0.66rem] tracking-[0.22em] ${accent === "cyan" ? "[--animation-color:#60a5fa]" : "[--animation-color:#34d399]"}`}
               aria-hidden
             >
-              <span className="repair-outline-button-label">Taller tecnico</span>
-              <span className="repair-outline-button-hover">Taller tecnico</span>
+              <span className="repair-outline-button-label">Taller técnico</span>
+              <span className="repair-outline-button-hover">Taller técnico</span>
             </span>
           </span>
         </Link>
@@ -80,7 +80,7 @@ export function PublicNavbar({
           ))}
           <Link
             className={`${portalLink} min-h-10 rounded-2xl px-3 py-2 text-center text-xs sm:min-h-11 sm:rounded-full sm:px-4 sm:py-2.5 sm:text-sm`}
-            href="/track/demo"
+            href="/contact"
           >
             Portal cliente
           </Link>
@@ -88,7 +88,7 @@ export function PublicNavbar({
 
         <div className="hidden items-center gap-2 lg:flex">
           <RepairButton href="/contact" size="sm">
-            Solicitar reparacion
+            Solicitar reparación
           </RepairButton>
           <RepairButton href="/admin" tone="secondary" size="sm">
             Admin
@@ -122,7 +122,7 @@ export function PublicHero({
   title,
   description,
   primaryHref = "/contact",
-  primaryLabel = "Solicitar reparacion",
+  primaryLabel = "Solicitar reparación",
   secondaryHref,
   secondaryLabel,
 }: {
@@ -213,17 +213,17 @@ export function PublicFooter() {
             Fengz<span className="text-cyan-400">Lab</span>
           </p>
           <p className="max-w-md text-sm leading-6 text-zinc-300">
-            Taller de reparacion electronica con diagnostico, cotizacion, seguimiento profesional y entrega documentada.
+            Taller de reparación electrónica con diagnóstico, cotización, seguimiento profesional y entrega documentada.
           </p>
         </div>
         <div className="grid gap-6 sm:grid-cols-3">
-          <FooterGroup title="Servicios" items={["Diagnostico", "Consolas", "Microsoldadura", "Mantenimiento"]} />
-          <FooterGroup title="Enlaces rapidos" items={["Inicio", "Servicios", "Productos", "Contacto"]} />
+          <FooterGroup title="Servicios" items={["Diagnóstico", "Consolas", "Microsoldadura", "Mantenimiento"]} />
+          <FooterGroup title="Enlaces rápidos" items={["Inicio", "Servicios", "Productos", "Contacto"]} />
           <FooterGroup title="Contacto" items={["contacto@fengzlab.local", "+506 0000-0000", "Lun - Vie"]} />
         </div>
       </RepairContainer>
       <div className="relative z-10 border-t border-white/10 py-5 text-center text-xs text-zinc-500">
-        FengzLab. Taller tecnico con seguimiento transparente.
+        FengzLab. Taller técnico con seguimiento transparente.
       </div>
     </footer>
   );
@@ -231,9 +231,9 @@ export function PublicFooter() {
 
 function TechVisual() {
   const flow = [
-    { label: "Recepcion segura", icon: ClipboardList },
-    { label: "Diagnostico tecnico", icon: SearchCheck },
-    { label: "Cotizacion transparente", icon: FileText },
+    { label: "Recepción segura", icon: ClipboardList },
+    { label: "Diagnóstico técnico", icon: SearchCheck },
+    { label: "Cotización transparente", icon: FileText },
     { label: "Entrega documentada", icon: PackageCheck },
   ];
 
@@ -243,7 +243,7 @@ function TechVisual() {
       <div className="repair-premium-card relative rounded-[2rem] border border-white/10 bg-zinc-900/45 p-5 shadow-2xl shadow-black/30 backdrop-blur">
         <div className="rounded-3xl border border-white/10 bg-zinc-950/80 p-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">Mesa tecnica</span>
+            <span className="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">Mesa técnica</span>
             <span className="rounded-full bg-cyan-400 px-3 py-1 text-xs font-black text-slate-950">Activa</span>
           </div>
           <div className="mt-5 grid gap-3">
