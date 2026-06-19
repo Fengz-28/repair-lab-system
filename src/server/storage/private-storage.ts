@@ -186,6 +186,10 @@ export function privateStorageRoot() {
   const relative = path.relative(process.cwd(), root);
   const firstSegment = relative.split(path.sep)[0];
 
+  if (!relative) {
+    throw new Error("PRIVATE_STORAGE_ROOT cannot be the project root.");
+  }
+
   if (!relative.startsWith("..") && forbiddenStorageRootSegments.has(firstSegment)) {
     throw new Error(`PRIVATE_STORAGE_ROOT cannot be inside ${firstSegment}.`);
   }

@@ -4,6 +4,7 @@ import { writeAuditLog } from "@/server/audit/audit.service";
 import { prisma } from "@/server/db/prisma";
 import {
   deletePrivateFile,
+  maxUploadFilesPerTicket,
   savePrivateFile,
   validateUploadFile,
 } from "@/server/storage/private-storage";
@@ -352,6 +353,19 @@ export async function addTicketAttachmentPlaceholder(
   actorUserId?: string | null,
 ) {
   validateUploadFile(input);
+
+  const existingFileCount = await prisma.fileAsset.count({
+    where: {
+      ticketId: input.ticketId,
+      deletedAt: null,
+      visibility: "PRIVATE",
+    },
+  });
+
+  if (existingFileCount >= maxUploadFilesPerTicket()) {
+    throw new Error("Se supero el maximo de archivos por ticket.");
+  }
+
   const savedAttachment = await savePrivateFile("tickets", input);
 
   try {
