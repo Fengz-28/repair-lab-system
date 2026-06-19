@@ -4,6 +4,10 @@ import { createHash, randomUUID } from "crypto";
 import { mkdir, readFile, stat, unlink, writeFile } from "fs/promises";
 import path from "path";
 
+import { privateStorageRoot } from "./private-storage-root";
+
+export { privateStorageRoot };
+
 export type PrivateUploadFile = {
   originalName: string;
   mimeType: string;
@@ -39,7 +43,6 @@ const allowedExtensionsByMimeType: Record<string, string[]> = {
   "application/pdf": [".pdf"],
 };
 
-const forbiddenStorageRootSegments = new Set(["public", ".next", "src", "prisma"]);
 
 export function maxUploadFileSizeBytes() {
   return readPositiveInt("MAX_UPLOAD_FILE_SIZE_MB", 10) * 1024 * 1024;
@@ -180,22 +183,6 @@ function resolveStorageKey(storageKey: string) {
   return absolutePath;
 }
 
-export function privateStorageRoot() {
-  const configuredRoot = process.env.PRIVATE_STORAGE_ROOT || "./storage/private";
-  const root = path.resolve(process.cwd(), configuredRoot);
-  const relative = path.relative(process.cwd(), root);
-  const firstSegment = relative.split(path.sep)[0];
-
-  if (!relative) {
-    throw new Error("PRIVATE_STORAGE_ROOT cannot be the project root.");
-  }
-
-  if (!relative.startsWith("..") && forbiddenStorageRootSegments.has(firstSegment)) {
-    throw new Error(`PRIVATE_STORAGE_ROOT cannot be inside ${firstSegment}.`);
-  }
-
-  return root;
-}
 
 function readPositiveInt(name: string, fallback: number) {
   const raw = process.env[name];

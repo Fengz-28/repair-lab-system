@@ -4,7 +4,7 @@ import { access, mkdir } from "node:fs/promises";
 import { NextResponse } from "next/server";
 
 import { prisma } from "@/server/db/prisma";
-import { privateStorageRoot } from "@/server/storage/private-storage";
+import { privateStorageRoot } from "@/server/storage/private-storage-root";
 
 export const dynamic = "force-dynamic";
 
@@ -50,4 +50,3 @@ async function checkStorage(): Promise<ComponentStatus> {
     return "error";
   }
 }
-
