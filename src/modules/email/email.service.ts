@@ -5,8 +5,10 @@ import {
   Prisma,
 } from "@prisma/client";
 
+import { getEmailConfig, sendEmail } from "@/server/email";
+
 import { renderTransactionalEmail } from "./email.templates";
-import type { EmailSendResult, TransactionalEmailRequest } from "./email.types";
+import type { TransactionalEmailRequest } from "./email.types";
 
 type EmailDb = Prisma.TransactionClient;
 
@@ -16,7 +18,8 @@ export async function sendTransactionalEmailSafely(
 ) {
   const rendered = renderTransactionalEmail(request.template, request.data);
   const recipient = request.recipient.email ?? null;
-  const provider = configuredEmailProvider();
+  const emailConfig = getEmailConfig();
+  const provider = emailConfig.provider;
   const baseMetadata = {
     template: request.template,
     htmlPreview: rendered.html,
@@ -49,21 +52,55 @@ export async function sendTransactionalEmailSafely(
       return messageLog;
     }
 
-    if (provider === "disabled") {
-      await markMessage(db, messageLog.id, MessageStatus.DRAFT, provider, {
-        ...baseMetadata,
-        skipped: true,
-        reason: "EMAIL_PROVIDER=disabled",
-      });
-      return messageLog;
-    }
-
     const result = await sendEmail({
       to: recipient,
       subject: rendered.subject,
       text: rendered.text,
       html: rendered.html,
+      replyTo: emailConfig.replyTo,
+      metadata: {
+        messageLogId: messageLog.id,
+        template: request.template,
+      },
     });
+
+    if (!result.ok) {
+      await markMessage(db, messageLog.id, MessageStatus.FAILED, result.provider, {
+        ...baseMetadata,
+        failed: true,
+        errorCode: result.errorCode ?? "EMAIL_SEND_FAILED",
+        error: result.errorMessage ?? "Email send failed.",
+      });
+
+      await db.integrationEvent.create({
+        data: {
+          type: "notification.email.failed",
+          aggregateType: "MessageLog",
+          aggregateId: messageLog.id,
+          payload: {
+            messageLogId: messageLog.id,
+            template: request.template,
+            provider: result.provider,
+            errorCode: result.errorCode ?? null,
+            error: result.errorMessage ?? "Email send failed.",
+            customerId: request.recipient.customerId ?? null,
+            ticketId: request.recipient.ticketId ?? null,
+          },
+        },
+      });
+
+      return messageLog;
+    }
+
+    if (result.disabled || result.dryRun) {
+      await markMessage(db, messageLog.id, MessageStatus.DRAFT, result.provider, {
+        ...baseMetadata,
+        ...jsonObjectMetadata(result.metadata),
+        dryRun: result.dryRun,
+        disabled: result.disabled,
+      });
+      return messageLog;
+    }
 
     await markMessage(
       db,
@@ -127,7 +164,7 @@ export async function sendTransactionalEmailSafely(
   return messageLog;
 }
 
-function jsonObjectMetadata(metadata: Prisma.InputJsonValue | undefined) {
+function jsonObjectMetadata(metadata: Record<string, unknown> | undefined) {
   if (!metadata || typeof metadata !== "object" || Array.isArray(metadata)) {
     return {};
   }
@@ -155,76 +192,6 @@ function getAppBaseUrl() {
     "http://localhost:3000";
 
   return baseUrl.replace(/\/+$/, "");
-}
-
-function configuredEmailProvider() {
-  return process.env.EMAIL_PROVIDER?.trim() || "console";
-}
-
-async function sendEmail(input: {
-  to: string;
-  subject: string;
-  text: string;
-  html: string;
-}): Promise<EmailSendResult> {
-  const provider = configuredEmailProvider();
-
-  if (provider === "resend") {
-    return sendWithResend(input);
-  }
-
-  console.info("Transactional email preview", {
-    to: input.to,
-    subject: input.subject,
-    text: input.text,
-  });
-
-  return {
-    provider: "console",
-    metadata: {
-      previewOnly: true,
-    },
-  };
-}
-
-async function sendWithResend(input: {
-  to: string;
-  subject: string;
-  text: string;
-  html: string;
-}): Promise<EmailSendResult> {
-  const apiKey = process.env.RESEND_API_KEY || process.env.EMAIL_PROVIDER_KEY;
-  const from = process.env.EMAIL_FROM || process.env.SMTP_FROM;
-
-  if (!apiKey || !from) {
-    throw new Error("Resend email is not configured. Set RESEND_API_KEY and EMAIL_FROM.");
-  }
-
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from,
-      to: input.to,
-      subject: input.subject,
-      html: input.html,
-      text: input.text,
-    }),
-  });
-
-  const body = (await response.json().catch(() => null)) as { id?: string; message?: string } | null;
-
-  if (!response.ok) {
-    throw new Error(body?.message ?? `Resend failed with status ${response.status}.`);
-  }
-
-  return {
-    provider: "resend",
-    providerMessageId: body?.id,
-  };
 }
 
 async function markMessage(
