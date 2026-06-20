@@ -208,3 +208,13 @@ Move from home-hosted staging toward VPS or a more permanent production setup wh
 - customer portal and PDFs pass manual QA;
 - the workstation setup becomes an availability bottleneck;
 - real operations justify the infrastructure cost.
+
+## Email-first communication
+
+Near-term customer communication should be email-first.
+
+- Use email for transactional ticket updates.
+- Link customers back to the portal instead of exposing long technical detail in the email.
+- Keep WhatsApp deferred until FengzLab has a dedicated WhatsApp Business number.
+- Do not use n8n or marketing automation for customer updates in this phase.
+- Keep dry-run mode enabled until provider DNS and message content are validated.

@@ -113,7 +113,12 @@ Examples:
 
 ### Optional integration
 
-- `EMAIL_PROVIDER` - supports `console`, `resend`, or `disabled`.
+- `EMAIL_PROVIDER` - supports `resend`, `console`, or `disabled`.
+- `EMAIL_NOTIFICATIONS_ENABLED` - must be `true` before external email sending is allowed.
+- `EMAIL_DRY_RUN` - when `true`, store/preview intended emails without external sending.
+- `EMAIL_REPLY_TO` - monitored human reply inbox for customer replies.
+- `PUBLIC_CONTACT_EMAIL` / `NEXT_PUBLIC_CONTACT_EMAIL` - public contact address placeholders.
+- `NEXT_PUBLIC_WHATSAPP_ENABLED` / `NEXT_PUBLIC_WHATSAPP_NUMBER` - public WhatsApp placeholders; keep disabled until a dedicated business number exists.
 - `EMAIL_FROM`
 - `EMAIL_PROVIDER_KEY` - secret if used.
 - `RESEND_API_KEY` - secret if used.
