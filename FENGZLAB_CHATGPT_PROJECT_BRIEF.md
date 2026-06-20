@@ -65,7 +65,8 @@ Known current state:
 - the previous Turbopack/NFT healthcheck warning has been resolved;
 - manual ticket workflow was tested successfully in staging by the user;
 - core ticket flow is currently functional for controlled validation;
-- final production with real customers is still no-go until restore drill, email notifications, and monitoring are completed.
+- email-first transactional notifications are implemented through MessageLog + IntegrationEvent outbox, with disabled/dry-run safety flags;
+- final production with real customers is still no-go until restore drill, live email provider setup/testing, and monitoring are completed.
 
 ## 4. Core stack
 
@@ -116,8 +117,9 @@ Primary flows already in the system:
 - PDFs for quotes and invoices;
 - admin dashboard and customer records;
 - login and staff authorization;
-- local outbox worker for integration events;
+- local outbox worker for integration events and email notification requests;
 - backups and restore planning;
+- transactional email adapter with Resend support, disabled mode, and dry-run mode;
 - healthcheck and production readiness docs.
 
 The workshop model is the real product. The software exists to reduce friction in daily repair operations.
@@ -197,6 +199,11 @@ Final production remains no-go until:
 Recent relevant commits:
 
 ```txt
+aa02b98 test: cover ticket email notifications
+d362515 feat: send ticket update emails from outbox
+6e7e365 feat: add transactional email provider
+91c0638 docs: document email-first ticket notifications
+8ba09f4 docs: record ticket workflow manual qa
 2b403e4 docs: add FengzLab operations v0
 055cb9c docs: update home-hosted backup and restore drill plan
 d087824 docs: add staging and tunnel preflight checklist
@@ -246,6 +253,8 @@ Important risks to remember:
 - rate limiting is still in-memory and not multi-instance safe;
 - customer portal tokens are bearer-style links and need careful handling;
 - backup/restore exists but restore drill still needs to run against temporary targets before final production;
+- Resend DNS/domain setup and live email sending are still pending;
+- EMAIL_NOTIFICATIONS_ENABLED should remain false and EMAIL_DRY_RUN should remain true until manual dry-run is reviewed;
 - monitoring is documented but still needs practical deployment in the real environment;
 - home-hosted staging depends on workstation power, internet, router, OS updates, and Cloudflare Tunnel health;
 - any change touching auth, storage, payments, PDFs, or tickets can affect real workshop trust quickly.
@@ -259,6 +268,15 @@ npm run lint: passed
 npx tsc --noEmit: passed
 npm run test: passed
 npm run build: passed
+```
+
+Email notification status:
+
+```txt
+Provider adapter implemented.
+Outbox worker email processing implemented.
+Dry-run/disabled modes implemented and tested.
+Live Resend sending is code-ready but disabled by env until DNS/provider setup and owner-inbox test pass.
 ```
 
 The previous Turbopack/NFT healthcheck warning was resolved by scoping the private storage root helper used by `/api/health`.
@@ -279,6 +297,8 @@ Keep changes small, committed, and validated.
 Recommended next tasks:
 
 - finish the remaining manual QA checklist beyond the already-tested ticket workflow;
+- run manual email dry-run against staging ticket updates;
+- configure Resend DNS/domain and test live email to owner inbox only;
 - execute a restore drill against temporary DB/storage targets only;
 - configure practical monitoring/alerts;
 - review remaining public UI copy for FengzLab-first consistency;
@@ -317,3 +337,31 @@ Current path is home-hosted staging through Cloudflare Tunnel.
 Final production is still no-go until manual QA, restore drill, and monitoring are done.
 Keep changes small, safe, and operationally useful.
 ```
+
+## 16. Communication channel status
+
+Current decision:
+
+- Email is the near-term official transactional notification channel.
+- WhatsApp remains deferred until FengzLab has a dedicated WhatsApp Business number.
+- WhatsApp API is deferred.
+- n8n is deferred.
+- Marketing automation is deferred.
+- Products remain a consultative catalog, not ecommerce checkout.
+- Customer portal remains the tracking source.
+
+Runtime flags:
+
+```env
+EMAIL_PROVIDER=resend
+EMAIL_NOTIFICATIONS_ENABLED=false
+EMAIL_DRY_RUN=true
+```
+
+Manual email processing:
+
+```txt
+npm run worker:events
+```
+
+Keep live sending disabled until provider DNS, content review, owner-inbox test, and rollback path are confirmed.
