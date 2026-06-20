@@ -61,20 +61,20 @@ function quoteReadyEmail(data: Record<string, unknown>) {
     "La aprobación en línea se implementará próximamente. Por ahora, contacta al taller para confirmar.",
   ].filter(Boolean);
 
-  return renderLayout(subject, "Cotizacion disponible", lines, portalUrl);
+  return renderLayout(subject, "Cotización disponible", lines, portalUrl);
 }
 
 function quoteApprovedEmail(data: Record<string, unknown>) {
   const ticketNumber = textValue(data.ticketNumber, "tu ticket");
   const portalUrl = textValue(data.portalUrl, "");
-  const subject = `Cotizacion aprobada - ${ticketNumber}`;
+  const subject = `Cotización aprobada - ${ticketNumber}`;
   const lines = [
     `La cotización del ticket ${ticketNumber} fue marcada como aprobada.`,
     "El taller continuará con el flujo de reparación.",
     portalUrl ? `Puedes consultar el avance aqui: ${portalUrl}` : undefined,
   ].filter(Boolean);
 
-  return renderLayout(subject, "Cotizacion aprobada", lines, portalUrl);
+  return renderLayout(subject, "Cotización aprobada", lines, portalUrl);
 }
 
 function readyForPickupEmail(data: Record<string, unknown>) {
@@ -82,9 +82,9 @@ function readyForPickupEmail(data: Record<string, unknown>) {
   const deviceLabel = textValue(data.deviceLabel, "tu equipo");
   const portalUrl = textValue(data.portalUrl, "");
   const balance = moneyText(data.currency, data.balanceDue);
-  const subject = `Tu equipo esta listo para entrega - ${ticketNumber}`;
+  const subject = `Tu equipo está listo para entrega - ${ticketNumber}`;
   const lines = [
-    `${deviceLabel} esta listo para entrega.`,
+    `${deviceLabel} está listo para entrega.`,
     `Ticket: ${ticketNumber}`,
     balance ? `Saldo pendiente: ${balance}` : undefined,
     portalUrl ? `Consulta los detalles aqui: ${portalUrl}` : undefined,
@@ -100,7 +100,7 @@ function ticketClosedEmail(data: Record<string, unknown>) {
   const subject = `Ticket cerrado - ${ticketNumber}`;
   const lines = [
     `El ticket ${ticketNumber} fue cerrado como entregado.`,
-    "Gracias por confiar en Repair Lab.",
+    "Gracias por confiar en FengzLab.",
     portalUrl ? `Puedes conservar este enlace como referencia: ${portalUrl}` : undefined,
     "Si necesitas soporte futuro, contacta al taller indicando tu codigo de ticket.",
   ].filter(Boolean);
@@ -145,12 +145,12 @@ function renderLayout(
   <body style="margin:0;background:#f8fafc;font-family:Arial,sans-serif;">
     <div style="max-width:640px;margin:0 auto;padding:24px;">
       <div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:8px;padding:24px;">
-        <p style="margin:0 0 8px;color:#64748b;font-size:13px;font-weight:700;">Repair Lab</p>
+        <p style="margin:0 0 8px;color:#64748b;font-size:13px;font-weight:700;">FengzLab</p>
         <h1 style="margin:0 0 18px;color:#111827;font-size:22px;">${escapeHtml(heading)}</h1>
         ${paragraphs}
         ${cta}
       </div>
-      <p style="margin:14px 0 0;color:#64748b;font-size:12px;">Mensaje transaccional generado por Repair Lab System.</p>
+      <p style="margin:14px 0 0;color:#64748b;font-size:12px;">Mensaje transaccional generado por el sistema interno de FengzLab.</p>
     </div>
   </body>
 </html>`,
