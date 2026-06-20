@@ -86,3 +86,18 @@ Detener pruebas con datos reales si aparece cualquiera de estos puntos:
 - Upload privado queda accesible publicamente.
 - No existe backup reciente antes de probar datos reales.
 - Staging queda abierto sin Cloudflare Access o control equivalente.
+
+## Manual QA result - ticket workflow
+
+Resultado registrado el 2026-06-19:
+
+- El flujo manual de tickets fue probado correctamente en staging por el usuario.
+- El core ticket flow se considera funcional para validacion controlada: login staff, rutas admin protegidas, intake/tickets y navegacion principal del flujo de reparacion.
+- Este resultado no convierte el sistema en produccion final lista para clientes reales.
+
+Bloqueos restantes de readiness:
+
+- restore drill contra DB/storage temporales;
+- monitoreo y alertas reales;
+- implementacion y prueba de notificaciones transaccionales por email;
+- decision final de produccion sigue condicionada a QA, backups y operacion real controlada.

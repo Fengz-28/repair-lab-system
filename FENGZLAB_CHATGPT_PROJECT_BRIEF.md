@@ -63,7 +63,9 @@ Known current state:
 - protected admin routes preserve the intended `next` redirect after staff login;
 - CSS Studio was removed from runtime/production code;
 - the previous Turbopack/NFT healthcheck warning has been resolved;
-- final production with real customers is still no-go until manual staging QA, restore drill, and monitoring are completed.
+- manual ticket workflow was tested successfully in staging by the user;
+- core ticket flow is currently functional for controlled validation;
+- final production with real customers is still no-go until restore drill, email notifications, and monitoring are completed.
 
 ## 4. Core stack
 
@@ -276,7 +278,7 @@ Keep changes small, committed, and validated.
 
 Recommended next tasks:
 
-- run the manual QA checklist against `https://staging.fengzlab.tech`;
+- finish the remaining manual QA checklist beyond the already-tested ticket workflow;
 - execute a restore drill against temporary DB/storage targets only;
 - configure practical monitoring/alerts;
 - review remaining public UI copy for FengzLab-first consistency;
