@@ -196,9 +196,7 @@ async function processIntegrationEvent(event) {
   }
 
   if (event.type === "notification.email.requested") {
-    throw new Error(
-      "notification.email.requested is reserved for the future email outbox flow and is not enabled yet.",
-    );
+    return processEmailRequestedEvent(event);
   }
 
   if (supportedNoopEvents.has(event.type)) {
@@ -210,6 +208,237 @@ async function processIntegrationEvent(event) {
   return unsupportedEventResult(event.type);
 }
 
+async function processEmailRequestedEvent(event) {
+  const payload = asObject(event.payload);
+  const messageLogId = typeof payload.messageLogId === "string" ? payload.messageLogId : null;
+
+  if (!messageLogId) {
+    return {
+      status: "cancelled",
+      reason: "Email request payload does not include messageLogId.",
+    };
+  }
+
+  const message = await prisma.messageLog.findUnique({
+    where: {
+      id: messageLogId,
+    },
+    select: {
+      id: true,
+      channel: true,
+      direction: true,
+      status: true,
+      provider: true,
+      recipient: true,
+      subject: true,
+      body: true,
+      metadata: true,
+      customerId: true,
+      ticketId: true,
+    },
+  });
+
+  if (!message) {
+    return {
+      status: "cancelled",
+      reason: "Email request references a MessageLog that no longer exists.",
+    };
+  }
+
+  if (message.channel !== "EMAIL" || message.direction !== "OUTBOUND") {
+    return {
+      status: "cancelled",
+      reason: "MessageLog is not an outbound email.",
+    };
+  }
+
+  if (message.status === "SENT") {
+    return {
+      status: "processed",
+    };
+  }
+
+  if (message.status !== "QUEUED" && message.status !== "FAILED") {
+    return {
+      status: "cancelled",
+      reason: `MessageLog status ${message.status} is not eligible for email sending.`,
+    };
+  }
+
+  const config = readEmailConfig();
+
+  if (!message.recipient) {
+    await updateEmailMessage(message, "DRAFT", config.provider, {
+      skipped: true,
+      reason: "Customer email is not available.",
+    });
+    return {
+      status: "processed",
+    };
+  }
+
+  if (!config.notificationsEnabled || config.provider === "disabled") {
+    await updateEmailMessage(message, "DRAFT", config.provider, {
+      previewOnly: true,
+      disabled: true,
+      reason: "EMAIL_NOTIFICATIONS_ENABLED is not true.",
+    });
+    return {
+      status: "processed",
+    };
+  }
+
+  if (config.dryRun || config.provider === "console") {
+    console.log("Email worker dry-run:", {
+      messageLogId: message.id,
+      provider: config.provider,
+      to: message.recipient,
+      subject: message.subject,
+    });
+
+    await updateEmailMessage(message, "DRAFT", config.provider, {
+      previewOnly: true,
+      dryRun: true,
+      reason: config.dryRun ? "EMAIL_DRY_RUN is true." : "EMAIL_PROVIDER=console.",
+    });
+    return {
+      status: "processed",
+    };
+  }
+
+  if (config.provider !== "resend") {
+    await updateEmailMessage(message, "FAILED", config.provider, {
+      failed: true,
+      errorCode: "UNSUPPORTED_PROVIDER",
+      error: "Unsupported email provider.",
+    });
+    throw new Error("Unsupported email provider.");
+  }
+
+  const result = await sendMessageWithResend(message, config);
+
+  if (!result.ok) {
+    await updateEmailMessage(message, "FAILED", "resend", {
+      failed: true,
+      errorCode: result.errorCode,
+      error: result.errorMessage,
+    });
+    throw new Error(result.errorMessage);
+  }
+
+  await updateEmailMessage(message, "SENT", "resend", {
+    providerMessageId: result.providerMessageId ?? null,
+  }, result.providerMessageId);
+
+  await prisma.integrationEvent.create({
+    data: {
+      type: "notification.email.sent",
+      aggregateType: "MessageLog",
+      aggregateId: message.id,
+      payload: {
+        messageLogId: message.id,
+        provider: "resend",
+        providerMessageId: result.providerMessageId ?? null,
+        customerId: message.customerId ?? null,
+        ticketId: message.ticketId ?? null,
+      },
+    },
+  });
+
+  return {
+    status: "processed",
+  };
+}
+
+async function sendMessageWithResend(message, config) {
+  if (!config.resendApiKey || !config.from) {
+    return {
+      ok: false,
+      errorCode: "CONFIGURATION_ERROR",
+      errorMessage: "Resend email is not configured. Set RESEND_API_KEY and EMAIL_FROM.",
+    };
+  }
+
+  try {
+    const metadata = asObject(message.metadata);
+    const html = typeof metadata.htmlPreview === "string" ? metadata.htmlPreview : message.body;
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${config.resendApiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: config.from,
+        to: message.recipient,
+        subject: message.subject ?? "Actualizacion de FengzLab",
+        text: message.body ?? "Tu ticket fue actualizado. Revisa el portal de cliente.",
+        html: html ?? message.body ?? "Tu ticket fue actualizado. Revisa el portal de cliente.",
+        reply_to: config.replyTo,
+      }),
+    });
+
+    const body = (await response.json().catch(() => null)) ?? {};
+
+    if (!response.ok) {
+      return {
+        ok: false,
+        errorCode: "PROVIDER_ERROR",
+        errorMessage: `Resend failed with status ${response.status}.`,
+      };
+    }
+
+    return {
+      ok: true,
+      providerMessageId: typeof body.id === "string" ? body.id : undefined,
+    };
+  } catch {
+    return {
+      ok: false,
+      errorCode: "PROVIDER_ERROR",
+      errorMessage: "Resend request failed.",
+    };
+  }
+}
+
+async function updateEmailMessage(message, status, provider, metadataPatch, providerMessageId) {
+  await prisma.messageLog.update({
+    where: {
+      id: message.id,
+    },
+    data: {
+      status,
+      provider,
+      providerMessageId: providerMessageId ?? null,
+      sentAt: status === "SENT" ? new Date() : undefined,
+      metadata: {
+        ...asObject(message.metadata),
+        ...metadataPatch,
+      },
+    },
+  });
+}
+
+function readEmailConfig() {
+  return {
+    provider: readEmailProvider(),
+    notificationsEnabled: process.env.EMAIL_NOTIFICATIONS_ENABLED === "true",
+    dryRun: process.env.EMAIL_DRY_RUN !== "false",
+    from: process.env.EMAIL_FROM || process.env.SMTP_FROM || "",
+    replyTo: process.env.EMAIL_REPLY_TO || undefined,
+    resendApiKey: process.env.RESEND_API_KEY || process.env.EMAIL_PROVIDER_KEY || "",
+  };
+}
+
+function readEmailProvider() {
+  const provider = process.env.EMAIL_PROVIDER?.trim().toLowerCase();
+
+  if (provider === "resend" || provider === "console" || provider === "disabled") {
+    return provider;
+  }
+
+  return "disabled";
+}
 async function processEmailOutcomeEvent(event) {
   const payload = asObject(event.payload);
   const messageLogId = typeof payload.messageLogId === "string" ? payload.messageLogId : null;

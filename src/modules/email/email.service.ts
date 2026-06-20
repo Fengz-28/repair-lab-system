@@ -5,7 +5,7 @@ import {
   Prisma,
 } from "@prisma/client";
 
-import { getEmailConfig, sendEmail } from "@/server/email";
+import { getEmailConfig } from "@/server/email";
 
 import { renderTransactionalEmail } from "./email.templates";
 import type { TransactionalEmailRequest } from "./email.types";
@@ -42,134 +42,32 @@ export async function sendTransactionalEmailSafely(
     },
   });
 
-  try {
-    if (!recipient) {
-      await markMessage(db, messageLog.id, MessageStatus.DRAFT, provider, {
-        ...baseMetadata,
-        skipped: true,
-        reason: "Customer email is not available.",
-      });
-      return messageLog;
-    }
+  if (!recipient) {
+    await markMessage(db, messageLog.id, MessageStatus.DRAFT, provider, {
+      ...baseMetadata,
+      skipped: true,
+      reason: "Customer email is not available.",
+    });
+    return messageLog;
+  }
 
-    const result = await sendEmail({
-      to: recipient,
-      subject: rendered.subject,
-      text: rendered.text,
-      html: rendered.html,
-      replyTo: emailConfig.replyTo,
-      metadata: {
+  await db.integrationEvent.create({
+    data: {
+      type: "notification.email.requested",
+      aggregateType: "MessageLog",
+      aggregateId: messageLog.id,
+      idempotencyKey: `notification.email.requested:${messageLog.id}`,
+      payload: {
         messageLogId: messageLog.id,
         template: request.template,
+        provider,
+        customerId: request.recipient.customerId ?? null,
+        ticketId: request.recipient.ticketId ?? null,
       },
-    });
-
-    if (!result.ok) {
-      await markMessage(db, messageLog.id, MessageStatus.FAILED, result.provider, {
-        ...baseMetadata,
-        failed: true,
-        errorCode: result.errorCode ?? "EMAIL_SEND_FAILED",
-        error: result.errorMessage ?? "Email send failed.",
-      });
-
-      await db.integrationEvent.create({
-        data: {
-          type: "notification.email.failed",
-          aggregateType: "MessageLog",
-          aggregateId: messageLog.id,
-          payload: {
-            messageLogId: messageLog.id,
-            template: request.template,
-            provider: result.provider,
-            errorCode: result.errorCode ?? null,
-            error: result.errorMessage ?? "Email send failed.",
-            customerId: request.recipient.customerId ?? null,
-            ticketId: request.recipient.ticketId ?? null,
-          },
-        },
-      });
-
-      return messageLog;
-    }
-
-    if (result.disabled || result.dryRun) {
-      await markMessage(db, messageLog.id, MessageStatus.DRAFT, result.provider, {
-        ...baseMetadata,
-        ...jsonObjectMetadata(result.metadata),
-        dryRun: result.dryRun,
-        disabled: result.disabled,
-      });
-      return messageLog;
-    }
-
-    await markMessage(
-      db,
-      messageLog.id,
-      MessageStatus.SENT,
-      result.provider,
-      {
-        ...baseMetadata,
-        ...jsonObjectMetadata(result.metadata),
-      },
-      result.providerMessageId,
-    );
-
-    await db.integrationEvent.create({
-      data: {
-        type: "notification.email.sent",
-        aggregateType: "MessageLog",
-        aggregateId: messageLog.id,
-        payload: {
-          messageLogId: messageLog.id,
-          template: request.template,
-          provider: result.provider,
-          providerMessageId: result.providerMessageId ?? null,
-          customerId: request.recipient.customerId ?? null,
-          ticketId: request.recipient.ticketId ?? null,
-        },
-      },
-    });
-  } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "Unknown email error.";
-
-    console.error("Transactional email failed", {
-      template: request.template,
-      messageLogId: messageLog.id,
-      error: errorMessage,
-    });
-
-    await markMessage(db, messageLog.id, MessageStatus.FAILED, provider, {
-      ...baseMetadata,
-      failed: true,
-      error: errorMessage,
-    });
-
-    await db.integrationEvent.create({
-      data: {
-        type: "notification.email.failed",
-        aggregateType: "MessageLog",
-        aggregateId: messageLog.id,
-        payload: {
-          messageLogId: messageLog.id,
-          template: request.template,
-          provider,
-          error: errorMessage,
-          customerId: request.recipient.customerId ?? null,
-          ticketId: request.recipient.ticketId ?? null,
-        },
-      },
-    });
-  }
+    },
+  });
 
   return messageLog;
-}
-
-function jsonObjectMetadata(metadata: Record<string, unknown> | undefined) {
-  if (!metadata || typeof metadata !== "object" || Array.isArray(metadata)) {
-    return {};
-  }
-
-  return metadata;
 }
 
 export function buildPublicPortalUrl(publicAccessToken: string) {
@@ -200,15 +98,14 @@ async function markMessage(
   status: MessageStatus,
   provider: string,
   metadata: Prisma.InputJsonValue | null,
-  providerMessageId?: string,
 ) {
   await db.messageLog.update({
     where: { id },
     data: {
       status,
       provider,
-      providerMessageId: providerMessageId ?? null,
-      sentAt: status === MessageStatus.SENT ? new Date() : undefined,
+      providerMessageId: null,
+      sentAt: undefined,
       metadata: metadata ?? undefined,
     },
   });
