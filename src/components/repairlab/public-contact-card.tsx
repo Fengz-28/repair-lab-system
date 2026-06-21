@@ -14,10 +14,10 @@ export function PublicContactCard({ ticketNumber }: { ticketNumber: string }) {
             <MessageSquare className="size-3.5" />
             Contacto
           </p>
-          <h2 className="mt-2 text-2xl font-black text-zinc-50">¿Tienes dudas sobre tu reparación?</h2>
+          <h2 className="mt-2 text-2xl font-black text-zinc-50">Â¿Tienes dudas sobre tu reparaciÃ³n?</h2>
           <p className="mt-3 text-sm leading-6 text-zinc-300">
-            Contacta al taller indicando tu codigo de ticket. Así podremos ubicar tu caso rapidamente sin exponer
-            información interna del sistema.
+            Contacta al taller indicando tu codigo de ticket. AsÃ­ podremos ubicar tu caso rapidamente sin exponer
+            informaciÃ³n interna del sistema.
           </p>
         </div>
         <RepairBadge tone="cyan">Codigo {ticketNumber}</RepairBadge>
@@ -25,11 +25,11 @@ export function PublicContactCard({ ticketNumber }: { ticketNumber: string }) {
       <div className="mt-5 grid gap-3 rounded-2xl border border-cyan-300/25 bg-cyan-500/10 p-4 text-sm font-semibold text-cyan-100 sm:grid-cols-2">
         <p className="inline-flex items-center gap-2">
           <PhoneCall className="size-4" />
-          +506 0000-0000
+          Atencion por cita
         </p>
         <p className="inline-flex items-center gap-2">
           <Mail className="size-4" />
-          contacto@fengzlab.local
+          contacto@fengzlab.tech
         </p>
       </div>
     </section>
@@ -47,29 +47,29 @@ export function PublicTrackingFooter() {
             Fengz<span className="text-cyan-400">Lab</span>
           </p>
           <p className="mt-3 max-w-md text-sm leading-6 text-zinc-400">
-            Portal de seguimiento para clientes. Consulta estado, cotización y factura de forma segura con tu enlace
+            Portal de seguimiento para clientes. Consulta estado, cotizaciÃ³n y factura de forma segura con tu enlace
             privado.
           </p>
         </div>
         <div>
           <h3 className="font-bold text-white">Seguimiento</h3>
           <ul className="mt-3 space-y-2 text-sm text-zinc-400">
-            <li>Estado de reparación</li>
-            <li>Cotización disponible</li>
+            <li>Estado de reparaciÃ³n</li>
+            <li>CotizaciÃ³n disponible</li>
             <li>Factura y saldo</li>
           </ul>
         </div>
         <div>
           <h3 className="font-bold text-white">Contacto</h3>
           <ul className="mt-3 space-y-2 text-sm text-zinc-400">
-            <li>contacto@fengzlab.local</li>
-            <li>+506 0000-0000</li>
+            <li>contacto@fengzlab.tech</li>
+            <li>Atencion por cita</li>
             <li>Lun - Vie: 09:00 - 17:00</li>
           </ul>
         </div>
       </div>
       <div className="relative border-t border-white/10 py-5 text-center text-xs text-zinc-500">
-        FengzLab. Portal de seguimiento de reparación.
+        FengzLab. Portal de seguimiento de reparaciÃ³n.
       </div>
     </footer>
   );
