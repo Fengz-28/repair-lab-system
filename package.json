@@ -17,7 +17,8 @@
     "smoke:staging": "node scripts/smoke-staging.mjs",
     "worker:events": "node scripts/process-integration-events.mjs",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "check:backups": "node scripts/check-backups.mjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
