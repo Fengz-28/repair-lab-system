@@ -13,6 +13,8 @@
     "backup:storage": "node scripts/backup-storage.mjs",
     "backup": "node scripts/backup.mjs",
     "backup:check": "node scripts/check-backups.mjs",
+    "smoke:local": "node scripts/smoke-staging.mjs --local",
+    "smoke:staging": "node scripts/smoke-staging.mjs",
     "worker:events": "node scripts/process-integration-events.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
