@@ -12,6 +12,7 @@
     "backup:db": "node scripts/backup-db.mjs",
     "backup:storage": "node scripts/backup-storage.mjs",
     "backup": "node scripts/backup.mjs",
+    "backup:check": "node scripts/check-backups.mjs",
     "worker:events": "node scripts/process-integration-events.mjs",
     "test": "vitest run",
     "test:watch": "vitest"

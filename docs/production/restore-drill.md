@@ -2,6 +2,12 @@
 
 Status: planning document only. Home-hosted tunnel notes added. No restore command has been executed.
 
+## NO-DESTRUCTIVE-RESTORE warning
+
+Restore drills are allowed only against temporary targets. Never restore over the active PostgreSQL database, never extract over the active private storage root, and never point the public tunnel at restored data unless the user explicitly approves a temporary smoke test.
+
+If any command names the production database, `storage/private`, or the active app environment, stop and review before continuing.
+
 ## Purpose
 
 Use this drill to prove that FengzLab / RepairLab backups can be restored without risking active workshop data.
@@ -13,6 +19,16 @@ The drill must restore into temporary targets only:
 - explicit approval before any command that points the app at restored data.
 
 This document is a safety procedure, not an automation script.
+
+## Backup presence check
+
+Before choosing restore artifacts, run the non-destructive backup check:
+
+```bash
+npm run backup:check
+```
+
+The check only verifies expected backup files under `backups/postgres` and `backups/storage`. It does not connect to PostgreSQL, does not extract archives, and does not restore data. The default freshness threshold is `72` hours and can be adjusted with `BACKUP_FRESHNESS_HOURS`.
 
 ## Required backup artifacts
 
@@ -159,6 +175,39 @@ Application smoke validation, only if explicitly approved:
 - [ ] Open one restored ticket.
 - [ ] Confirm private file download remains staff-protected.
 - [ ] Stop the temporary app immediately after validation.
+
+## Restore drill execution record
+
+Fill this before and during each drill:
+
+```txt
+Operator:
+Source environment:
+DB backup artifact:
+Storage backup artifact:
+Backup timestamp:
+Restore drill started at:
+Temporary database:
+Temporary storage path:
+Temporary app allowed: yes/no
+Restore drill completed at:
+Issues found:
+Decision: pass/fail/retry
+```
+
+## Operational verification checklist
+
+- [ ] DB backup artifact selected and timestamp recorded.
+- [ ] Storage backup artifact selected and timestamp recorded.
+- [ ] DB restored to a temporary PostgreSQL target only.
+- [ ] Storage restored to a temporary folder only.
+- [ ] App can read restored data only if intentionally started with temporary `DATABASE_URL` and `PRIVATE_STORAGE_ROOT`.
+- [ ] No restored files are placed under `public/`.
+- [ ] Backup timestamp recorded.
+- [ ] Restore timestamp recorded.
+- [ ] Issues recorded with owner and next action.
+- [ ] Temporary app stopped after validation.
+- [ ] Temporary database and temporary storage cleaned up after the drill.
 
 ## Cleanup steps
 

@@ -22,7 +22,15 @@ Full local backup:
 npm run backup
 ```
 
+Backup presence and freshness check:
+
+```txt
+npm run backup:check
+```
+
 `npm run backup` runs the database backup first and the private storage backup second.
+
+The check command is read-only. It verifies that recent PostgreSQL and private storage artifacts exist under `backups/`; it does not restore, extract, delete, or connect to the database.
 
 ## Current backup outputs
 
@@ -92,6 +100,7 @@ This is intentional for secrets. Secrets must be stored and restored through a s
 
 ## Restore procedure
 
+Never restore over active workshop data as part of a drill. All drills must use a temporary database and temporary storage folder first.
 Do not restore over active workshop data without a fresh backup and explicit approval.
 
 Recommended safe restore drill:
